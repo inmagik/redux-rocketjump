@@ -1,0 +1,49 @@
+{
+  "name": "redux-rocketjump",
+  "version": "0.1.0",
+  "description": "Rocket jump your redux!",
+  "main": "lib/index.js",
+  "repository": "https://github.com/inmagik/redux-rocketjump",
+  "author": "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm-run-all -p dev fake-api",
+    "dev": "webpack-dev-server",
+    "fake-api": "json-server --watch --delay 400 example/db.json",
+    "build": "rimraf lib && babel src --out-dir lib",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.10",
+    "json-server": "^0.12.1",
+    "npm-run-all": "^4.1.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.20.2",
+    "superagent": "^3.8.2",
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
+  },
+  "peerDependencies": {
+    "redux": "^3.0.0",
+    "redux-saga": ">=0.15.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
+  }
+}
