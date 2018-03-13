@@ -56,8 +56,8 @@ export function* takeLatestAndCancel(pattern, cancelPattern, saga, ...args) {
 export function* takeLatestAndCancelGroupBy(
   pattern,
   cancelPattern,
-  groupBy,
   saga,
+  groupBy,
   ...args
 ) {
   const task = yield fork(function*() {

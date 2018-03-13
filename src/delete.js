@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { omit } from 'lodash'
+import omit from 'lodash.omit'
 import { rocketjump, makeActionTypes, makeActions } from './core'
 import { takeEveryAndCancel } from './effects'
 import { getOrSelect } from './utils'

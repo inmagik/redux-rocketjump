@@ -1,6 +1,8 @@
-import { get, some, isArray, mapValues } from 'lodash'
+import get from 'lodash.get'
+import some from 'lodash.some'
+import mapValues from 'lodash.mapvalues'
 
-export const arrayze = a => (isArray(a) ? a : [a])
+export const arrayze = a => (Array.isArray(a) ? a : [a])
 
 // Hight Order Reducer for reset a piece of state on certain actions
 export const resetReducerOn = (matchTypes, reducer) => {

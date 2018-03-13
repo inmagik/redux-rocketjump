@@ -6,7 +6,8 @@ import NewTodo from './NewTodo'
 
 class Todos extends PureComponent {
   componentDidMount() {
-    this.props.loadTodos()
+    this.props.loadTodos({}, { giova: 23 })
+    this.props.loadTodos({}, { giova: 22 })
   }
 
   // addTodo = todo => {

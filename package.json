@@ -23,6 +23,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.5",
     "css-loader": "^0.28.10",
     "json-server": "^0.12.1",
     "npm-run-all": "^4.1.2",
@@ -41,9 +42,15 @@
   },
   "peerDependencies": {
     "redux": "^3.0.0",
-    "redux-saga": ">=0.15.0"
+    "redux-saga": ">=0.15.0",
+    "reselect": "^3.0.0"
   },
   "dependencies": {
-    "classnames": "^2.2.5"
+    "lodash.get": "^4.4.2",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "lodash.some": "^4.6.0",
+    "query-string": "^5.1.0"
   }
 }

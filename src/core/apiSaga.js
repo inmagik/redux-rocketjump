@@ -1,30 +1,29 @@
-import { fork, call, put } from 'redux-saga/effects'
+import { fork, call, put, all } from 'redux-saga/effects'
 import { makeActionTypes } from './actions'
 import { takeLatestAndCancel } from '../effects'
 
 export default (
   actionType,
   apiFn,
-  extraParamsEffect,
+  extraParamsEffects = [],
   takeEffect = takeLatestAndCancel,
   callApi = call,
-  successEffect,
-  failureEffect
+  successEffects = [],
+  failureEffects = [],
+  takeEffectArgs = [],
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
     yield put({ type: actionTypes.loading, meta })
     try {
       // Get extra shit from outside HOOK
-      let extraParams
-      if (extraParamsEffect) {
-        extraParams = yield extraParamsEffect(params, meta)
+      let finalParams = { ...params }
+      for (let i = 0; i < extraParamsEffects.length; i++) {
+        const extraParams = yield extraParamsEffects[i](finalParams, meta)
+        finalParams = { ...finalParams, ...extraParams }
       }
 
-      const finalParams = {
-        ...params,
-        ...extraParams,
-      }
+      // Run api with using given call api function
       const data = yield callApi(apiFn, finalParams)
 
       yield put({ type: actionTypes.success, meta, payload: {
@@ -32,14 +31,10 @@ export default (
         // Sha la la la
         params: finalParams,
       }})
-      if (successEffect) {
-        yield successEffect(data, meta)
-      }
+      yield all(successEffects.map(effect => effect(data, meta)))
     } catch (error) {
       yield put({ type: actionTypes.failure, meta, error })
-      if (failureEffect) {
-        yield failureEffect(error, meta)
-      }
+      yield all(failureEffects.map(effect => effect(error, meta)))
     }
   }
 
@@ -48,7 +43,8 @@ export default (
       takeEffect,
       actionTypes.main,
       actionTypes.unload,
-      handleApi
+      handleApi,
+      ...takeEffectArgs,
     )
   }
 }
