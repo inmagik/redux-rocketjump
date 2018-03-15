@@ -7,6 +7,7 @@
   "author": "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint src",
     "start": "npm-run-all -p dev fake-api",
     "dev": "webpack-dev-server",
     "fake-api": "json-server --watch --delay 400 example/db.json",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -25,6 +27,12 @@
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.5",
     "css-loader": "^0.28.10",
+    "eslint": "^4.1.1",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
     "json-server": "^0.12.1",
     "npm-run-all": "^4.1.2",
     "react": "^16.2.0",

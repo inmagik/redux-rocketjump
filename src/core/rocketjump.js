@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import { proxyObject, proxyReducer, arrayze } from '../utils'
+import { proxyObject, proxyReducer } from '../utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
@@ -7,8 +7,6 @@ import {
   makeSideEffectDescriptor,
   addConfigToSideEffectDescritor,
 } from './sideEffectDescriptor'
-import get from 'lodash.get'
-import pick from 'lodash.pick'
 import omit from 'lodash.omit'
 import makeApiSaga from './apiSaga'
 
