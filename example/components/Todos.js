@@ -1,30 +1,44 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { getTodos, loadTodos, addTodo, areTodosLoading } from '../state/todos'
+import {
+  getTodos,
+  loadTodos,
+  addTodo,
+  areTodosLoading,
+  isAddingTodo,
+  updateTodo,
+  getUpdatingTodos,
+  getDeletingTodos,
+  deleteTodo,
+} from '../state/todos'
 import Todo from './Todo'
 import NewTodo from './NewTodo'
 
 class Todos extends PureComponent {
   componentDidMount() {
-    this.props.loadTodos({}, { giova: 23 })
-    this.props.loadTodos({}, { giova: 22 })
+    this.props.loadTodos()
   }
 
-  // addTodo = todo => {
-  //   console.log('NEW TODO!', todo)
-  // }
+  onToggle = todo => this.props.updateTodo({
+    ...todo,
+    done: !todo.done,
+  })
+
+  onRemove = todo => this.props.deleteTodo(todo.id)
 
   render() {
-    const { todos, addTodo, loading } = this.props
+    const { todos, addTodo, loading, adding, updating, deleting } = this.props
     return (
       <div className='todos'>
         {loading && <div>Loading <b>Y</b> todos...</div>}
-        {todos && <NewTodo onSubmit={addTodo}/>}
+        {todos && <NewTodo onSubmit={addTodo} />}
         <div className='todo-list'>
           {todos && todos.map(todo => (
             <Todo
-              saving={`${todo.id}`.indexOf('pushing-') !== -1}
-              key={todo.id || 'adding-todo'}
+              saving={updating[todo.id] || deleting[todo.id]}
+              onToggle={this.onToggle}
+              onRemove={this.onRemove}
+              key={todo.id}
               todo={todo}
             />
           ))}
@@ -37,7 +51,12 @@ class Todos extends PureComponent {
 export default connect(state => ({
   todos: getTodos(state),
   loading: areTodosLoading(state),
+  adding: isAddingTodo(state),
+  updating: getUpdatingTodos(state),
+  deleting: getDeletingTodos(state)
 }), {
   loadTodos,
   addTodo,
+  updateTodo,
+  deleteTodo,
 })(Todos)

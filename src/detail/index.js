@@ -1,4 +1,4 @@
-import { rocketjump, makeActions } from './core'
+import { rocketjump, makeActions } from '../core'
 
 export const makeDetailActions = (type) => {
   const { load, unload } = makeActions(type)

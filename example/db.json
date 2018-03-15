@@ -1,34 +1,3 @@
 {
-  "todos": [
-    {
-      "title": "CC",
-      "done": false,
-      "id": 1
-    },
-    {
-      "title": "Kill AGAIN!",
-      "done": true,
-      "id": 2
-    },
-    {
-      "title": "eheh",
-      "done": false,
-      "id": 3
-    },
-    {
-      "title": "O.o",
-      "done": false,
-      "id": 4
-    },
-    {
-      "title": "j",
-      "done": false,
-      "id": 5
-    },
-    {
-      "title": "jj",
-      "done": false,
-      "id": 6
-    }
-  ]
+  "todos": []
 }

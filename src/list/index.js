@@ -114,7 +114,7 @@ const makeDataListSelectors = (getData, pageSizeSelector) => {
 }
 
 // Paginate list rocketjump!
-export const makeList = config => rocketjump({
+export const makeList = (config, ...args) => rocketjump({
   dataReducer: makeListDataReducer(config),
   proxyReducer: reducer => {
     if (config.deleteBy) {
@@ -128,6 +128,6 @@ export const makeList = config => rocketjump({
   proxySelectors: ({ getData }) => {
     return makeDataListSelectors(getData, config.pageSize)
   },
-})(config)
+})(config, ...args)
 
 export { limitOffsetPaginationAdapter, nextPreviousPaginationAdapter }

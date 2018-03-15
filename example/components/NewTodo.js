@@ -12,8 +12,9 @@ export default class NewTodo extends PureComponent {
   }
 
   render() {
+    const { adding } = this.props
     return (
-      <form className='new-todo' onSubmit={this.submitTodo}>
+      <form className='new-todo' onSubmit={this.submitTodo} disabled={adding}>
         <input
           placeholder='What to do ma friend?'
           value={this.state.title}

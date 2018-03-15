@@ -1,93 +1,98 @@
 import request from 'superagent'
+import { omit } from 'lodash'
+import { combineReducers } from 'redux'
 import {
   rocketjump,
   makeActionTypes,
   composeReducers,
   takeEveryAndCancel,
-  takeLatestAndCancelGroupBy,
 } from 'redux-rocketjump'
 import { fork, put } from 'redux-saga/effects'
 
 const API_URL = 'http://localhost:3000'
 
-// const TOGGLE_TODO = 'TOGGLE_TODO'
-// export const {
-//   actions: {
-//     load: togggleTodo,
-//   },
-//   saga: togleTodoSa,
-// } = rocketjump({
-//   type: ADD_TODO,
-//   takeAction: takeEveryAndCancel,
-//   proxyActions: {
-//     load: ({ load }) => todo => {
-//       pushing++
-//       return load(todo, { _id: `pushing-${pushing}` })
-//     }
-//   },
-//   // you can keep track of loading or error if u want
-//   // state: '...',
-//   api: todo => request.post(`${API_URL}/todos`)
-//     .send(todo)
-//     .then(({ body }) => body),
-// })()
-//
-// // Pushing shitty todos (naive implementation of uniq...)
-// let pushing = 0
-// const ADD_TODO = 'ADD_TODO'
-// export const {
-//   actions: {
-//     load: addTodo,
-//   },
-//   saga: addTodoSaga,
-// } = rocketjump({
-//   type: ADD_TODO,
-//   takeAction: takeEveryAndCancel,
-//   proxyActions: {
-//     load: ({ load }) => todo => {
-//       pushing++
-//       return load(todo, { _id: `pushing-${pushing}` })
-//     }
-//   },
-//   // you can keep track of loading or error if u want
-//   // state: '...',
-//   api: todo => request.post(`${API_URL}/todos`)
-//     .send(todo)
-//     .then(({ body }) => body),
-// })()
-//
-// const addTodoReducer = (prevState, { type, payload, meta }) => {
-//   const addTodosActions = makeActionTypes(ADD_TODO)
-//   switch (type) {
-//     case ADD_TODO:
-//       return {
-//         ...prevState,
-//         data: prevState.data.concat({
-//           ...payload.params,
-//           id: meta._id,
-//         }),
-//       }
-//     case addTodosActions.success:
-//       return {
-//         ...prevState,
-//         data: prevState.data.map(todo => (
-//           todo.id === meta._id ? payload.data : todo
-//         ))
-//       }
-//     default:
-//       return prevState
-//   }
-// }
-
-
-const coolJump = config => rocketjump({
-  takeEffect: takeLatestAndCancelGroupBy,
-  takeEffectArgs: [config.groupBy],
-  successEffect: function *(data, params) {
-    console.log('Giooooova successEffect')
+const ADD_TODO = 'ADD_TODO'
+export const {
+  actions: {
+    load: addTodo,
   },
+  selectors: {
+    isLoading: isAddingTodo,
+    getError: getAddTodoError,
+  },
+  reducer: addTodoReducer,
+  saga: addTodoSaga,
+} = rocketjump({
+  type: ADD_TODO,
+  takeEffect: takeEveryAndCancel,
+  // No need to save added todo
+  dataReducer: () => null,
+  state: 'todos.add',
+  api: todo => request.post(`${API_URL}/todos`)
+    .send(todo)
+    .then(({ body }) => body)
+})()
 
-})(config)
+const multiloadingRj = (config, ...args) => rocketjump({
+  takeEffect: takeEveryAndCancel,
+  proxyReducer: () => (prevState = {}, { type, meta }) => {
+    const types = makeActionTypes(config.type)
+    switch (type) {
+      case types.loading:
+        return {
+          ...prevState,
+          [meta.id]: true,
+        }
+      case types.success:
+      case types.failure:
+        return omit(prevState, meta.id)
+      default:
+        return prevState
+    }
+  },
+})(config, ...args)
+
+const UPDATE_TODO = 'UPDATE_TODO'
+export const {
+  actions: {
+    load: updateTodo,
+  },
+  selectors: {
+    getBaseState: getUpdatingTodos,
+  },
+  reducer: updateTodoReducer,
+  saga: updateTodoSaga,
+} = multiloadingRj({
+  type: UPDATE_TODO,
+  state: 'todos.update',
+  proxyActions: {
+    load: ({ load }) => todo => load({ todo }, { id: todo.id }),
+  },
+  // Keep trak only of updating todos....
+  api: ({ todo }) => request.put(`${API_URL}/todos/${todo.id}`)
+    .send(todo)
+    .then(({ body }) => body)
+})
+
+const DELETE_TODO = 'DELETE_TODO'
+export const {
+  actions: {
+    load: deleteTodo,
+  },
+  selectors: {
+    getBaseState: getDeletingTodos,
+  },
+  reducer: deleteTodoReducer,
+  saga: deleteTodoSaga,
+} = multiloadingRj({
+  type: DELETE_TODO,
+  state: 'todos.delete',
+  proxyActions: {
+    load: ({ load }) => id => load({ id }, { id }),
+  },
+  // Keep trak only of updating todos....
+  api: ({ id }) => request.delete(`${API_URL}/todos/${id}`)
+})
 
 const GET_TODOS = 'GET_TODOS'
 export const {
@@ -98,28 +103,48 @@ export const {
     getData: getTodos,
     isLoading: areTodosLoading,
   },
-  reducer,
+  reducer: todoListReducer,
   saga: todoListSaga,
-} = coolJump({
+} = rocketjump({
   type: GET_TODOS,
-  groupBy: ({ payload: { params }, meta }) => {
-    return meta.giova
-  },
-  apiExtraParams: function *() {
-    console.log(23)
-    return { giova: 23 }
-  },
-  successEffect: [function *(data, params) {
-    console.log('GOd bless the drug', data, params)
-  }],
-  // proxyReducer: reducer => composeReducers(reducer, addTodoReducer),
-  state: 'todos',
+  state: 'todos.list',
   api: () => request.get(`${API_URL}/todos`).then(({ body }) => body),
-})
-
-// console.log('~', todoListSaga)
+  proxyReducer: reducer => composeReducers(reducer, (prevState, { type, payload, meta }) => {
+    switch (type) {
+      case makeActionTypes(ADD_TODO).success:
+        return {
+          ...prevState,
+          data: prevState.data.concat(payload.data),
+        }
+      case makeActionTypes(UPDATE_TODO).success:
+        return {
+          ...prevState,
+          data: prevState.data.map(todo => (
+            todo.id === payload.data.id ? payload.data : todo
+          ))
+        }
+      case makeActionTypes(DELETE_TODO).success:
+        return {
+          ...prevState,
+          data: prevState.data.filter(todo => todo.id !== meta.id),
+        }
+      default:
+        return prevState
+    }
+    return prevState
+  })
+})()
 
 export const saga = function*() {
   yield fork(todoListSaga)
-  // yield fork(addTodoSaga)
+  yield fork(addTodoSaga)
+  yield fork(deleteTodoSaga)
+  yield fork(updateTodoSaga)
 }
+
+export const reducer = combineReducers({
+  list: todoListReducer,
+  add: addTodoReducer,
+  update: updateTodoReducer,
+  delete: deleteTodoReducer,
+})

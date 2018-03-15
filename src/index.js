@@ -3,6 +3,9 @@ import { fork } from 'redux-saga/effects'
 export { composeReducers, resetReducerOn } from './utils'
 export * from './core'
 export * from './effects'
+export * from './list'
+export * from './detail'
+export * from './delete'
 
 export const makeAppsReducers = (apps) => {
   return Object.keys(apps)

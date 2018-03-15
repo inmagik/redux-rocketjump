@@ -1,86 +1,80 @@
+import invariant from 'invariant'
 import { proxyObject, proxyReducer, arrayze } from '../utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
+import {
+  makeSideEffectDescriptor,
+  addConfigToSideEffectDescritor,
+} from './sideEffectDescriptor'
 import get from 'lodash.get'
 import pick from 'lodash.pick'
 import omit from 'lodash.omit'
 import makeApiSaga from './apiSaga'
 
-const rocketjumper = (rocketConfig = {}, rj) => (localConfig = {}) => {
+export const rocketjump = (...configs) => (config = {}, extendExport) => {
+  const allConfigs = [...configs, ...[config]]
 
-  const config = { ...localConfig, ...rocketConfig }
-
-  // All stuff to export
-  let exp
-
-  if (typeof rj === 'function') {
-    // Call parent rocketjump **heres the magic** it can compose all the stuff
-    exp = rj(omit(
-      config,
-      // Make the saga only at the end of all
-      'api',
-      // Prevent to re merge arrays
-      'apiExtraParams',
-      'successEffect',
-      'failureEffect',
-    ))
-  } else {
-    // Default export stuff
-    exp = {
-      actions: makeActions(config.type),
-
-      selectors: makeSelectors(config.state),
-
-      reducer: makeReducer(config.type, config.dataReducer),
-
-      sideEffect: {
-        apiExtraParams: [],
-        successEffect: [],
-        failureEffect: [],
-      },
+  const mergedConfig = allConfigs.reduce((merged, config) => {
+    if (typeof config === 'function') {
+      return merged
     }
-  }
+    return {
+      ...merged,
+      ...config,
+    }
+  }, {})
 
-  // Proxy actions
-  exp.actions = proxyObject(exp.actions, config.proxyActions)
+  invariant(mergedConfig.type, 'You must specify a type key for actions and reducer')
+  invariant(mergedConfig.state, 'You must specify a state key for create selectors')
 
-  // Proxy reducer
-  exp.reducer = proxyReducer(exp.reducer, config.proxyReducer)
+  const finalExport = allConfigs.reduce((finalExport, config, i) => {
+    // When config is a function is intendeed to be a rocketjump!
+    if (typeof config === 'function') {
+      return config(omit(mergedConfig, [
+        'api',
+        'callApi',
+        'apiExtraParams',
+        'successEffect',
+        'failureEffect',
+        'proxySelectors',
+        'proxyActions',
+        'proxyReducer',
+      ]), finalExport)
+    }
 
-  // Proxy selectors
-  exp.selectors = proxyObject(exp.selectors, config.proxySelectors)
+    const exp = typeof finalExport === 'undefined'
+      // Make the export for the first time
+      ? {
+        actions: makeActions(mergedConfig.type),
+        reducer: makeReducer(mergedConfig.type, mergedConfig.dataReducer),
+        selectors: makeSelectors(mergedConfig.state),
+        sideEffect: makeSideEffectDescriptor(),
+      }
+      // Continued to previous export
+      : { ...finalExport }
 
-  // Describe the side effect
-  const sideEffect = {
-    ...exp.sideEffect,
-    ...pick(config, [
-      'callApi',
-      'takeEffect',
-      'takeEffectArgs',
-    ]),
-    apiExtraParams: [
-      ...exp.sideEffect.apiExtraParams,
-      ...arrayze(get(config, 'apiExtraParams', [])),
-    ],
-    successEffect: [
-      ...exp.sideEffect.successEffect,
-      ...arrayze(get(config, 'successEffect', [])),
-    ],
-    failureEffect: [
-      ...exp.sideEffect.failureEffect,
-      ...arrayze(get(config, 'failureEffect', [])),
-    ],
-  }
+    exp.actions = proxyObject(exp.actions, config.proxyActions)
+    exp.reducer = proxyReducer(exp.reducer, config.proxyReducer)
+    exp.selectors = proxyObject(exp.selectors, config.proxySelectors)
+    exp.sideEffect = addConfigToSideEffectDescritor(exp.sideEffect, config)
 
-  if (typeof config.saga === 'function') {
+    return exp
+  }, extendExport)
+
+  if (typeof mergedConfig.saga === 'function') {
     // Custom saga...
-    exp.saga = config.saga()
-  } else if (typeof config.api === 'function') {
+    const saga = mergedConfig.saga(mergedConfig.type)
+    return {
+      ...omit(finalExport, 'sideEffect'),
+      saga,
+    }
+  } else if (typeof mergedConfig.api === 'function') {
     // Time 2 make real saga!
-    exp.saga = makeApiSaga(
-      config.type,
-      config.api,
+    const { sideEffect } = finalExport
+    const saga = makeApiSaga(
+      mergedConfig.type,
+      mergedConfig.api,
       sideEffect.apiExtraParams,
       sideEffect.takeEffect,
       sideEffect.callApi,
@@ -88,14 +82,14 @@ const rocketjumper = (rocketConfig = {}, rj) => (localConfig = {}) => {
       sideEffect.failureEffect,
       sideEffect.takeEffectArgs,
     )
+    return {
+      ...omit(finalExport, 'sideEffect'),
+      saga,
+    }
   } else {
     // Pass down side effect descriptor
-    exp.sideEffect = sideEffect
+    return finalExport
   }
-
-  return exp
 }
 
-export default (rocketConfig = {}, rj) => {
-  return rocketjumper(undefined, rocketjumper(rocketConfig, rj))
-}
+export default rocketjump

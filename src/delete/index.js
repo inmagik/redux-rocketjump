@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
 import omit from 'lodash.omit'
-import { rocketjump, makeActionTypes, makeActions } from './core'
-import { takeEveryAndCancel } from './effects'
-import { getOrSelect } from './utils'
+import { rocketjump, makeActionTypes, makeActions } from '../core'
+import { takeEveryAndCancel } from '../effects'
+import { getOrSelect } from '../utils'
 
 export const makeDeleteActions = (type) => {
   const { load, unload } = makeActions(type)
@@ -80,7 +80,7 @@ export const makeDeleteReducer = (type) => {
   }
 }
 
-export const makeDelete = (config) => rocketjump({
+export const makeDelete = (config, ...args) => rocketjump({
   proxyActions: {
     load: ({ load }) => (id, params = {}, meta = {}) =>
       load({ ...params, id  }, { ...meta, id })
@@ -88,4 +88,4 @@ export const makeDelete = (config) => rocketjump({
   proxyReducer: () => makeDeleteReducer(config.type),
   proxySelectors: () => makeDeleteSelectors(config.state),
   takeEffect: takeEveryAndCancel,
-})(config)
+})(config, ...args)
