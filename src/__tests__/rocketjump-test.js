@@ -1,7 +1,6 @@
 import { rocketjump } from '../core'
 
 describe('Rocketjump', () => {
-
   const type = 'GET_SOCI'
   const state = 'soci'
 
@@ -10,9 +9,7 @@ describe('Rocketjump', () => {
       rocketjump({
         type,
         state,
-      })()
-      .actions
-      .load({ name: 'Giova' }, { killEnemies: true })
+      })().actions.load({ name: 'Giova' }, { killEnemies: true })
     ).toEqual({
       type,
       payload: {
@@ -27,24 +24,23 @@ describe('Rocketjump', () => {
   })
 
   it('should make actions proxable', () => {
-  //   expect(
-  //     rocketjump({
-  //       type,
-  //       state,
-  //     })()
-  //     .actions
-  //     .load({ name: 'Giova' }, { killEnemies: true })
-  //   ).toEqual({
-  //     type,
-  //     payload: {
-  //       params: {
-  //         name: 'Giova',
-  //       },
-  //     },
-  //     meta: {
-  //       killEnemies: true,
-  //     },
-  //   })
+    //   expect(
+    //     rocketjump({
+    //       type,
+    //       state,
+    //     })()
+    //     .actions
+    //     .load({ name: 'Giova' }, { killEnemies: true })
+    //   ).toEqual({
+    //     type,
+    //     payload: {
+    //       params: {
+    //         name: 'Giova',
+    //       },
+    //     },
+    //     meta: {
+    //       killEnemies: true,
+    //     },
+    //   })
   })
-
 })

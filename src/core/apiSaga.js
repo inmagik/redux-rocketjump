@@ -10,7 +10,7 @@ export default (
   callApi = call,
   successEffects = [],
   failureEffects = [],
-  takeEffectArgs = [],
+  takeEffectArgs = []
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
@@ -26,11 +26,15 @@ export default (
       // Run api with using given call api function
       const data = yield callApi(apiFn, finalParams)
 
-      yield put({ type: actionTypes.success, meta, payload: {
-        data,
-        // Sha la la la
-        params: finalParams,
-      }})
+      yield put({
+        type: actionTypes.success,
+        meta,
+        payload: {
+          data,
+          // Sha la la la
+          params: finalParams,
+        },
+      })
       yield all(successEffects.map(effect => effect(data, meta)))
     } catch (error) {
       yield put({ type: actionTypes.failure, meta, error })
@@ -44,7 +48,7 @@ export default (
       actionTypes.main,
       actionTypes.unload,
       handleApi,
-      ...takeEffectArgs,
+      ...takeEffectArgs
     )
   }
 }

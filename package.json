@@ -7,6 +7,7 @@
   "author": "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
   "license": "MIT",
   "scripts": {
+    "format": "prettier --single-quote --trailing-comma es5  --no-semi --write \"{src,__{tests,mocks}__}/**/*.js\"",
     "test": "jest",
     "lint": "eslint src",
     "start": "npm-run-all -p dev fake-api",
@@ -38,6 +39,7 @@
     "jest": "^23.0.0-alpha.0",
     "json-server": "^0.12.1",
     "npm-run-all": "^4.1.2",
+    "prettier": "1.11.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",

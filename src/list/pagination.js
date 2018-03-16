@@ -26,7 +26,10 @@ export const nextPreviousPaginationAdapter = {
   previous: ({ previous }) => pickParamsFromUrl(previous, pickPage),
 }
 
-const pickLimitOffset = ({ limit, offset }) => ({ offset: +(offset || 0), limit })
+const pickLimitOffset = ({ limit, offset }) => ({
+  offset: +(offset || 0),
+  limit,
+})
 
 export const limitOffsetPaginationAdapter = {
   // Getter for list of stuff string or fn selector from the response

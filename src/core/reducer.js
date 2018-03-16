@@ -2,10 +2,7 @@ import { makeActionTypes } from './actions'
 
 // Barebone reducer from type
 const defaultDataReducer = (prevState, { payload }) => payload.data
-export const makeReducer = (
-  type,
-  dataReducer = defaultDataReducer,
-) => {
+export const makeReducer = (type, dataReducer = defaultDataReducer) => {
   const actionTypes = makeActionTypes(type)
 
   const defaultState = {

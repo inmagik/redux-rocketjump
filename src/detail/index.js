@@ -1,10 +1,10 @@
 import { rocketjump, makeActions } from '../core'
 
-export const makeDetailActions = (type) => {
+export const makeDetailActions = type => {
   const { load, unload } = makeActions(type)
 
   const loadDetail = (id, params = {}, meta = {}) =>
-    load({ ...params, id  }, { ...meta, id })
+    load({ ...params, id }, { ...meta, id })
 
   return {
     load: loadDetail,
@@ -15,6 +15,6 @@ export const makeDetailActions = (type) => {
 export const makeDetail = rocketjump({
   proxyActions: {
     load: ({ load }) => (id, params = {}, meta = {}) =>
-      load({ ...params, id  }, { ...meta, id }),
-  }
+      load({ ...params, id }, { ...meta, id }),
+  },
 })

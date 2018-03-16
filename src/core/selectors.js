@@ -3,23 +3,16 @@ import { getOrSelect } from '../utils'
 
 // Barebone selectors for barebone reducer
 export const makeSelectors = stateSelector => {
-
   const getBaseState = state => getOrSelect(state, stateSelector)
 
   const getData = createSelector(
     getBaseState,
-    ({ data }) => data === null ? null : data
+    ({ data }) => (data === null ? null : data)
   )
 
-  const isLoading = createSelector(
-    getBaseState,
-    ({ loading }) => loading
-  )
+  const isLoading = createSelector(getBaseState, ({ loading }) => loading)
 
-  const getError = createSelector(
-    getBaseState,
-    ({ error }) => error
-  )
+  const getError = createSelector(getBaseState, ({ error }) => error)
 
-  return {getBaseState, getData, isLoading, getError}
+  return { getBaseState, getData, isLoading, getError }
 }

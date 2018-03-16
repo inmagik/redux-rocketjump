@@ -4,11 +4,11 @@ import { rocketjump, makeActionTypes, makeActions } from '../core'
 import { takeEveryAndCancel } from '../effects'
 import { getOrSelect } from '../utils'
 
-export const makeDeleteActions = (type) => {
+export const makeDeleteActions = type => {
   const { load, unload } = makeActions(type)
 
   const perform = (id, params = {}, meta = {}) =>
-    load({ ...params, id  }, { ...meta, id })
+    load({ ...params, id }, { ...meta, id })
 
   return {
     perform,
@@ -17,28 +17,18 @@ export const makeDeleteActions = (type) => {
 }
 
 export const makeDeleteSelectors = stateSelector => {
-
   const baseState = state => getOrSelect(state, stateSelector)
 
-  const getDeleted = createSelector(
-    baseState,
-    ({ deleted }) => deleted
-  )
+  const getDeleted = createSelector(baseState, ({ deleted }) => deleted)
 
-  const getDeleting = createSelector(
-    baseState,
-    ({ deleting }) => deleting
-  )
+  const getDeleting = createSelector(baseState, ({ deleting }) => deleting)
 
-  const getFailures = createSelector(
-    baseState,
-    ({ failures }) => failures
-  )
+  const getFailures = createSelector(baseState, ({ failures }) => failures)
 
-  return {getDeleted, getDeleting, getFailures}
+  return { getDeleted, getDeleting, getFailures }
 }
 
-export const makeDeleteReducer = (type) => {
+export const makeDeleteReducer = type => {
   const actionTypes = makeActionTypes(type)
 
   const defaultState = { deleting: {}, failures: {}, deleted: {} }
@@ -61,7 +51,7 @@ export const makeDeleteReducer = (type) => {
           failures: {
             ...prevState.failures,
             [meta.id]: error,
-          }
+          },
         }
       case actionTypes.success:
         return {
@@ -70,7 +60,7 @@ export const makeDeleteReducer = (type) => {
           deleted: {
             ...prevState.deleted,
             [meta.id]: true,
-          }
+          },
         }
       case actionTypes.unload:
         return { ...prevState, ...defaultState }
@@ -80,12 +70,13 @@ export const makeDeleteReducer = (type) => {
   }
 }
 
-export const makeDelete = (config, ...args) => rocketjump({
-  proxyActions: {
-    load: ({ load }) => (id, params = {}, meta = {}) =>
-      load({ ...params, id  }, { ...meta, id })
-  },
-  proxyReducer: () => makeDeleteReducer(config.type),
-  proxySelectors: () => makeDeleteSelectors(config.state),
-  takeEffect: takeEveryAndCancel,
-})(config, ...args)
+export const makeDelete = (config, ...args) =>
+  rocketjump({
+    proxyActions: {
+      load: ({ load }) => (id, params = {}, meta = {}) =>
+        load({ ...params, id }, { ...meta, id }),
+    },
+    proxyReducer: () => makeDeleteReducer(config.type),
+    proxySelectors: () => makeDeleteSelectors(config.state),
+    takeEffect: takeEveryAndCancel,
+  })(config, ...args)

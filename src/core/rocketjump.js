@@ -23,34 +23,44 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
     }
   }, {})
 
-  invariant(mergedConfig.type, 'You must specify a type key for actions and reducer')
-  invariant(mergedConfig.state, 'You must specify a state key for create selectors')
+  invariant(
+    mergedConfig.type,
+    'You must specify a type key for actions and reducer'
+  )
+  invariant(
+    mergedConfig.state,
+    'You must specify a state key for create selectors'
+  )
 
   const finalExport = allConfigs.reduce((finalExport, config, i) => {
     // When config is a function is intendeed to be a rocketjump!
     if (typeof config === 'function') {
-      return config(omit(mergedConfig, [
-        'api',
-        'callApi',
-        'apiExtraParams',
-        'successEffect',
-        'failureEffect',
-        'proxySelectors',
-        'proxyActions',
-        'proxyReducer',
-      ]), finalExport)
+      return config(
+        omit(mergedConfig, [
+          'api',
+          'callApi',
+          'apiExtraParams',
+          'successEffect',
+          'failureEffect',
+          'proxySelectors',
+          'proxyActions',
+          'proxyReducer',
+        ]),
+        finalExport
+      )
     }
 
-    const exp = typeof finalExport === 'undefined'
-      // Make the export for the first time
-      ? {
-        actions: makeActions(mergedConfig.type),
-        reducer: makeReducer(mergedConfig.type, mergedConfig.dataReducer),
-        selectors: makeSelectors(mergedConfig.state),
-        sideEffect: makeSideEffectDescriptor(),
-      }
-      // Continued to previous export
-      : { ...finalExport }
+    const exp =
+      typeof finalExport === 'undefined'
+        ? // Make the export for the first time
+          {
+            actions: makeActions(mergedConfig.type),
+            reducer: makeReducer(mergedConfig.type, mergedConfig.dataReducer),
+            selectors: makeSelectors(mergedConfig.state),
+            sideEffect: makeSideEffectDescriptor(),
+          }
+        : // Continued to previous export
+          { ...finalExport }
 
     exp.actions = proxyObject(exp.actions, config.proxyActions)
     exp.reducer = proxyReducer(exp.reducer, config.proxyReducer)
@@ -78,7 +88,7 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
       sideEffect.callApi,
       sideEffect.successEffect,
       sideEffect.failureEffect,
-      sideEffect.takeEffectArgs,
+      sideEffect.takeEffectArgs
     )
     return {
       ...omit(finalExport, 'sideEffect'),

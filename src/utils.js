@@ -52,7 +52,7 @@ export const proxyObject = (obj, proxy) => {
   if (typeof proxy === 'object') {
     return {
       ...obj,
-      ...mapValues(proxy, proxyFn => proxyFn(obj))
+      ...mapValues(proxy, proxyFn => proxyFn(obj)),
     }
   }
   return obj

@@ -7,24 +7,26 @@ import {
   nextPreviousPaginationAdapter,
 } from './pagination'
 
-export const makeDeleteListReducerById = (type, getId = ({ meta }) => meta.id) =>
-  (prevState, action) => {
-    if (action.type === type && prevState.data) {
-      return {
-        ...prevState,
-        data: {
-          ...prevState.data,
-          pagination: {
-            ...prevState.data.pagination,
-            count: prevState.data.pagination.count - 1,
-          },
-          list: prevState.data.list.filter(({ id }) => id !== getId(action)),
-        }
-      }
-    } else {
-      return prevState
+export const makeDeleteListReducerById = (
+  type,
+  getId = ({ meta }) => meta.id
+) => (prevState, action) => {
+  if (action.type === type && prevState.data) {
+    return {
+      ...prevState,
+      data: {
+        ...prevState.data,
+        pagination: {
+          ...prevState.data.pagination,
+          count: prevState.data.pagination.count - 1,
+        },
+        list: prevState.data.list.filter(({ id }) => id !== getId(action)),
+      },
     }
+  } else {
+    return prevState
   }
+}
 
 // Paginate list create data handle info about the list it self
 // total items and finally the next and prev params to call
@@ -45,26 +47,31 @@ export const makeListDataReducer = (c = {}) => {
   const config = {
     // Standar pagination adapter!
     paginationAdapter: nextPreviousPaginationAdapter,
-     ...c,
+    ...c,
   }
 
   const defaultListReducer = (prevState, { payload: { data } }) =>
     getOrSelect(data, config.paginationAdapter.list)
 
-  const defaultPaginationReducer = (prevState, { payload: { data, params } }) => ({
+  const defaultPaginationReducer = (
+    prevState,
+    { payload: { data, params } }
+  ) => ({
     count: getOrSelect(data, config.paginationAdapter.count),
     current: getOrSelect(params, config.paginationAdapter.current),
     next: getOrSelect(data, config.paginationAdapter.next),
     previous: getOrSelect(data, config.paginationAdapter.previous),
   })
 
-  const listReducer = typeof config.listReducer === 'function'
-    ? config.listReducer
-    : defaultListReducer
+  const listReducer =
+    typeof config.listReducer === 'function'
+      ? config.listReducer
+      : defaultListReducer
 
-  const paginationReducer = typeof config.paginationReducer === 'function'
-    ? config.paginationReducer
-    : defaultPaginationReducer
+  const paginationReducer =
+    typeof config.paginationReducer === 'function'
+      ? config.paginationReducer
+      : defaultPaginationReducer
 
   return (prevState, action) => ({
     list: listReducer(get(prevState, 'list'), action),
@@ -73,35 +80,35 @@ export const makeListDataReducer = (c = {}) => {
 }
 
 const makeDataListSelectors = (getData, pageSizeSelector) => {
-
-  const getPageSize = typeof pageSizeSelector === 'function'
-    ? pageSizeSelector
-    : () => pageSizeSelector
+  const getPageSize =
+    typeof pageSizeSelector === 'function'
+      ? pageSizeSelector
+      : () => pageSizeSelector
 
   const getList = createSelector(
     getData,
-    data => data === null ? null : data.list
+    data => (data === null ? null : data.list)
   )
 
   const getCount = createSelector(
     getData,
-    data => data === null ? null : data.pagination.count
+    data => (data === null ? null : data.pagination.count)
   )
 
   const getNumPages = createSelector(
     getCount,
     getPageSize,
-    (count, pageSize) => count === null ? null : Math.ceil(count / pageSize)
+    (count, pageSize) => (count === null ? null : Math.ceil(count / pageSize))
   )
 
   const hasNext = createSelector(
     getData,
-    data => data === null ? false : data.pagination.next !== null
+    data => (data === null ? false : data.pagination.next !== null)
   )
 
   const hasPrev = createSelector(
     getData,
-    data => data === null ? false : data.pagination.prev !== null
+    data => (data === null ? false : data.pagination.prev !== null)
   )
 
   return {
@@ -114,20 +121,21 @@ const makeDataListSelectors = (getData, pageSizeSelector) => {
 }
 
 // Paginate list rocketjump!
-export const makeList = (config, ...args) => rocketjump({
-  dataReducer: makeListDataReducer(config),
-  proxyReducer: reducer => {
-    if (config.deleteBy) {
-      reducer = composeReducers(
-        reducer,
-        makeDeleteListReducerById(makeActionTypes(config.deleteBy).success),
-      )
-    }
-    return reducer
-  },
-  proxySelectors: ({ getData }) => {
-    return makeDataListSelectors(getData, config.pageSize)
-  },
-})(config, ...args)
+export const makeList = (config, ...args) =>
+  rocketjump({
+    dataReducer: makeListDataReducer(config),
+    proxyReducer: reducer => {
+      if (config.deleteBy) {
+        reducer = composeReducers(
+          reducer,
+          makeDeleteListReducerById(makeActionTypes(config.deleteBy).success)
+        )
+      }
+      return reducer
+    },
+    proxySelectors: ({ getData }) => {
+      return makeDataListSelectors(getData, config.pageSize)
+    },
+  })(config, ...args)
 
 export { limitOffsetPaginationAdapter, nextPreviousPaginationAdapter }
