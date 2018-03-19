@@ -1,3 +1,8 @@
+# TODOS
+- [ ] Finish writing README 
+- [ ] Improve tests
+- [ ] Improve organization of pre-maded rj detail, list and delete... 
+
 # redux-rocketjump
 Rocketjump your redux! Speed up redux-app development
 
