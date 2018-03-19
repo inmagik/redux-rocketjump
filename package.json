@@ -1,11 +1,23 @@
 {
   "name": "redux-rocketjump",
   "version": "0.1.0",
-  "description": "Rocket jump your redux!",
+  "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "lib/index.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
-  "author": "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
+  "authors": [
+    "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
+    "Mauro Bianchi <mauro.bianchi@inmagik.com>"
+  ],
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inmagik/redux-rocketjump/issues"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "rest",
+    "api"
+  ],
   "scripts": {
     "format": "prettier --single-quote --trailing-comma es5 --no-semi --write \"{src,__{tests,mocks}__}/**/*.js\"",
     "test": "jest",
