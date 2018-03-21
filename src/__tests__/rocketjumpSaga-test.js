@@ -122,6 +122,51 @@ describe('Rocketjump saga', () => {
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
   })
 
+  it('should call success effect on success', done => {
+    const successEffect = jest.fn()
+    const failureEffect = jest.fn()
+    const mockApi = jest.fn().mockResolvedValueOnce('maik')
+    const { actions: { load }, saga } = rocketjump({
+      type,
+      state,
+      successEffect,
+      failureEffect,
+      api: mockApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    mockApi.mock.returnValues[0].then(() => {
+      expect(successEffect).toBeCalled()
+      expect(failureEffect).not.toBeCalled()
+      done()
+    })
+  })
+
+  it('should call failure effect on failure', done => {
+    const successEffect = jest.fn()
+    const failureEffect = jest.fn()
+    const mockBadApi = jest.fn(
+      () =>
+        new Promise((_, reject) => {
+          reject('Bad shit')
+        })
+    )
+    const { actions: { load }, saga } = rocketjump({
+      type,
+      state,
+      successEffect,
+      failureEffect,
+      api: mockBadApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    mockBadApi.mock.returnValues[0].catch(() => {
+      expect(successEffect).not.toBeCalled()
+      expect(failureEffect).toBeCalled()
+      done()
+    })
+  })
+
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
     const { actions: { load }, saga } = rocketjump({
