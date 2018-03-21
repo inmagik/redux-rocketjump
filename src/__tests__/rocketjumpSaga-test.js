@@ -52,17 +52,20 @@ describe('Rocketjump saga', () => {
           payload: {
             params: {},
             data: mockApiResults,
-          }
-        }
+          },
+        },
       ])
       done()
     })
   })
 
   it('should run an async api and dispatch LOADING and FAILURE actions when rejected', done => {
-    const mockBadApi = jest.fn(() => new Promise((_,reject) => {
-      reject('Bad shit')
-    }))
+    const mockBadApi = jest.fn(
+      () =>
+        new Promise((_, reject) => {
+          reject('Bad shit')
+        })
+    )
     const { actions: { load }, saga } = rocketjump({
       type,
       state,
@@ -85,7 +88,7 @@ describe('Rocketjump saga', () => {
           type: `${type}_FAILURE`,
           meta: {},
           error: 'Bad shit',
-        }
+        },
       ])
       done()
     })
@@ -129,17 +132,20 @@ describe('Rocketjump saga', () => {
           payload: {
             params: {},
             data: mockApiResults,
-          }
-        }
+          },
+        },
       ])
       done()
     })
   })
 
   it('should dispatch meta along with actions also when reject', done => {
-    const mockBadApi = jest.fn(() => new Promise((_,reject) => {
-      reject('Bad shit')
-    }))
+    const mockBadApi = jest.fn(
+      () =>
+        new Promise((_, reject) => {
+          reject('Bad shit')
+        })
+    )
     const { actions: { load }, saga } = rocketjump({
       type,
       state,
@@ -162,7 +168,7 @@ describe('Rocketjump saga', () => {
           type: `${type}_FAILURE`,
           meta: { maik: 23 },
           error: 'Bad shit',
-        }
+        },
       ])
       done()
     })
@@ -199,7 +205,8 @@ describe('Rocketjump saga', () => {
   })
 
   it('take only the last side effect as default', done => {
-    const mockApi = jest.fn()
+    const mockApi = jest
+      .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
     const { actions: { load }, saga } = rocketjump({
@@ -236,15 +243,16 @@ describe('Rocketjump saga', () => {
           payload: {
             params: {},
             data: 'splitbanana',
-          }
-        }
+          },
+        },
       ])
       done()
     })
   })
 
   it('take every side effect when specified', done => {
-    const mockApi = jest.fn()
+    const mockApi = jest
+      .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
     const { actions: { load }, saga } = rocketjump({
@@ -256,7 +264,7 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
     store.dispatch(load())
-    mockApi.mock.returnValues[1].then((r) => {
+    mockApi.mock.returnValues[1].then(r => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -290,8 +298,8 @@ describe('Rocketjump saga', () => {
           payload: {
             params: {},
             data: 'splitbanana',
-          }
-        }
+          },
+        },
       ])
       done()
     })
@@ -299,10 +307,13 @@ describe('Rocketjump saga', () => {
 
   it('take latest side effect group by when specified', done => {
     const counterByName = {}
-    const mockApi = jest.fn(({ name }) => new Promise(resolve => {
-      counterByName[name] = (counterByName[name] || 0) + 1
-      resolve(`${name} is cool ${counterByName[name]}`)
-    }))
+    const mockApi = jest.fn(
+      ({ name }) =>
+        new Promise(resolve => {
+          counterByName[name] = (counterByName[name] || 0) + 1
+          resolve(`${name} is cool ${counterByName[name]}`)
+        })
+    )
     const { actions: { load }, saga } = rocketjump({
       type,
       state,
@@ -310,7 +321,7 @@ describe('Rocketjump saga', () => {
       takeEffect: takeLatestAndCancelGroupBy,
       takeEffectArgs: [({ meta }) => meta.name],
       proxyActions: {
-        load: ({ load }) => name => load({ name }, { name })
+        load: ({ load }) => name => load({ name }, { name }),
       },
     })()
     const store = mockStoreWithSaga(saga, {})
@@ -319,7 +330,7 @@ describe('Rocketjump saga', () => {
     store.dispatch(load('maik'))
     store.dispatch(load('lore'))
 
-    mockApi.mock.returnValues[3].then((r) => {
+    mockApi.mock.returnValues[3].then(r => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -397,7 +408,7 @@ describe('Rocketjump saga', () => {
     function successEffect() {}
     function failureEffect() {}
 
-    function *customSaga(){}
+    function* customSaga() {}
 
     function makeCustomSaga(config) {
       expect(config).toEqual({
@@ -428,5 +439,4 @@ describe('Rocketjump saga', () => {
     })()
     expect(saga).toBe(customSaga)
   })
-
 })

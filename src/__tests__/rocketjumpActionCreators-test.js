@@ -33,7 +33,7 @@ describe('Rocketjump action creators', () => {
       type,
       state,
       proxyActions: {
-        load: ({ load }) => name => load({ name })
+        load: ({ load }) => name => load({ name }),
       },
     })()
 
@@ -54,7 +54,7 @@ describe('Rocketjump action creators', () => {
       state,
       proxyActions: {
         destoryTheWorld: () => () => ({
-          type: 'DESTROY_THE_WORLD'
+          type: 'DESTROY_THE_WORLD',
         }),
         loadMore: ({ load }) => (params, meta) =>
           load(params, { ...meta, more: true }),
@@ -66,22 +66,21 @@ describe('Rocketjump action creators', () => {
     expect(actions.loadMore()).toEqual({
       type,
       payload: { params: {} },
-      meta: { more: true }
+      meta: { more: true },
     })
   })
 
   it('should be composable', () => {
     const rjUn = rocketjump({
       proxyActions: {
-        load: ({ load }) => (un, params, meta) =>
-          load({ un, ...params }, meta)
+        load: ({ load }) => (un, params, meta) => load({ un, ...params }, meta),
       },
     })
 
     const rjDos = rocketjump({
       proxyActions: {
         load: ({ load }) => (un, dos, params, meta) =>
-          load(un, { dos, ...params }, meta)
+          load(un, { dos, ...params }, meta),
       },
     })
 
@@ -89,16 +88,29 @@ describe('Rocketjump action creators', () => {
       type,
       state,
       proxyActions: {
-        load: ({ load }) => (un, dos, tres, params, meta) => load(un, dos, {
-          ...params,
-          tres,
-        }, meta),
+        load: ({ load }) => (un, dos, tres, params, meta) =>
+          load(
+            un,
+            dos,
+            {
+              ...params,
+              tres,
+            },
+            meta
+          ),
       },
     })({
       proxyActions: {
-        load: ({ load }) => (a) => load('Un', 'Dos', 'Tres', {}, {
-          ammaccabanane: a,
-        })
+        load: ({ load }) => a =>
+          load(
+            'Un',
+            'Dos',
+            'Tres',
+            {},
+            {
+              ammaccabanane: a,
+            }
+          ),
       },
     })
 
@@ -113,8 +125,7 @@ describe('Rocketjump action creators', () => {
       },
       meta: {
         ammaccabanane: 'JD',
-      }
+      },
     })
   })
-
 })

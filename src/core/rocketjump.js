@@ -73,17 +73,19 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
 
   if (typeof mergedConfig.saga === 'function') {
     // Custom saga...
-    const saga = mergedConfig.saga(pick(mergedConfig, [
-      'type',
-      'state',
-      'api',
-      'apiExtraParams',
-      'takeEffect',
-      'callApi',
-      'successEffect',
-      'failureEffect',
-      'takeEffectArgs'
-    ]))
+    const saga = mergedConfig.saga(
+      pick(mergedConfig, [
+        'type',
+        'state',
+        'api',
+        'apiExtraParams',
+        'takeEffect',
+        'callApi',
+        'successEffect',
+        'failureEffect',
+        'takeEffectArgs',
+      ])
+    )
     return {
       ...omit(finalExport, 'sideEffect'),
       saga,

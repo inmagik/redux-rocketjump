@@ -17,8 +17,8 @@ describe('Rocketjump selectors', () => {
         {
           name: 'Maik',
           age: 29,
-        }
-      ]
+        },
+      ],
     },
   }
 
@@ -38,14 +38,18 @@ describe('Rocketjump selectors', () => {
       type,
       state,
       proxySelectors: {
-        getData: ({ getData }) => createSelector(getData, soci => soci.map(s => ({
-          ...s,
-          name: s.name.toUpperCase(),
-          fresh: true,
-        }))),
-        getOldest: ({ getData }) => createSelector(getData, soci => {
-          return orderBy(soci, 'age', 'desc')[0]
-        })
+        getData: ({ getData }) =>
+          createSelector(getData, soci =>
+            soci.map(s => ({
+              ...s,
+              name: s.name.toUpperCase(),
+              fresh: true,
+            }))
+          ),
+        getOldest: ({ getData }) =>
+          createSelector(getData, soci => {
+            return orderBy(soci, 'age', 'desc')[0]
+          }),
       },
     })()
 
@@ -59,7 +63,7 @@ describe('Rocketjump selectors', () => {
         name: 'MAIK',
         fresh: true,
         age: 29,
-      }
+      },
     ])
     expect(selectors.getOldest(fakeState)).toEqual({
       name: 'Maik',
@@ -70,37 +74,54 @@ describe('Rocketjump selectors', () => {
   it('should be composable', () => {
     const rjIsAlive = rocketjump({
       proxySelectors: {
-        getData: ({ getData }) => createSelector(getData, soci => soci.map(s => ({
-          ...s,
-          isAlive: s.age < 27,
-        })))
-      }
+        getData: ({ getData }) =>
+          createSelector(getData, soci =>
+            soci.map(s => ({
+              ...s,
+              isAlive: s.age < 27,
+            }))
+          ),
+      },
     })
-    const capitalize = s => s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase()
+    const capitalize = s =>
+      s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase()
     const rjRangerName = rocketjump({
       proxySelectors: {
-        getData: ({ getData }) => createSelector(getData, soci => soci.map(s => ({
-          ...s,
-          rangerName: [s.name.slice(0, -2), s.name.slice(-2)].map(capitalize).join(' '),
-        })))
-      }
+        getData: ({ getData }) =>
+          createSelector(getData, soci =>
+            soci.map(s => ({
+              ...s,
+              rangerName: [s.name.slice(0, -2), s.name.slice(-2)]
+                .map(capitalize)
+                .join(' '),
+            }))
+          ),
+      },
     })
     const { selectors } = rocketjump(rjIsAlive, rjRangerName, {
       type,
       state,
       proxySelectors: {
-        getData: ({ getData }) => createSelector(getData, soci => soci.map(s => ({
-          ...s,
-          hello: `My name is ${s.rangerName} an i am ${s.age}`,
-        })))
-      }
+        getData: ({ getData }) =>
+          createSelector(getData, soci =>
+            soci.map(s => ({
+              ...s,
+              hello: `My name is ${s.rangerName} an i am ${s.age}`,
+            }))
+          ),
+      },
     })({
       proxySelectors: {
-        getData: ({ getData }) => createSelector(getData, soci => soci.map(s => ({
-          ...s,
-          hello: s.isAlive ? `${s.hello} and i am alive` : `${s.hello} and i am a ghost`,
-        })))
-      }
+        getData: ({ getData }) =>
+          createSelector(getData, soci =>
+            soci.map(s => ({
+              ...s,
+              hello: s.isAlive
+                ? `${s.hello} and i am alive`
+                : `${s.hello} and i am a ghost`,
+            }))
+          ),
+      },
     })
 
     expect(selectors.getData(fakeState)).toEqual([
@@ -117,7 +138,7 @@ describe('Rocketjump selectors', () => {
         isAlive: false,
         rangerName: 'Ma Ik',
         hello: 'My name is Ma Ik an i am 29 and i am a ghost',
-      }
+      },
     ])
   })
 })
