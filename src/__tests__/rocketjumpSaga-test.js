@@ -386,4 +386,47 @@ describe('Rocketjump saga', () => {
     })
   })
 
+  it('can be custom!', () => {
+    expect.assertions(2)
+
+    function api() {}
+    function apiExtraParams() {}
+    function takeEffect() {}
+    function takeEffectArgs() {}
+    function callApi() {}
+    function successEffect() {}
+    function failureEffect() {}
+
+    function *customSaga(){}
+
+    function makeCustomSaga(config) {
+      expect(config).toEqual({
+        type,
+        state,
+        api,
+        apiExtraParams,
+        takeEffect,
+        takeEffectArgs,
+        callApi,
+        successEffect,
+        failureEffect,
+      })
+      return customSaga
+    }
+
+    const { saga } = rocketjump({
+      type,
+      state,
+      saga: makeCustomSaga,
+      api,
+      apiExtraParams,
+      takeEffect,
+      takeEffectArgs,
+      callApi,
+      successEffect,
+      failureEffect,
+    })()
+    expect(saga).toBe(customSaga)
+  })
+
 })

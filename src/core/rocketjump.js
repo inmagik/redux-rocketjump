@@ -1,4 +1,5 @@
 import invariant from 'invariant'
+import pick from 'lodash.pick'
 import { proxyObject, proxyReducer } from '../utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
@@ -72,7 +73,17 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
 
   if (typeof mergedConfig.saga === 'function') {
     // Custom saga...
-    const saga = mergedConfig.saga(mergedConfig.type)
+    const saga = mergedConfig.saga(pick(mergedConfig, [
+      'type',
+      'state',
+      'api',
+      'apiExtraParams',
+      'takeEffect',
+      'callApi',
+      'successEffect',
+      'failureEffect',
+      'takeEffectArgs'
+    ]))
     return {
       ...omit(finalExport, 'sideEffect'),
       saga,
