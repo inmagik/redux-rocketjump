@@ -106,6 +106,22 @@ describe('Rocketjump saga', () => {
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 666, rinne: 22 })
   })
 
+  it('can provide extra params to api function', () => {
+    const mockApi = jest.fn()
+    const { actions: { load }, saga } = rocketjump({
+      type,
+      state,
+      /* eslint-disable require-yield */
+      apiExtraParams: function*() {
+        return { giova: 99, maik: 23 }
+      },
+      api: mockApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load({ giova: 666, rinne: 22 }))
+    expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
+  })
+
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
     const { actions: { load }, saga } = rocketjump({
