@@ -15,4 +15,21 @@ describe('Rocketjump reducer', () => {
       error: null,
     })
   })
+
+  it('should handle $type_LOADING actions', () => {
+    const { reducer } = rocketjump({
+      type,
+      state,
+    })()
+    const prevState = {
+      loading: false,
+      data: null,
+      error: null,
+    }
+    expect(reducer(prevState, { type: `${type}_LOADING` })).toEqual({
+      loading: true,
+      data: null,
+      error: null,
+    })
+  })
 })
