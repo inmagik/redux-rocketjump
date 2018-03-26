@@ -1,4 +1,4 @@
-import { rocketjump } from '../core'
+import { rocketjump } from '../rocketjump'
 import { createSelector } from 'reselect'
 import { orderBy } from 'lodash'
 

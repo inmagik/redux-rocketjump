@@ -31,7 +31,7 @@ class Todos extends PureComponent {
     return (
       <div className='todos'>
         {loading && <div>Loading <b>Y</b> todos...</div>}
-        {todos && <NewTodo onSubmit={addTodo} />}
+        {todos && <NewTodo onSubmit={addTodo} adding={adding} />}
         <div className='todo-list'>
           {todos && todos.map(todo => (
             <Todo

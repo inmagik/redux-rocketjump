@@ -1,7 +1,7 @@
 # TODOS
 - [ ] Finish writing README
 - [ ] Improve tests
-- [ ] Improve organization of pre-maded rj detail, list and delete...
+- [x] Improve organization of pre-maded rj detail, list and delete...
 
 # redux-rocketjump
 Rocketjump your redux! Speed up redux-app development
@@ -28,16 +28,19 @@ npm install --save redux-saga reselect
 
 ## What?
 
-redux-rocketjump is a set of tool to speed up the devlopment of an a redux based app.
+redux-rocketjump is a set of tools to speed up the devlopment of an a redux based app.
 redux-rocketjump encourage composition and exentibilty instead of an "a black box that do all the stuff" approach .
 
 ## Why?
 
 When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an a difficult to share behaviours, redux-rocketjump try to bridge this gap using composition and functional programming.
 
-# Organize state folders
-The one main idea is to organize the state folder by functionality instead of type es (actions, reducers, selectors, ...).
-Every folders should export a `reducer` key used to inject into main reducer and, if needed a `saga` key used to handle side effects.
+## Organize redux code by functionality
+When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
+But when the app get bigger this approach lead to confusion, unmantenibility and in a difficult scalability.
+So instead yuo should organizing state folders by what they does Es:. (tods, users, tickets, ...).
+To do this redux-rocketjump offers you two covenient methods `makeAppsReducers` and `makeAppsSaga`.
+Every state folder should export a `reducer` key with the reducer injected into the main reducer and, if needed, a `saga` key used to handle side effects.
 A tipical `state/index.js` looks like this:
 ```js
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
@@ -72,7 +75,66 @@ sagaMiddleware.run(mainSaga)
 export default store
 ```
 
-# Base rocketjump
+## Your first rocketjump
+Basically `rocketjump` is just a function that makes action creators, selectors, reducer
+and saga from a configuration.
+The minum options are:
+- `type`: The action type that trigger side effect and the prefix for related action types (type_LOADING, type_SUCCESS, type_FAILURE, type_UNLOAD).
+- `state`: The base selector for generated selectors, can be a string with the sintax of https://lodash.com/docs/#get
+- `api`: the side effect, a function that return a promise.
+So this is a `rocketjump` for fetching some todos from an API:
+```js
+// todos.js
+import { rocketjump } from 'redux-rocketjump'
+export const {
+    actions: {
+      // Trigger side effect
+      load: loadTodos,
+      // Stop side effect and clear the state
+      unload: unloadTods,
+    },
+    selectors: {
+      // Promise resolved value
+      getData: getTodos,
+      // Promise is running?
+      isLoading: isLoading,
+      // The promise rejection value
+      getError: getTodsError,
+    },
+    // The generated reducer
+    reducer,
+    // The generated saga
+    saga,
+} = rocketjump({
+    type: 'GET_TODOS',
+    state 'todos',
+    api: params => loadTodosFromApi(params),
+})()
+```
+## Extend the base rocketjump
+The base rocketjump can be extendend with following options:
+- `proxyReducer`:
+
+Heres an examples of more cool todos rj:
+```js
+export const {
+  actions: {
+    load: loadTodos,
+    loadMore: loadMoreTodos,
+    unload: unloadTods,
+  },
+  selectors: {
+    ca
+  }
+
+} = rocketjump({
+  failureEffect: function *(error) {
+    yield put(displayErrorToast(error))
+  }
+})
+```
+
+
 Di base rocketjump è una funzione che genera azioni, selettori, reducer e saga partendo
 da:
   - type: l'action type che scatena il side effect e dal quale verrano generate
@@ -112,6 +174,8 @@ export const {
 
 # rocketjump configurabile
 Quelle sopra sono le opzioni base x creare rj but puoi personalizzarle
+ProxyActions is a hook to proxy action creators, if object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expcted to be the new action creator. Previous action creators were merged. If function is given, rj used the result as an objcet of action creators to be merged with previous action creators.
+ProxyResuc
 - proxyActions
 
 - dataReducer

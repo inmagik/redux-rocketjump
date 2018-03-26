@@ -1,4 +1,4 @@
-import { rocketjump } from '../core'
+import { rocketjump } from '../rocketjump'
 
 describe('Rocketjump side effect descriptor', () => {
   const type = 'GET_SOCI'

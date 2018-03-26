@@ -1,4 +1,4 @@
-import { rocketjump } from '../core'
+import { rocketjump } from '../rocketjump'
 
 describe('Rocketjump', () => {
   it('should throw exception when no type is provided', () => {

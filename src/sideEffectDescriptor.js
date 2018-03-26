@@ -1,6 +1,6 @@
 import get from 'lodash.get'
 import pick from 'lodash.pick'
-import { arrayze } from '../utils'
+import { arrayze } from './utils'
 
 export const makeSideEffectDescriptor = () => ({
   apiExtraParams: [],

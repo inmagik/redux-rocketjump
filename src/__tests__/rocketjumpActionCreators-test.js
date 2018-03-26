@@ -1,4 +1,4 @@
-import { rocketjump } from '../core'
+import { rocketjump } from '../rocketjump'
 
 describe('Rocketjump action creators', () => {
   const type = 'GET_SOCI'

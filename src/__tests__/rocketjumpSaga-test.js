@@ -1,6 +1,7 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
-import { rocketjump } from '../core'
+import { call } from 'redux-saga/effects'
+import { rocketjump } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
 
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
@@ -166,6 +167,30 @@ describe('Rocketjump saga', () => {
       done()
     })
   })
+
+  // it('should be use custom call api function', done => {
+  //   const callApi = function *(apiFn) {
+  //     const data = yield call(apiFn('supersecret'))
+  //     return data
+  //   }
+  //   const mockApi = token => () => new Promise(resolve => {
+  //     resolve('maik ' + token)
+  //   })
+  //
+  //   const { actions: { load }, saga } = rocketjump({
+  //     type,
+  //     state,
+  //     callApi,
+  //     api: mockApi,
+  //   })()
+  //   const store = mockStoreWithSaga(saga, {})
+  //   store.dispatch(load())
+  //   mockApi.mock.returnValues[0].then(apiResult => {
+  //     expect(mockApi.mock.calls[0][0]).tobe('supersecret')
+  //     console.log('~~~', apiResult)
+  //     done()
+  //   })
+  // })
 
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)

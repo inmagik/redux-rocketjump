@@ -1,6 +1,6 @@
 import { fork, call, put, all } from 'redux-saga/effects'
 import { makeActionTypes } from './actions'
-import { takeLatestAndCancel } from '../effects'
+import { takeLatestAndCancel } from './effects'
 
 export default (
   actionType,

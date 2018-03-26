@@ -1,6 +1,6 @@
 import invariant from 'invariant'
 import pick from 'lodash.pick'
-import { proxyObject, proxyReducer } from '../utils'
+import { proxyObject, proxyReducer } from './utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
@@ -112,5 +112,3 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
     return finalExport
   }
 }
-
-export default rocketjump
