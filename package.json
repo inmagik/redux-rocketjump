@@ -78,7 +78,6 @@
     "lodash.mapvalues": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
-    "lodash.some": "^4.6.0",
-    "query-string": "^5.1.0"
+    "lodash.some": "^4.6.0"
   }
 }
