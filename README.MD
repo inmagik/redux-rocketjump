@@ -39,7 +39,7 @@ const toastOnFailureRj = rocketjump({
   }
 })
 
-const callAuthenticateRj = rocketjump({
+const callAuthenticatedRj = rocketjump({
   callApi: function *(apiFn, ...args) {
     const token = yield select(getAuthToken)
     const result = yield call(apiFn, ...args, token)
@@ -52,7 +52,7 @@ export const {
   selectors: { getData: getTodos, isLoading: isLoadingTodos, getError: getTodosError },
   saga,
   reducer,
-} = rocketjump(moreStuffRj, toastOnFailureRj, callAuthenticateRj)({
+} = rocketjump(moreStuffRj, toastOnFailureRj, callAuthenticatedRj)({
   type: 'GET_TODOS',
   state: 'todos',
   api: fetchTodosFromApi,
@@ -79,25 +79,18 @@ npm install --save redux-rocketjump
 ```
 
 ## Install peer dependencies
-redux-rocketjump use `redux-saga` to handle side effects, and `reselect` to make ad hoc memoized selectors.
+redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects, and [reselect](https://github.com/reactjs/reselect) to make ad hoc memoized selectors.
 ```
-yarn add redux-saga reselect
+yarn add redux redux-saga reselect
 ```
 or
 ```
-npm install --save redux-saga reselect
+npm install --save redux redux-saga reselect
 ```
 
 ## Why?
 
 When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff, from  using composition and functional programming. automating
-
-
-## What?
-
-
-
-
 
 ## Organize redux code by functionality
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
