@@ -1,12 +1,74 @@
-# TODOS
-- [ ] Finish writing README
-- [ ] Improve tests
-- [x] Improve organization of pre-maded rj detail, list and delete...
-
 # redux-rocketjump
-Rocketjump your redux! Speed up redux-app development
+Rocketjump your redux! Speed up redux-app development.
 
-# Install
+A set of tools to speed up the devlopment of an a redux based app:
+
+- Generate all you need from and for the state from a single function call, easy to extend, easy to compose.
+- An out of the box way to divide redux folders by functionality instead of type.
+- Handy helpers to help you compose functionality.
+
+```js
+import { rocketjump, makeAppsReducers, makeAppsSaga } from 'redux-rocketjump'
+
+// state/index.js
+import * as todos from './todos'
+
+const APPS = {
+  todos,
+}
+
+const rootReducer = combineReducers({
+  ...makeAppsReducers(APPS),
+})
+
+const mainSaga = makeAppsSaga(APPS)
+
+// state/todos.js
+const moreStuffRj = rocketjump({
+  proxyActions: {
+    loadMore: ({ load }) => (params = {}, meta = {}) =>
+      load(params, { ...meta, more: true }),
+  },
+  dataReducer: (prevState, { type, payload, meta }) =>
+    meta.more ? prevState.concat(payload.data) : payload.data
+})
+
+const toastOnFailureRj = rocketjump({
+  failureEffect: function *(error) {
+    yield put(showErrorToast(`Sorry our monkeys are trying to do their best, ${error.message}`))
+  }
+})
+
+const callAuthenticateRj = rocketjump({
+  callApi: function *(apiFn, ...args) {
+    const token = yield select(getAuthToken)
+    const result = yield call(apiFn, ...args, token)
+    return result
+  }
+})
+
+export const {
+  actions: { load: loadTodos, unload: unloadTods, loadMore: loadMoreTodos },
+  selectors: { getData: getTodos, isLoading: isLoadingTodos, getError: getTodosError },
+  saga,
+  reducer,
+} = rocketjump(moreStuffRj, toastOnFailureRj, callAuthenticateRj)({
+  type: 'GET_TODOS',
+  state: 'todos',
+  api: fetchTodosFromApi,
+  proxySelectors: {
+    getData: ({ getData }) => createSelector(getData, todos =>
+      todos === null ? null : todos.map(todo => ({
+        ...todo,
+        asReadMe: `* [${todo.done ? 'v' : ''}] ${todo.title}`
+      }))
+    )
+  },
+})
+
+```
+
+## Install
 
 ```
 yarn add redux-rocketjump
@@ -16,7 +78,7 @@ or
 npm install --save redux-rocketjump
 ```
 
-# Install peer dependencies
+## Install peer dependencies
 redux-rocketjump use `redux-saga` to handle side effects, and `reselect` to make ad hoc memoized selectors.
 ```
 yarn add redux-saga reselect
@@ -26,19 +88,21 @@ or
 npm install --save redux-saga reselect
 ```
 
-## What?
-
-redux-rocketjump is a set of tools to speed up the devlopment of an a redux based app.
-redux-rocketjump encourage composition and exentibilty instead of an "a black box that do all the stuff" approach .
-
 ## Why?
 
-When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an a difficult to share behaviours, redux-rocketjump try to bridge this gap using composition and functional programming.
+When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff, from  using composition and functional programming. automating
+
+
+## What?
+
+
+
+
 
 ## Organize redux code by functionality
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
 But when the app get bigger this approach lead to confusion, unmantenibility and in a difficult scalability.
-So instead yuo should organizing state folders by what they does Es:. (tods, users, tickets, ...).
+So instead yuo should organizing state folders by what they does Es:. (todos, users, tickets, ...).
 To do this redux-rocketjump offers you two covenient methods `makeAppsReducers` and `makeAppsSaga`.
 Every state folder should export a `reducer` key with the reducer injected into the main reducer and, if needed, a `saga` key used to handle side effects.
 A tipical `state/index.js` looks like this:
@@ -112,8 +176,27 @@ export const {
 })()
 ```
 ## Extend the base rocketjump
-The base rocketjump can be extendend with following options:
-- `proxyReducer`:
+The base rocketjump can be extendend to change how the reducer work, make new actions creator, custom selectors and more.
+Here the complete list of available options:
+
+- `proxyActions`: An hook to proxy action creators, if an object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expcted to be the new action creator. Previous action creators will be merged with the given new action creators. If function is given, the return value will be used directly to be merge to the previous actions creators.
+- `proxySelectors`: Works exactly as `proxyActions` but is used to proxy selectors.
+- `dataReducer`: If given is used as a sub reducer to handle the `type_SUCCESS ` action on the piece of state related to data.
+The default implentation is:
+```
+(prevState, { type, payload }) => payload.data
+```
+- `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
+- `apiExtraParams`: A generator called from a saga used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
+- `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
+- `successEffect`: A generator run only when the promise returned from `api` resolves. You can even pass an array of generator.
+- `failureEffect`: A generator run only when the promise returned from `api` reject. You can even pass an array of generator.
+- `takeEffect`: ...
+- `takeEffectArgs`: ...
+- `saga`: ...
+
+the result as an objcet of action creators to be merged with previous action creators.
+ProxyResuc
 
 Heres an examples of more cool todos rj:
 ```js
