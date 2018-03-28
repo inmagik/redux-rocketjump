@@ -4,7 +4,7 @@ Rocketjump your redux! Speed up redux-app development.
 A set of tools to speed up the devlopment of an a redux based app:
 
 - Generate all you need from and for the state from a single function call, easy to extend, easy to compose.
-- An out of the box way to divide redux folders by functionality instead of type.
+- An out of the box way to organize redux folders by functionality instead of type.
 - Handy helpers to help you compose functionality.
 
 ```js
@@ -79,6 +79,7 @@ npm install --save redux-rocketjump
 ```
 
 ## Install peer dependencies
+
 redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects, and [reselect](https://github.com/reactjs/reselect) to make ad hoc memoized selectors.
 ```
 yarn add redux redux-saga reselect
@@ -90,13 +91,13 @@ npm install --save redux redux-saga reselect
 
 ## Why?
 
-When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff, from  using composition and functional programming. automating
+When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff without loosing control of what you are doing.
 
 ## Organize redux code by functionality
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
 But when the app get bigger this approach lead to confusion, unmantenibility and in a difficult scalability.
 So instead yuo should organizing state folders by what they does Es:. (todos, users, tickets, ...).
-To do this redux-rocketjump offers you two covenient methods `makeAppsReducers` and `makeAppsSaga`.
+To do this redux-rocketjump offers you two covenient helpers `makeAppsReducers` and `makeAppsSaga`.
 Every state folder should export a `reducer` key with the reducer injected into the main reducer and, if needed, a `saga` key used to handle side effects.
 A tipical `state/index.js` looks like this:
 ```js
@@ -139,37 +140,41 @@ The minum options are:
 - `type`: The action type that trigger side effect and the prefix for related action types (type_LOADING, type_SUCCESS, type_FAILURE, type_UNLOAD).
 - `state`: The base selector for generated selectors, can be a string with the sintax of https://lodash.com/docs/#get
 - `api`: the side effect, a function that return a promise.
+
 So this is a `rocketjump` for fetching some todos from an API:
 ```js
 // todos.js
 import { rocketjump } from 'redux-rocketjump'
 export const {
-    actions: {
-      // Trigger side effect
-      load: loadTodos,
-      // Stop side effect and clear the state
-      unload: unloadTods,
-    },
-    selectors: {
-      // Promise resolved value
-      getData: getTodos,
-      // Promise is running?
-      isLoading: isLoading,
-      // The promise rejection value
-      getError: getTodsError,
-    },
-    // The generated reducer
-    reducer,
-    // The generated saga
-    saga,
+  actions: {
+    // Trigger side effect
+    // the first parameter is an object that is passed as argument to the api function
+    // the second paramter is an object of meta dispached along with all the action dispatched
+    // you can use meta to customize reducer or saga behaviour from outside.
+    load: loadTodos,
+    // Stop side effect and clear the state, accept an object of meta as paramater
+    unload: unloadTods,
+  },
+  selectors: {
+    // Promise resolved value
+    getData: getTodos,
+    // Promise is running?
+    isLoading: isLoading,
+    // The promise rejection
+    getError: getTodsError,
+  },
+  // The generated reducer
+  reducer,
+  // The generated saga
+  saga,
 } = rocketjump({
-    type: 'GET_TODOS',
-    state 'todos',
-    api: params => loadTodosFromApi(params),
+  type: 'GET_TODOS',
+  state 'todos',
+  api: params => loadTodosFromApi(params),
 })()
 ```
 ## Extend the base rocketjump
-The base rocketjump can be extendend to change how the reducer work, make new actions creator, custom selectors and more.
+The base rocketjump can be extendend to change how the reducer work, make new action creators, customize selectors and more.
 Here the complete list of available options:
 
 - `proxyActions`: An hook to proxy action creators, if an object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expcted to be the new action creator. Previous action creators will be merged with the given new action creators. If function is given, the return value will be used directly to be merge to the previous actions creators.
@@ -180,7 +185,7 @@ The default implentation is:
 (prevState, { type, payload }) => payload.data
 ```
 - `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
-- `apiExtraParams`: A generator called from a saga used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
+- `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
 - `successEffect`: A generator run only when the promise returned from `api` resolves. You can even pass an array of generator.
 - `failureEffect`: A generator run only when the promise returned from `api` reject. You can even pass an array of generator.
@@ -350,6 +355,11 @@ rj(
   (config, ...args) => rj({})(config, ...args),
 )
 ```
+
+# Working example
+You can find a working example under src/example, it's a simple REST todo app that uses [json-server](https://github.com/typicode/json-server) as fake API server.
+
+To run it first clone the repo:
 
 # Rocketjump battery included
 As an examples and 4 real life there are some pre maded rjs
