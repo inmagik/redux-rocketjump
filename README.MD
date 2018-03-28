@@ -80,7 +80,8 @@ npm install --save redux-rocketjump
 
 ## Install peer dependencies
 
-redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects, and [reselect](https://github.com/reactjs/reselect) to make ad hoc memoized selectors.
+redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects, 
+and [reselect](https://github.com/reactjs/reselect) to make ad hoc memoized selectors.
 ```
 yarn add redux redux-saga reselect
 ```
@@ -91,7 +92,8 @@ npm install --save redux redux-saga reselect
 
 ## Why?
 
-When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff without loosing control of what you are doing.
+When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and 
+automating certain stuff without loosing control of what you are doing.
 
 ## Organize redux code by functionality
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
@@ -99,6 +101,7 @@ But when the app get bigger this approach lead to confusion, unmantenibility and
 So instead yuo should organizing state folders by what they does Es:. (todos, users, tickets, ...).
 To do this redux-rocketjump offers you two covenient helpers `makeAppsReducers` and `makeAppsSaga`.
 Every state folder should export a `reducer` key with the reducer injected into the main reducer and, if needed, a `saga` key used to handle side effects.
+
 A tipical `state/index.js` looks like this:
 ```js
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
@@ -189,30 +192,122 @@ The default implentation is:
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
 - `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generator.
 - `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generator.
-- `takeEffect`: The effect that describe how to handle the sideEffect, the default value is `takeLatestAndCancel` that take care only of the last side effect runned. If you need different behaviours you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js) (you can import theese directly from redux-rocketjump)
+- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous task, this is usally the best choice for GET api requests. 
+If you need a different behaviours of you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js), or you can implement a new one.
 - `takeEffectArgs`: Extra arguments passed to `takeEffect`.
 
-the result as an objcet of action creators to be merged with previous action creators.
-ProxyResuc
+Here some examples to use theese options to handle common tasks.
 
-Heres an examples of more cool todos rj:
+Adding auth to your api calls:
 ```js
-export const {
-  actions: {
-    load: loadTodos,
-    loadMore: loadMoreTodos,
-    unload: unloadTods,
-  },
-  selectors: {
-    ca
-  }
+import { rocketjump } from 'redux-rocketjump'
+import { select, call } from 'redux-saga/effects'
 
-} = rocketjump({
-  failureEffect: function *(error) {
-    yield put(displayErrorToast(error))
+const rj = rocketjump({
+  callApi: function *(apiFn, ...args) {
+    const token = yield select(state => state.auth.accessToken)
+    const result = yield call(apiFn, ...args, token)
+    return result
+  }
+})
+
+```
+
+Load more stuff from a paginated api:
+```js
+import { rocketjump, getOrSelect } from 'redux-rocketjump'
+import { select } from 'redux-saga/effects'
+
+const rj = (config, ...args) = rocketjump({
+  apiExtraParams: function (params, meta) {
+    if (meta.loadMore) {
+      const next = yield select(getOrSelect(state, config.state).pagination.next)
+      return { next }
+    }
+  }
+})(config, ...args)
+```
+
+Show a popup on success:
+```js
+import { rocketjump } from 'redux-rocketjump'
+import { put } from 'redux-saga/effects'
+
+const rj = rocketjump({
+  successEffect: function (data, meta) {
+    if (meta.successMessage) {
+      yield put(showSuccessMessage(meta.successMessage))
+    }
   }
 })
 ```
+
+Handle a delete call:
+```js
+import { rocketjump, takeEveryAndCancel, makeActionTypes } from 'redux-rocketjump'
+import omit from 'lodash.omit'
+import { createSelectors } from 'reselect' 
+
+const rj = (config = {}, ...args) => rocketjump({
+  takeEffect: takeEveryAndCancel,
+  proxyActions: {
+    load: ({ load }) => (id, params = {}, meta = {}) =>
+      load({ ...params, id }, { ...meta, id }),
+  },
+  proxySelectors: ({ getBaseState }) => {
+    const getDeleted = createSelector(getBaseState, ({ deleted }) => deleted)
+
+    const getDeleting = createSelector(getBaseState, ({ deleting }) => deleting)
+
+    const getFailures = createSelector(getBaseState, ({ failures }) => failures)
+
+    return { getDeleted, getDeleting, getFailures }
+  },
+  proxyReducer: () => {
+    const actionTypes = makeActionTypes(config.type)
+
+    const defaultState = { deleting: {}, failures: {}, deleted: {} }
+
+    return (prevState = defaultState, { type, payload, meta, error }) => {
+      switch (type) {
+        case actionTypes.loading:
+          return {
+            ...prevState,
+            deleting: {
+              ...prevState.deleting,
+              [meta.id]: true,
+            },
+            failures: omit(prevState.failures, meta.id),
+          }
+        case actionTypes.failure:
+          return {
+            ...prevState,
+            deleting: omit(prevState.deleting, meta.id),
+            failures: {
+              ...prevState.failures,
+              [meta.id]: error,
+            },
+          }
+        case actionTypes.success:
+          return {
+            ...prevState,
+            deleting: omit(prevState.deleting, meta.id),
+            deleted: {
+              ...prevState.deleted,
+              [meta.id]: true,
+            },
+          }
+        case actionTypes.unload:
+          return { ...prevState, ...defaultState }
+        default:
+          return prevState
+      }
+    }
+  }
+})(config, ...args)
+```
+
+
 ## Compose rocketjumps
 Come avrete notato rocketjump non è una funzione ma una funzione che genera una
 una funzione questo perché è pensato per essere riutilizzato, infatti la funzione
