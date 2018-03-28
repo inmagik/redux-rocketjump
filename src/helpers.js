@@ -1,6 +1,15 @@
 import { fork } from 'redux-saga/effects'
+import get from 'lodash.get'
 import some from 'lodash.some'
 import { arrayze } from './utils'
+
+// Helper for select from both string and function
+export const getOrSelect = (obj, selector) => {
+  if (typeof selector === 'function') {
+    return selector(obj)
+  }
+  return get(obj, selector)
+}
 
 export const composeReducers = (...reducers) => (prevState, action) =>
   reducers.reduce((nextState, reducer) => {

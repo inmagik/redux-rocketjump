@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { getOrSelect } from './utils'
+import { getOrSelect } from './helpers'
 
 // Barebone selectors for barebone reducer
 export const makeSelectors = stateSelector => {
