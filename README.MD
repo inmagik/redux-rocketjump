@@ -187,11 +187,10 @@ The default implentation is:
 - `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
 - `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
-- `successEffect`: A generator run only when the promise returned from `api` resolves. You can even pass an array of generator.
-- `failureEffect`: A generator run only when the promise returned from `api` reject. You can even pass an array of generator.
-- `takeEffect`: ...
-- `takeEffectArgs`: ...
-- `saga`: ...
+- `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generator.
+- `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generator.
+- `takeEffect`: The effect that describe how to handle the sideEffect, the default value is `takeLatestAndCancel` that take care only of the last side effect runned. If you need different behaviours you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js) (you can import theese directly from redux-rocketjump)
+- `takeEffectArgs`: Extra arguments passed to `takeEffect`.
 
 the result as an objcet of action creators to be merged with previous action creators.
 ProxyResuc
