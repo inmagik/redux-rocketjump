@@ -1,9 +1,9 @@
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 
 describe('Rocketjump reducer', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
-  const { reducer } = rocketjump({
+  const { reducer } = rj({
     type,
     state,
   })()
@@ -75,7 +75,7 @@ describe('Rocketjump reducer', () => {
   })
 
   it('should use dataReducer to provide new data value', () => {
-    const { reducer } = rocketjump({
+    const { reducer } = rj({
       type,
       state,
       dataReducer: (prevState, { type, payload: { data } }) =>
@@ -96,7 +96,7 @@ describe('Rocketjump reducer', () => {
   })
 
   it('should be proxable', () => {
-    const { reducer } = rocketjump({
+    const { reducer } = rj({
       type,
       state,
       proxyReducer: givenReducer => {

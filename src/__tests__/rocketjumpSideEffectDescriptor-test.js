@@ -1,4 +1,4 @@
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 
 describe('Rocketjump side effect descriptor', () => {
   const type = 'GET_SOCI'
@@ -6,12 +6,12 @@ describe('Rocketjump side effect descriptor', () => {
   const noop = () => {}
 
   it('should be returned only when no saga is generated', () => {
-    const rj1 = rocketjump({
+    const rj1 = rj({
       type,
       state,
     })()
     expect(rj1.sideEffect).not.toBe(undefined)
-    const rj2 = rocketjump({
+    const rj2 = rj({
       type,
       state,
       api: noop,
@@ -30,21 +30,21 @@ describe('Rocketjump side effect descriptor', () => {
     function ep2() {}
     function ep3() {}
 
-    const rj1 = rocketjump({
+    const rj1 = rj({
       type,
       state,
       successEffect: se1,
       failureEffect: fe1,
       apiExtraParams: ep1,
     })
-    const rj2 = rocketjump({
+    const rj2 = rj({
       type,
       state,
       successEffect: se2,
       failureEffect: fe2,
       apiExtraParams: ep2,
     })
-    const { sideEffect } = rocketjump(rj1, rj2, {
+    const { sideEffect } = rj(rj1, rj2, {
       type,
       state,
       successEffect: se3,

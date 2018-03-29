@@ -2,14 +2,14 @@ import request from 'superagent'
 import { omit } from 'lodash'
 import { combineReducers } from 'redux'
 import {
-  rocketjump,
+  rj,
   makeActionTypes,
   composeReducers,
   takeEveryAndCancel,
 } from 'redux-rocketjump'
 import { fork, put } from 'redux-saga/effects'
 
-const API_URL = 'http://localhost:3000'
+const API_URL = `http://${window.location.hostname}:3000`
 
 const ADD_TODO = 'ADD_TODO'
 export const {
@@ -22,7 +22,7 @@ export const {
   },
   reducer: addTodoReducer,
   saga: addTodoSaga,
-} = rocketjump({
+} = rj({
   type: ADD_TODO,
   takeEffect: takeEveryAndCancel,
   // No need to save added todo
@@ -33,7 +33,7 @@ export const {
     .then(({ body }) => body)
 })()
 
-const multiloadingRj = (config, ...args) => rocketjump({
+const multiloadingRj = (config, ...args) => rj({
   takeEffect: takeEveryAndCancel,
   proxyReducer: () => (prevState = {}, { type, meta }) => {
     const types = makeActionTypes(config.type)
@@ -105,7 +105,7 @@ export const {
   },
   reducer: todoListReducer,
   saga: todoListSaga,
-} = rocketjump({
+} = rj({
   type: GET_TODOS,
   state: 'todos.list',
   api: () => request.get(`${API_URL}/todos`).then(({ body }) => body),

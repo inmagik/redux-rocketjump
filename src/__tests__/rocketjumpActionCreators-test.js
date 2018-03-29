@@ -1,11 +1,11 @@
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 
 describe('Rocketjump action creators', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
 
   it('should be load and unload', () => {
-    const { actions } = rocketjump({
+    const { actions } = rj({
       type,
       state,
     })()
@@ -29,7 +29,7 @@ describe('Rocketjump action creators', () => {
   })
 
   it('should be proxable', () => {
-    const { actions } = rocketjump({
+    const { actions } = rj({
       type,
       state,
       proxyActions: {
@@ -49,7 +49,7 @@ describe('Rocketjump action creators', () => {
   })
 
   it('should be extendible', () => {
-    const { actions } = rocketjump({
+    const { actions } = rj({
       type,
       state,
       proxyActions: {
@@ -71,20 +71,20 @@ describe('Rocketjump action creators', () => {
   })
 
   it('should be composable', () => {
-    const rjUn = rocketjump({
+    const rjUn = rj({
       proxyActions: {
         load: ({ load }) => (un, params, meta) => load({ un, ...params }, meta),
       },
     })
 
-    const rjDos = rocketjump({
+    const rjDos = rj({
       proxyActions: {
         load: ({ load }) => (un, dos, params, meta) =>
           load(un, { dos, ...params }, meta),
       },
     })
 
-    const { actions } = rocketjump(rjUn, rjDos, {
+    const { actions } = rj(rjUn, rjDos, {
       type,
       state,
       proxyActions: {

@@ -8,7 +8,7 @@ A set of tools to speed up the devlopment of an a redux based app:
 - Handy helpers to help you compose functionality.
 
 ```js
-import { rocketjump, makeAppsReducers, makeAppsSaga } from 'redux-rocketjump'
+import { rj, makeAppsReducers, makeAppsSaga } from 'redux-rocketjump'
 
 // state/index.js
 import * as todos from './todos'
@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
 const mainSaga = makeAppsSaga(APPS)
 
 // state/todos.js
-const moreStuffRj = rocketjump({
+const moreStuffRj = rj({
   proxyActions: {
     loadMore: ({ load }) => (params = {}, meta = {}) =>
       load(params, { ...meta, more: true }),
@@ -33,13 +33,13 @@ const moreStuffRj = rocketjump({
     meta.more ? prevState.concat(payload.data) : payload.data
 })
 
-const toastOnFailureRj = rocketjump({
+const toastOnFailureRj = rj({
   failureEffect: function *(error) {
     yield put(showErrorToast(`Sorry our monkeys are trying to do their best, ${error.message}`))
   }
 })
 
-const callAuthenticatedRj = rocketjump({
+const callAuthenticatedRj = rj({
   callApi: function *(apiFn, ...args) {
     const token = yield select(getAuthToken)
     const result = yield call(apiFn, ...args, token)
@@ -52,7 +52,7 @@ export const {
   selectors: { getData: getTodos, isLoading: isLoadingTodos, getError: getTodosError },
   saga,
   reducer,
-} = rocketjump(moreStuffRj, toastOnFailureRj, callAuthenticatedRj)({
+} = rj(moreStuffRj, toastOnFailureRj, callAuthenticatedRj)({
   type: 'GET_TODOS',
   state: 'todos',
   api: fetchTodosFromApi,
@@ -80,7 +80,7 @@ npm install --save redux-rocketjump
 
 ## Install peer dependencies
 
-redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects, 
+redux-rocketjump uses [redux-saga](https://github.com/redux-saga/redux-saga) to handle side effects,
 and [reselect](https://github.com/reactjs/reselect) to make ad hoc memoized selectors.
 ```
 yarn add redux redux-saga reselect
@@ -92,7 +92,7 @@ npm install --save redux redux-saga reselect
 
 ## Why?
 
-When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and 
+When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and
 automating certain stuff without loosing control of what you are doing.
 
 ## Organize redux code by functionality
@@ -147,7 +147,7 @@ The minum options are:
 So this is a `rocketjump` for fetching some todos from an API:
 ```js
 // todos.js
-import { rocketjump } from 'redux-rocketjump'
+import { rj } from 'redux-rocketjump'
 export const {
   actions: {
     // Trigger side effect
@@ -170,7 +170,7 @@ export const {
   reducer,
   // The generated saga
   saga,
-} = rocketjump({
+} = rj({
   type: 'GET_TODOS',
   state 'todos',
   api: params => loadTodosFromApi(params),
@@ -189,18 +189,18 @@ The default implentation is: `(prevState, { type, payload }) => payload.data`
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
 - `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generator.
 - `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generator.
-- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous task, this is usally the best choice for GET api requests. 
+- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous task, this is usally the best choice for GET api requests.
 If you need a different behaviours of you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js), or you can implement a new one.
 - `takeEffectArgs`: Extra arguments passed to `takeEffect`.
 
 Here some examples to use theese options to handle common tasks.
 
-Adding auth to your api calls:
+Rocketjump that add auth to your api calls:
 ```js
-import { rocketjump } from 'redux-rocketjump'
+import { rj } from 'redux-rocketjump'
 import { select, call } from 'redux-saga/effects'
 
-const rj = rocketjump({
+const rjAuth = rj({
   callApi: function *(apiFn, ...args) {
     const token = yield select(state => state.auth.accessToken)
     const result = yield call(apiFn, ...args, token)
@@ -210,12 +210,12 @@ const rj = rocketjump({
 
 ```
 
-Load more stuff from a paginated api:
+Rocketjump that load more stuff from a paginated api:
 ```js
-import { rocketjump, getOrSelect } from 'redux-rocketjump'
+import { rj, getOrSelect } from 'redux-rocketjump'
 import { select } from 'redux-saga/effects'
 
-const rj = (config, ...args) = rocketjump({
+const rjLoadMore = (config, ...args) = rj({
   apiExtraParams: function (params, meta) {
     if (meta.loadMore) {
       const next = yield select(getOrSelect(state, config.state).pagination.next)
@@ -225,12 +225,12 @@ const rj = (config, ...args) = rocketjump({
 })(config, ...args)
 ```
 
-Show a popup on success:
+Rocketjump that show a message on success:
 ```js
-import { rocketjump } from 'redux-rocketjump'
+import { rj } from 'redux-rocketjump'
 import { put } from 'redux-saga/effects'
 
-const rj = rocketjump({
+const rjOkMsg = rj({
   successEffect: function (data, meta) {
     if (meta.successMessage) {
       yield put(showSuccessMessage(meta.successMessage))
@@ -239,13 +239,13 @@ const rj = rocketjump({
 })
 ```
 
-Handle a delete call:
+Rocketjump that handle a delete call:
 ```js
-import { rocketjump, takeEveryAndCancel, makeActionTypes } from 'redux-rocketjump'
+import { rj, takeEveryAndCancel, makeActionTypes } from 'redux-rocketjump'
 import omit from 'lodash.omit'
-import { createSelectors } from 'reselect' 
+import { createSelectors } from 'reselect'
 
-const rj = (config = {}, ...args) => rocketjump({
+const rjDelete = (config = {}, ...args) => rj({
   takeEffect: takeEveryAndCancel,
   proxyActions: {
     load: ({ load }) => (id, params = {}, meta = {}) =>
@@ -311,11 +311,11 @@ Rocketjump is thought with the composition in mind, a rocketjump can be called w
 Take the following pseudo-code:
 
 ```js
-const rj1 = rocketjump({ /* config */ })
+const rj1 = rj({ /* config */ })
 
-const rj2 = rocketjump({ /* config */ })
+const rj2 = rj({ /* config */ })
 
-const { /* actions, reducers, ... */ } = rocketjump(
+const { /* actions, reducers, ... */ } = rj(
   rj1,
   rj2,
   {/* config */ },

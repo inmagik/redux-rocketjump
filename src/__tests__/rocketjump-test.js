@@ -1,16 +1,16 @@
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 
 describe('Rocketjump', () => {
   it('should throw exception when no type is provided', () => {
     expect(
-      rocketjump({
+      rj({
         state: 'soci',
       })
     ).toThrow()
   })
   it('should throw exception when no state is provided', () => {
     expect(
-      rocketjump({
+      rj({
         type: 'GET_SOCI',
       })
     ).toThrow()

@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
 import { call } from 'redux-saga/effects'
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
 
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
@@ -29,7 +29,7 @@ describe('Rocketjump saga', () => {
 
   it('should run an async api and dispatch LOADING and SUCCESS actions when resolved', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -67,7 +67,7 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockBadApi,
@@ -97,7 +97,7 @@ describe('Rocketjump saga', () => {
 
   it('should pass params to api function', () => {
     const mockApi = jest.fn()
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -109,7 +109,7 @@ describe('Rocketjump saga', () => {
 
   it('can provide extra params to api function', () => {
     const mockApi = jest.fn()
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       /* eslint-disable require-yield */
@@ -127,7 +127,7 @@ describe('Rocketjump saga', () => {
     const successEffect = jest.fn()
     const failureEffect = jest.fn()
     const mockApi = jest.fn().mockResolvedValueOnce('maik')
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       successEffect,
@@ -152,7 +152,7 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       successEffect,
@@ -177,7 +177,7 @@ describe('Rocketjump saga', () => {
   //     resolve('maik ' + token)
   //   })
   //
-  //   const { actions: { load }, saga } = rocketjump({
+  //   const { actions: { load }, saga } = rj({
   //     type,
   //     state,
   //     callApi,
@@ -194,7 +194,7 @@ describe('Rocketjump saga', () => {
 
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -232,7 +232,7 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockBadApi,
@@ -262,7 +262,7 @@ describe('Rocketjump saga', () => {
 
   it('can unload a side effect', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load, unload }, saga } = rocketjump({
+    const { actions: { load, unload }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -295,7 +295,7 @@ describe('Rocketjump saga', () => {
       .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -341,7 +341,7 @@ describe('Rocketjump saga', () => {
       .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -400,7 +400,7 @@ describe('Rocketjump saga', () => {
           resolve(`${name} is cool ${counterByName[name]}`)
         })
     )
-    const { actions: { load }, saga } = rocketjump({
+    const { actions: { load }, saga } = rj({
       type,
       state,
       api: mockApi,
@@ -511,7 +511,7 @@ describe('Rocketjump saga', () => {
       return customSaga
     }
 
-    const { saga } = rocketjump({
+    const { saga } = rj({
       type,
       state,
       saga: makeCustomSaga,

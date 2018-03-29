@@ -1,4 +1,4 @@
-import { rocketjump } from '../rocketjump'
+import { rj } from '../rocketjump'
 import { createSelector } from 'reselect'
 import { orderBy } from 'lodash'
 
@@ -23,7 +23,7 @@ describe('Rocketjump selectors', () => {
   }
 
   it('should be getData, isLoading, getError, getBaseState', () => {
-    const { selectors } = rocketjump({
+    const { selectors } = rj({
       type,
       state,
     })()
@@ -34,7 +34,7 @@ describe('Rocketjump selectors', () => {
   })
 
   it('should be proxable and extendible', () => {
-    const { selectors } = rocketjump({
+    const { selectors } = rj({
       type,
       state,
       proxySelectors: {
@@ -72,7 +72,7 @@ describe('Rocketjump selectors', () => {
   })
 
   it('should be composable', () => {
-    const rjIsAlive = rocketjump({
+    const rjIsAlive = rj({
       proxySelectors: {
         getData: ({ getData }) =>
           createSelector(getData, soci =>
@@ -85,7 +85,7 @@ describe('Rocketjump selectors', () => {
     })
     const capitalize = s =>
       s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase()
-    const rjRangerName = rocketjump({
+    const rjRangerName = rj({
       proxySelectors: {
         getData: ({ getData }) =>
           createSelector(getData, soci =>
@@ -98,7 +98,7 @@ describe('Rocketjump selectors', () => {
           ),
       },
     })
-    const { selectors } = rocketjump(rjIsAlive, rjRangerName, {
+    const { selectors } = rj(rjIsAlive, rjRangerName, {
       type,
       state,
       proxySelectors: {

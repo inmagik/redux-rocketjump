@@ -11,7 +11,7 @@ import {
 import omit from 'lodash.omit'
 import makeApiSaga from './apiSaga'
 
-export const rocketjump = (...configs) => (config = {}, extendExport) => {
+const rocketjump = (...configs) => (config = {}, extendExport) => {
   const allConfigs = [...configs, ...[config]]
 
   const mergedConfig = allConfigs.reduce((merged, config) => {
@@ -112,3 +112,5 @@ export const rocketjump = (...configs) => (config = {}, extendExport) => {
     return finalExport
   }
 }
+
+export { rocketjump as rj }
