@@ -99,8 +99,10 @@ automating certain stuff without loosing control of what you are doing.
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
 But when the app get bigger this approach lead to confusion, unmantenibility and in a difficult scalability.
 So instead yuo should organizing state folders by what they does Es:. (todos, users, tickets, ...).
-To do this redux-rocketjump offers you two covenient helpers `makeAppsReducers` and `makeAppsSaga`.
-Every state folder should export a `reducer` key with the reducer injected into the main reducer and, if needed, a `saga` key used to handle side effects.
+
+To do this `redux-rocketjump` offers you two covenient helpers `makeAppsReducers` and `makeAppsSaga`.
+
+Every state folder should export a `reducer` injected into the main reducer and, if needed, a `saga` used to handle side effects.
 
 A tipical `state/index.js` looks like this:
 ```js
@@ -140,8 +142,8 @@ export default store
 Basically `rocketjump` is just a function that makes action creators, selectors, reducer
 and saga from a configuration.
 The minum options are:
-- `type`: The action type that trigger side effect and the prefix for related action types (type_LOADING, type_SUCCESS, type_FAILURE, type_UNLOAD).
-- `state`: The base selector for generated selectors, can be a string with the sintax of https://lodash.com/docs/#get
+- `type`: The action type that trigger side effect and the prefix for related action types dispatched: `type`_LOADING, `type`_SUCCESS, `type`_FAILURE, `type`_UNLOAD.
+- `state`: The base selector for generated selectors, can be a selector, a function or a string with the sintax of https://lodash.com/docs/#get.
 - `api`: the side effect, a function that return a promise.
 
 So this is a `rocketjump` for fetching some todos from an API:
@@ -185,11 +187,11 @@ Here the complete list of available options:
 - `dataReducer`: If given is used as a sub reducer to handle the `type_SUCCESS ` action on the piece of state related to data.
 The default implentation is: `(prevState, { type, payload }) => payload.data`
 - `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
-- `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
+- `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generators.
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
-- `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generator.
-- `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generator.
-- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous task, this is usally the best choice for GET api requests.
+- `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generators.
+- `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generators.
+- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous tasks, this is usally the best choice for GET api requests.
 If you need a different behaviours of you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js), or you can implement a new one.
 - `takeEffectArgs`: Extra arguments passed to `takeEffect`.
 
@@ -305,9 +307,8 @@ const rjDelete = (config = {}, ...args) => rj({
 ```
 ## Compose rocketjumps
 
-Rocketjump is thinked with composition in mind, indeed you can call a rocketjump with a or a list of partial evalutated rocketjumps. Only when a rocketjump is called the second time reducers, action creators, saga and selecors are created. All the configurations or partial evaluted rocketjumps are composed in the following way:
-
 Rocketjump is thought with the composition in mind, a rocketjump can be called with one or a list of partial evaluated rocketjumps or configurations. Only when a rocketjump is called the second time reducer, actions, saga and selectors are created. All the given partial evaluated rocketjumps or configurations are composed together.
+
 Take the following pseudo-code:
 
 ```js
