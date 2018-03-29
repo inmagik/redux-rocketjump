@@ -26,6 +26,7 @@
     "dev": "webpack-dev-server",
     "fake-api": "json-server --watch --delay 400 example/db.json",
     "build": "rimraf lib && babel src --out-dir lib --ignore __tests__",
+    "build:watch": "babel src --out-dir lib --ignore __tests__ --watch",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

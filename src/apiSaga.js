@@ -37,6 +37,15 @@ export default (
       })
       yield all(successEffects.map(effect => effect(data, meta)))
     } catch (error) {
+      // Avoid headache
+      if (
+        error instanceof TypeError ||
+        error instanceof RangeError ||
+        error instanceof SyntaxError ||
+        error instanceof ReferenceError
+      ) {
+        throw error
+      }
       yield put({ type: actionTypes.failure, meta, error })
       yield all(failureEffects.map(effect => effect(error, meta)))
     }
