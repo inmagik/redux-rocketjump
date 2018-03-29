@@ -330,7 +330,21 @@ Regarding the saga it can't be composed as the others, instead all the extra par
 ## Handy helpers
 ...
 
-## Working example
-You can find a working example under src/example, it's a simple REST todo app that uses [json-server](https://github.com/typicode/json-server) as fake API server.
+## Example
+You can find an example under [/example](https://github.com/inmagik/redux-rocketjump/tree/master/example), it's a simple REST todo app that uses [json-server](https://github.com/typicode/json-server) as fake API server.
 
 To run it first clone the repo:
+```
+git clone git@github.com:inmagik/redux-rocketjump.git
+```
+
+Then run:
+```
+yarn install
+yarn start
+```
+Or using npm:
+```
+npm install
+npm start
+```
