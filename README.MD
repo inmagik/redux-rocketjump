@@ -183,10 +183,7 @@ Here the complete list of available options:
 - `proxyActions`: An hook to proxy action creators, if an object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expcted to be the new action creator. Previous action creators will be merged with the given new action creators. If function is given, the return value will be used directly to be merge to the previous actions creators.
 - `proxySelectors`: Works exactly as `proxyActions` but is used to proxy selectors.
 - `dataReducer`: If given is used as a sub reducer to handle the `type_SUCCESS ` action on the piece of state related to data.
-The default implentation is:
-```
-(prevState, { type, payload }) => payload.data
-```
+The default implentation is: `(prevState, { type, payload }) => payload.data`
 - `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
 - `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generator.
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
