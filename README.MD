@@ -330,10 +330,32 @@ Regarding the saga it can't be composed as the others, instead all the extra par
 ## Handy helpers
 redux-rocketjump exports two handy helpers `composeReducers` and `resetReducerOn` to help you composin rocketjumps reducers behaviours, here an example:
 ```js
-import { rj } from ''
+import { rj, resetReducerOn, composeReducers, makeActionTypes } from 'redux-rocketjump'
 
-rj({
-  proxyReducer: r => composeReducers(r, (prevState = { failureCount: 0 })
+const rjCountFails = (config = {}, ...args) => rj({
+  proxyReducer: r => {
+    const actionTypes = makeActionTypes(config.type)
+    return composeReducers(r, (prevState = { failureCount: 0 }, { type, payload }) => {
+      switch (type) {
+        case actionTypes.failure:
+          return {
+            ...prevState,
+            failureCount: prevState.failureCount + 1,
+          }
+        case actionTypes.unload:
+          return {
+            ...prevState,
+            failureCount: 0,
+          }
+        default:
+          return prevState
+      }
+    })
+  }
+})(config = {}, ...args)
+
+const rjResetOnLogout = rj({
+  proxyReducer: r => resetReducerOn('LOGOUT', r),
 })
 ```
 
