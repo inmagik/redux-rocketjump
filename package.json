@@ -1,6 +1,6 @@
 {
   "name": "redux-rocketjump",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "lib/index.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
@@ -13,7 +13,6 @@
     "url": "https://github.com/inmagik/redux-rocketjump/issues"
   },
   "keywords": [
-    "react",
     "redux",
     "rest",
     "api"
