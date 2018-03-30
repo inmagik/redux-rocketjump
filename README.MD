@@ -1,4 +1,7 @@
 # redux-rocketjump
+[![Build Status](https://travis-ci.org/inmagik/redux-rocketjump.svg?branch=master)](https://travis-ci.org/inmagik/redux-rocketjump)
+[![npm version](https://badge.fury.io/js/redux-rocketjump.svg)](https://badge.fury.io/js/redux-rocketjump)
+
 Rocketjump your redux! Speed up redux-app development.
 
 A set of tools to speed up the devlopment of an a redux based app:
