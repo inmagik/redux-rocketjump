@@ -7,9 +7,7 @@ export default (config, ...args) => rj({
     meta: omit(a.meta, 'thunk'),
   }),
   proxyActions: {
-    load: ({ load }) => (params = {}, meta = {}) => load(
-      params,
-      { ...meta, thunk: true  }
-    )
+    load: ({ load }) => (params = {}, meta = {}) =>
+      load(params, { ...meta, thunk: true  })
   }
 })(config, ...args)

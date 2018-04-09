@@ -244,70 +244,6 @@ const rjOkMsg = rj({
 })
 ```
 
-Rocketjump that handle a delete call:
-```js
-import { rj, takeEveryAndCancel, makeActionTypes } from 'redux-rocketjump'
-import omit from 'lodash.omit'
-import { createSelectors } from 'reselect'
-
-const rjDelete = (config = {}, ...args) => rj({
-  takeEffect: takeEveryAndCancel,
-  proxyActions: {
-    load: ({ load }) => (id, params = {}, meta = {}) =>
-      load({ ...params, id }, { ...meta, id }),
-  },
-  proxySelectors: ({ getBaseState }) => {
-    const getDeleted = createSelector(getBaseState, ({ deleted }) => deleted)
-
-    const getDeleting = createSelector(getBaseState, ({ deleting }) => deleting)
-
-    const getFailures = createSelector(getBaseState, ({ failures }) => failures)
-
-    return { getDeleted, getDeleting, getFailures }
-  },
-  proxyReducer: () => {
-    const actionTypes = makeActionTypes(config.type)
-
-    const defaultState = { deleting: {}, failures: {}, deleted: {} }
-
-    return (prevState = defaultState, { type, payload, meta, error }) => {
-      switch (type) {
-        case actionTypes.loading:
-          return {
-            ...prevState,
-            deleting: {
-              ...prevState.deleting,
-              [meta.id]: true,
-            },
-            failures: omit(prevState.failures, meta.id),
-          }
-        case actionTypes.failure:
-          return {
-            ...prevState,
-            deleting: omit(prevState.deleting, meta.id),
-            failures: {
-              ...prevState.failures,
-              [meta.id]: error,
-            },
-          }
-        case actionTypes.success:
-          return {
-            ...prevState,
-            deleting: omit(prevState.deleting, meta.id),
-            deleted: {
-              ...prevState.deleted,
-              [meta.id]: true,
-            },
-          }
-        case actionTypes.unload:
-          return { ...prevState, ...defaultState }
-        default:
-          return prevState
-      }
-    }
-  }
-})(config, ...args)
-```
 ## Compose rocketjumps
 
 Rocketjump is thought with the composition in mind, a rocketjump can be called with one or a list of partial evaluated rocketjumps or configurations. Only when a rocketjump is called the second time reducer, actions, saga and selectors are created. All the given partial evaluated rocketjumps or configurations are composed together.
@@ -361,6 +297,9 @@ const rjResetOnLogout = rj({
   proxyReducer: r => resetReducerOn('LOGOUT', r),
 })
 ```
+
+## Catalogs
+WIP
 
 ## Example
 You can find an example under [example](https://github.com/inmagik/redux-rocketjump/tree/master/example), it's a simple REST todo app that uses the great [json-server](https://github.com/typicode/json-server) as fake API server.
