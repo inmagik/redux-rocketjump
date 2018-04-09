@@ -1,6 +1,6 @@
 {
   "name": "redux-rocketjump",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "./index.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
