@@ -4,7 +4,7 @@
 
 Rocketjump your redux! Speed up redux-app development.
 
-A set of tools to speed up the devlopment of an a redux based app:
+A set of tools to speed up the development of an a redux based app:
 
 - Generate all you need from and for the state from a single function call, easy to extend, easy to compose.
 - An out of the box way to organize redux folders by functionality instead of type.
