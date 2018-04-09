@@ -2,6 +2,8 @@ import { fork, call, put, all } from 'redux-saga/effects'
 import { makeActionTypes } from './actions'
 import { takeLatestAndCancel } from './effects'
 
+const id = a => a
+
 export default (
   actionType,
   apiFn,
@@ -10,11 +12,14 @@ export default (
   callApi = call,
   successEffects = [],
   failureEffects = [],
-  takeEffectArgs = []
+  takeEffectArgs = [],
+  mapLoadingAction = id,
+  mapSuccessAction = id,
+  mapFailureAction = id,
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
-    yield put({ type: actionTypes.loading, meta })
+    yield put(mapLoadingAction({ type: actionTypes.loading, meta: meta }))
     try {
       // Get extra shit from outside HOOK
       let finalParams = { ...params }
@@ -23,10 +28,10 @@ export default (
         finalParams = { ...finalParams, ...extraParams }
       }
 
-      // Run api with using given call api function
+      // Run api using given call api function \w alle the merged params
       const data = yield callApi(apiFn, finalParams)
 
-      yield put({
+      yield put(mapSuccessAction({
         type: actionTypes.success,
         meta,
         payload: {
@@ -34,7 +39,7 @@ export default (
           // Sha la la la
           params: finalParams,
         },
-      })
+      }))
       yield all(successEffects.map(effect => effect(data, meta)))
     } catch (error) {
       // Avoid headache
@@ -46,7 +51,12 @@ export default (
       ) {
         throw error
       }
-      yield put({ type: actionTypes.failure, meta, error })
+      yield put(mapFailureAction({
+        type: actionTypes.failure,
+        payload: error,
+        error: true,
+        meta,
+      }))
       yield all(failureEffects.map(effect => effect(error, meta)))
     }
   }

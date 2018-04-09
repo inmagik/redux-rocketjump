@@ -46,6 +46,9 @@ const rocketjump = (...configs) => (config = {}, extendExport) => {
           'proxySelectors',
           'proxyActions',
           'proxyReducer',
+          'mapLoadingAction',
+          'mapSuccessAction',
+          'mapFailureAction',
         ]),
         finalExport
       )
@@ -101,7 +104,10 @@ const rocketjump = (...configs) => (config = {}, extendExport) => {
       sideEffect.callApi,
       sideEffect.successEffect,
       sideEffect.failureEffect,
-      sideEffect.takeEffectArgs
+      sideEffect.takeEffectArgs,
+      sideEffect.mapLoadingAction,
+      sideEffect.mapSuccessAction,
+      sideEffect.mapFailureAction
     )
     return {
       ...omit(finalExport, 'sideEffect'),

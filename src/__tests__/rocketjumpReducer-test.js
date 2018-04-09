@@ -36,7 +36,7 @@ describe('Rocketjump reducer', () => {
       error: null,
     }
     expect(
-      reducer(prevState, { type: `${type}_FAILURE`, error: 'Shiiit' })
+      reducer(prevState, { type: `${type}_FAILURE`, error: true, payload: 'Shiiit' })
     ).toEqual({
       loading: false,
       data: null,

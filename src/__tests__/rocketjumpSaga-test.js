@@ -1,5 +1,6 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
+import omit from 'lodash/omit'
 import { call } from 'redux-saga/effects'
 import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
@@ -88,7 +89,8 @@ describe('Rocketjump saga', () => {
         {
           type: `${type}_FAILURE`,
           meta: {},
-          error: 'Bad shit',
+          error: true,
+          payload: 'Bad shit',
         },
       ])
       done()
@@ -121,6 +123,50 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
+  })
+
+  it('can map actions dispatched', done => {
+    const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
+    const { actions: { load }, saga } = rj({
+      type,
+      state,
+      mapSuccessAction: a => ({
+        ...a,
+        meta: {
+          ...a.meta,
+          maik: a.meta.maik * 2,
+        }
+      }),
+      mapLoadingAction: a => ({
+        ...a,
+        meta: omit(a.meta, 'maik'),
+      }),
+      api: mockApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load(undefined, { maik: 11.5 }))
+    mockApi.mock.returnValues[0].then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type,
+          payload: { params: {} },
+          meta: { maik: 11.5 },
+        },
+        {
+          type: `${type}_LOADING`,
+          meta: {},
+        },
+        {
+          type: `${type}_SUCCESS`,
+          meta: { maik: 23 },
+          payload: {
+            params: {},
+            data: mockApiResults,
+          },
+        },
+      ])
+      done()
+    })
   })
 
   it('should call success effect on success', done => {
@@ -253,7 +299,8 @@ describe('Rocketjump saga', () => {
         {
           type: `${type}_FAILURE`,
           meta: { maik: 23 },
-          error: 'Bad shit',
+          error: true,
+          payload: 'Bad shit',
         },
       ])
       done()

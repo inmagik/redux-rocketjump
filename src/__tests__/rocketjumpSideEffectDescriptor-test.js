@@ -36,6 +36,24 @@ describe('Rocketjump side effect descriptor', () => {
       successEffect: se1,
       failureEffect: fe1,
       apiExtraParams: ep1,
+      mapLoadingAction: action => ({
+        ...action,
+        meta: {
+          name: 'Maik',
+        },
+      }),
+      mapSuccessAction: action => ({
+        ...action,
+        meta: {
+          name: 'Skaffo',
+        },
+      }),
+      mapFailureAction: action => ({
+        ...action,
+        meta: {
+          name: 'Giova',
+        },
+      }),
     })
     const rj2 = rj({
       type,
@@ -43,6 +61,24 @@ describe('Rocketjump side effect descriptor', () => {
       successEffect: se2,
       failureEffect: fe2,
       apiExtraParams: ep2,
+      mapFailureAction: action => ({
+        ...action,
+        meta: {
+          name: action.meta.name + ' is fucking cool! Doh'
+        },
+      }),
+      mapLoadingAction: action => ({
+        ...action,
+        meta: {
+          name: action.meta.name + ' is fucking cool! **'
+        },
+      }),
+      mapSuccessAction: action => ({
+        ...action,
+        meta: {
+          name: action.meta.name + ' is fucking cool!'
+        },
+      }),
     })
     const { sideEffect } = rj(rj1, rj2, {
       type,
@@ -50,6 +86,24 @@ describe('Rocketjump side effect descriptor', () => {
       successEffect: se3,
       failureEffect: fe3,
       apiExtraParams: ep3,
+      mapLoadingAction: action => ({
+        ...action,
+        meta: {
+          name: 'Because ma friend ' + action.meta.name
+        },
+      }),
+      mapFailureAction: action => ({
+        ...action,
+        meta: {
+          name: 'Because ma friend ' + action.meta.name
+        },
+      }),
+      mapSuccessAction: action => ({
+        ...action,
+        meta: {
+          name: 'Because ma friend ' + action.meta.name
+        },
+      }),
     })()
     expect(sideEffect.successEffect[0]).toBe(se1)
     expect(sideEffect.successEffect[1]).toBe(se2)
@@ -60,5 +114,20 @@ describe('Rocketjump side effect descriptor', () => {
     expect(sideEffect.apiExtraParams[0]).toBe(ep1)
     expect(sideEffect.apiExtraParams[1]).toBe(ep2)
     expect(sideEffect.apiExtraParams[2]).toBe(ep3)
+    expect(sideEffect.mapLoadingAction({})).toEqual({
+      meta: {
+        name: 'Because ma friend Maik is fucking cool! **',
+      }
+    })
+    expect(sideEffect.mapSuccessAction({})).toEqual({
+      meta: {
+        name: 'Because ma friend Skaffo is fucking cool!',
+      }
+    })
+    expect(sideEffect.mapFailureAction({})).toEqual({
+      meta: {
+        name: 'Because ma friend Giova is fucking cool! Doh',
+      }
+    })
   })
 })

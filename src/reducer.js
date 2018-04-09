@@ -24,7 +24,8 @@ export const makeReducer = (type, dataReducer = defaultDataReducer) => {
         return {
           ...prevState,
           loading: false,
-          error,
+          error: action.payload,
+          // error: error === true ? action.payload : error,
         }
       case actionTypes.success:
         return {
