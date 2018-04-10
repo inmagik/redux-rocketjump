@@ -12,7 +12,7 @@ export const makeReducer = (type, dataReducer = defaultDataReducer) => {
   }
 
   return (prevState = defaultState, action) => {
-    const { type, error } = action
+    const { type } = action
     switch (type) {
       case actionTypes.loading:
         return {
@@ -25,7 +25,6 @@ export const makeReducer = (type, dataReducer = defaultDataReducer) => {
           ...prevState,
           loading: false,
           error: action.payload,
-          // error: error === true ? action.payload : error,
         }
       case actionTypes.success:
         return {

@@ -22,14 +22,21 @@ export default (
     yield put(mapLoadingAction({ type: actionTypes.loading, meta: meta }))
     try {
       // Get extra shit from outside HOOK
-      let finalParams = { ...params }
+      let finalParams = params
       for (let i = 0; i < extraParamsEffects.length; i++) {
         const extraParams = yield extraParamsEffects[i](finalParams, meta)
-        finalParams = { ...finalParams, ...extraParams }
+        finalParams = Array.isArray(finalParams)
+          ? finalParams = extraParams
+          : finalParams = { ...finalParams, ...extraParams }
       }
 
-      // Run api using given call api function \w alle the merged params
-      const data = yield callApi(apiFn, finalParams)
+      // Run api using given call api function \w all the merged params
+      let data
+      if (Array.isArray(finalParams)) {
+        data = yield callApi(apiFn, ...finalParams)
+      } else {
+        data = yield callApi(apiFn, finalParams)
+      }
 
       yield put(mapSuccessAction({
         type: actionTypes.success,
