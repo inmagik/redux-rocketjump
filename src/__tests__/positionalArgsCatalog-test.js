@@ -20,7 +20,7 @@ describe('Positional args catalog', () => {
         load,
       },
       saga,
-    } = rj(rjPosArgs)({
+    } = rj(rjPosArgs())({
       type: 'SOOCIO~',
       state: 'ocio',
       api,
@@ -34,5 +34,36 @@ describe('Positional args catalog', () => {
     expect(api.mock.calls[0][0]).toBe(23)
     expect(api.mock.calls[0][1]).toBe(777)
     expect(api.mock.calls[0][2]).toBe('King Redeem / Queen serene')
+  })
+
+  it('Should able to map positional arguments to meta', () => {
+    const api = jest.fn()
+    const type = 'SOOCIO~'
+    const {
+      actions: { load },
+    } = rj(rjPosArgs('id'))({
+      type,
+      state: 'ocio',
+      api,
+    })
+    expect(load(23)).toEqual({
+      type,
+      payload: { params: [23] },
+      meta: { id: 23 }
+    })
+
+    const {
+      actions: { load: load2 }
+    } = rjPosArgs('id', null, false, 'tek', 'isCool')({
+      type,
+      state: 'ocio',
+      api,
+    })
+
+    expect(load2(777, 'maik', 'giova', 23)).toEqual({
+      type,
+      payload: { params: [777, 'maik', 'giova', 23] },
+      meta: { id: 777, tek: 23 }
+    })
   })
 })
