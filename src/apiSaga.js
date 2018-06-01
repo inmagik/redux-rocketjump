@@ -16,6 +16,7 @@ export default (
   mapLoadingAction = id,
   mapSuccessAction = id,
   mapFailureAction = id,
+  unloadTypes = [],
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
@@ -72,7 +73,7 @@ export default (
     yield fork(
       takeEffect,
       actionTypes.main,
-      actionTypes.unload,
+      [actionTypes.unload, ...unloadTypes],
       handleApi,
       ...takeEffectArgs
     )

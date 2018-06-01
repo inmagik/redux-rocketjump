@@ -11,12 +11,14 @@ import {
   getDeletingTodos,
   deleteTodo,
 } from '../state/todos'
+import { todoListStore, todoDetailStore } from '../state/todos2'
 import Todo from './Todo'
 import NewTodo from './NewTodo'
 
 class Todos extends PureComponent {
   componentDidMount() {
     this.props.loadTodos()
+    this.props.loadTodo(3)
   }
 
   onToggle = todo => this.props.updateTodo({
@@ -49,13 +51,14 @@ class Todos extends PureComponent {
 }
 
 export default connect(state => ({
-  todos: getTodos(state),
+  todos: todoListStore.selectors.getData(state),
   loading: areTodosLoading(state),
   adding: isAddingTodo(state),
   updating: getUpdatingTodos(state),
   deleting: getDeletingTodos(state)
 }), {
-  loadTodos,
+  loadTodos: todoListStore.actions.load,
+  loadTodo: todoDetailStore.actions.load,
   addTodo,
   updateTodo,
   deleteTodo,
