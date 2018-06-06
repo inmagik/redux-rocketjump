@@ -2,6 +2,7 @@
 ###### *April 11, 2018*
 - You can now pass `false` to `rj` `state` param to omit reducer creation, util when you need only to
 run action driven side effect in rocketjump environment.
+- Added a `config` property to `rj` with the configuration of rocketjump.
 
 ## 1.2.0
 ###### *April 11, 2018*

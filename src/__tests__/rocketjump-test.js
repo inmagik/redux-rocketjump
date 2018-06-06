@@ -23,4 +23,21 @@ describe('Rocketjump', () => {
       })
     ).not.toThrow()
   })
+  it('should handle the configuration of rocketjump in the config field', () => {
+    expect(
+      rj({
+        coolestGuyInDaWorld: 'Gio Va aka Fu Mello',
+        type: 'GET_SOCI',
+      }, {
+        yeah: 23,
+      }, {
+        rateLimit: 99,
+      }).config
+    ).toEqual({
+      coolestGuyInDaWorld: 'Gio Va aka Fu Mello',
+      type: 'GET_SOCI',
+      rateLimit: 99,
+      yeah: 23,
+    })
+  })
 })
