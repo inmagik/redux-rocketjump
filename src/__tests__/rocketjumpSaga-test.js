@@ -1,7 +1,6 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
 import omit from 'lodash/omit'
-import { call } from 'redux-saga/effects'
 import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
 
@@ -37,7 +36,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
-    mockApi.mock.returnValues[0].then(() => {
+    mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -75,7 +74,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
-    mockBadApi.mock.returnValues[0].catch(() => {
+    mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -145,7 +144,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 11.5 }))
-    mockApi.mock.returnValues[0].then(() => {
+    mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -182,7 +181,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
-    mockApi.mock.returnValues[0].then(() => {
+    mockApi.mock.results[0].value.then(() => {
       expect(successEffect).toBeCalled()
       expect(failureEffect).not.toBeCalled()
       done()
@@ -207,7 +206,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
-    mockBadApi.mock.returnValues[0].catch(() => {
+    mockBadApi.mock.results[0].value.catch(() => {
       expect(successEffect).not.toBeCalled()
       expect(failureEffect).toBeCalled()
       done()
@@ -231,7 +230,7 @@ describe('Rocketjump saga', () => {
   //   })()
   //   const store = mockStoreWithSaga(saga, {})
   //   store.dispatch(load())
-  //   mockApi.mock.returnValues[0].then(apiResult => {
+  //   mockApi.mock.results[0].value.then(apiResult => {
   //     expect(mockApi.mock.calls[0][0]).tobe('supersecret')
   //     console.log('~~~', apiResult)
   //     done()
@@ -247,7 +246,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 23 }))
-    mockApi.mock.returnValues[0].then(() => {
+    mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -285,7 +284,7 @@ describe('Rocketjump saga', () => {
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 23 }))
-    mockBadApi.mock.returnValues[0].catch(() => {
+    mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -317,7 +316,7 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
     store.dispatch(unload())
-    mockApi.mock.returnValues[0].then(() => {
+    mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -350,7 +349,7 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
     store.dispatch(load())
-    mockApi.mock.returnValues[1].then(() => {
+    mockApi.mock.results[1].value.then(() => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -397,7 +396,7 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
     store.dispatch(load())
-    mockApi.mock.returnValues[1].then(r => {
+    mockApi.mock.results[1].value.then(r => {
       expect(store.getActions()).toEqual([
         {
           type,
@@ -463,7 +462,7 @@ describe('Rocketjump saga', () => {
     store.dispatch(load('maik'))
     store.dispatch(load('lore'))
 
-    mockApi.mock.returnValues[3].then(r => {
+    mockApi.mock.results[3].value.then(r => {
       expect(store.getActions()).toEqual([
         {
           type,

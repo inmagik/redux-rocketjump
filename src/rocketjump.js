@@ -30,11 +30,11 @@ const rocketjump = (...configs) => {
       mergedConfig.type,
       'You must specify a type key for actions and reducer'
     )
-    // invariant(
-    //   typeof mergedConfig.state !== 'undefined',
-    //   'You must specify a state key for create selectors' +
-    //   ', if you want to omit the state creation set state explice to false.'
-    // )
+    invariant(
+      typeof mergedConfig.state !== 'undefined',
+      'You must specify a state key for create selectors' +
+      ', if you want to omit the state creation set state explice to false.'
+    )
 
     const finalExport = allConfigs.reduce((finalExport, config, i) => {
       // When config is a function is intendeed to be a rocketjump!
@@ -63,28 +63,24 @@ const rocketjump = (...configs) => {
             {
               sideEffect: makeSideEffectDescriptor(),
               actions: makeActions(mergedConfig.type),
-              reducer: makeReducer(mergedConfig.type, mergedConfig.dataReducer),
-              selectors: makeSelectors(mergedConfig.state),
-              // reducer: mergedConfig.state === false
-              //   ? undefined
-              //   : makeReducer(mergedConfig.type, mergedConfig.dataReducer),
-              // selectors: mergedConfig.state === false
-              //  ? undefined
-              //  : makeSelectors(mergedConfig.state),
+              reducer: mergedConfig.state === false
+                ? undefined
+                : makeReducer(mergedConfig.type, mergedConfig.dataReducer),
+              selectors: mergedConfig.state === false
+               ? undefined
+               : makeSelectors(mergedConfig.state),
             }
           : // Continued to previous export
             { ...finalExport }
 
       exp.sideEffect = addConfigToSideEffectDescritor(exp.sideEffect, config)
       exp.actions = proxyObject(exp.actions, config.proxyActions)
-      exp.reducer = proxyReducer(exp.reducer, config.proxyReducer)
-      exp.selectors = proxyObject(exp.selectors, config.proxySelectors)
-      // exp.reducer = typeof exp.reducers === 'undefined'
-      //   ? undefined
-      //   : proxyReducer(exp.reducer, config.proxyReducer)
-      // exp.selectors = typeof exp.selectors
-      //   ? undefined
-      //   : proxyObject(exp.selectors, config.proxySelectors)
+      exp.reducer = typeof exp.reducer === 'undefined'
+        ? undefined
+        : proxyReducer(exp.reducer, config.proxyReducer)
+      exp.selectors = typeof exp.selectors === 'undefined'
+        ? undefined
+        : proxyObject(exp.selectors, config.proxySelectors)
 
       return exp
     }, extendExport)

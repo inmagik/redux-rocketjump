@@ -17,10 +17,9 @@ export default (combine, config) => {
 
   const combined = Object.keys(combine).reduce((result, key) => {
     const givenRj = combine[key]
-    // const stateKey = typeof givenRj.config.state === 'undefined'
-    //   ? key
-    //   : givenRj.config.state
-    const stateKey = givenRj.config.state ||  key
+    const stateKey = typeof givenRj.config.state === 'undefined'
+      ? key
+      : givenRj.config.state
     const {
       reducer,
       saga,
@@ -35,13 +34,16 @@ export default (combine, config) => {
     })
     const selectors = namespaceSelectors(config.state, baseSelectors)
 
-    // let reducers = result.reducers
-
-    return {
-      reducers: {
+    let reducers = result.reducers
+    if (typeof reducer !== 'undefined') {
+      reducers = {
         ...result.reducers,
         [stateKey]: reducer,
-      },
+      }
+    }
+
+    return {
+      reducers,
       sagas: result.sagas.concat(saga),
       connect: {
         ...result.connect,

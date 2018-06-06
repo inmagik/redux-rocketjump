@@ -15,4 +15,11 @@ describe('Rocketjump', () => {
       })
     ).toThrow()
   })
+  // it('should not throw exception when state ', () => {
+  //   expect(
+  //     rj({
+  //       type: 'GET_SOCI',
+  //     })
+  //   ).toThrow()
+  // })
 })
