@@ -8,6 +8,11 @@ describe('Rocketjump reducer', () => {
     state,
   })()
 
+  it('should be undefined when state is explicit set to false', () => {
+    expect(rj({ type: 'DESTROY_HUMANS', state: false })().reducer)
+      .toBeUndefined()
+  })
+
   it('should return the initial state', () => {
     expect(reducer(undefined, { type: '@' })).toEqual({
       loading: false,

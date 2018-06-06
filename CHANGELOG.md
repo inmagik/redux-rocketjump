@@ -1,3 +1,8 @@
+## 1.3.0
+###### *April 11, 2018*
+- You can now pass `false` to `rj` `state` param to omit reducer creation, util when you need only to
+run action driven side effect in rocketjump environment.
+
 ## 1.2.0
 ###### *April 11, 2018*
 - Api function can be invoked through positional arguments instead of an object.
@@ -5,7 +10,7 @@
 
 ## 1.1.0
 ###### *April 10, 2018*
-- Added the first *catalog*! The *promise* catalog that transform the `load` action creator in to a promise using 
+- Added the first *catalog*! The *promise* catalog that transform the `load` action creator in to a promise using
  the awesome [redux-saga-thunk](https://github.com/diegohaz/redux-saga-thunk).
 - Pubblished flat directories to npm.
 - Changed the base reducer set the error state using `payload` key instead of the `error` key.
