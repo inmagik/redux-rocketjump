@@ -181,6 +181,85 @@ export const {
   api: params => loadTodosFromApi(params),
 })()
 ```
+This the equivalent without using rocketjump:
+
+```js
+// reducer.js
+const defaultState = { loading: false, error: null, data: null  }
+export default (prevState = defaultState, { type, payload }) => {
+  switch (expression) {
+    case 'GET_TODOS_LOADING':
+      return {
+        ...prevState,
+        loading: true,
+        error: null,
+      }
+    case 'GET_TODOS_FAILURE':
+      return {
+        ...prevState,
+        loading: false,
+        error: payload,
+      }
+    case 'GET_TODOS_SUCCESS':
+      return {
+        ...prevState,
+        loading: false,
+        data: payload.data,
+      }
+    case 'GET_TODOS_UNLOAD':
+      return {
+        ...prevState,
+        ...defaultState,
+      }
+    default:
+      return prevState
+  }
+}
+```
+
+```js
+// actions.js
+export const loadTodos = (params = {}, meta = {}) => ({
+  type: 'GET_TODOS'
+  payload: {
+    params,
+  },
+  meta,
+})
+  
+export const unloadTodos = (meta = {}) => ({
+  type: 'GET_TODOS_UNLOAD',
+  meta
+})
+```
+
+```js
+// selectors.js
+export const getData = state => state.todos.data
+export const isLoading = state => state.todos.loading
+export const getError = state => state.todos.error
+```
+
+```js
+// saga.js
+import { call, put, takeLatest } from 'redux-saga/effects'
+
+function* fetchTodos({ payload: { params }, meta }) {
+  yield put({ type: 'GET_TODOS_LOADING', meta })
+  
+  try {
+    const data = yield call(loadTodosFromApi, params)
+    yield put({ type: 'GET_TODOS_SUCCESS', meta, payload: { data, params } })
+  } catch (error) {
+    yield put({ 'GET_TODOS_FAILURE', meta, error: true, payload: error })
+  }
+}
+
+export default function* () {
+  yield takeLatest('GET_TODOS', fetchTodos)
+}
+```
+
 ## Extend the base rocketjump
 The base rocketjump can be extendend to change how the reducer work, make new action creators, customize selectors and more.
 Here the complete list of available options:
