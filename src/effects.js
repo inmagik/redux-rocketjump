@@ -1,21 +1,13 @@
 import { fork, cancel, take } from 'redux-saga/effects'
-import { arrayze } from './utils'
-
-const mergePatterns = (...patterns) =>
-  patterns.reduce((finalPattern, pattern) => {
-    return [...finalPattern, ...arrayze(pattern)]
-  }, [])
-
-const matchPattern = (action, pattern) =>
-  pattern === '*' || arrayze(pattern).indexOf(action.type) !== -1
+import { mergeActionPatterns, matchActionPattern } from './utils'
 
 export function* takeEveryAndCancel(pattern, cancelPattern, saga, ...args) {
   const task = yield fork(function*() {
     let pendingTasks = []
     while (true) {
-      const action = yield take(mergePatterns(pattern, cancelPattern))
+      const action = yield take(mergeActionPatterns(pattern, cancelPattern))
 
-      if (matchPattern(action, cancelPattern)) {
+      if (matchActionPattern(action, cancelPattern)) {
         // Cancel all pending tasks
         for (let i = 0; i < pendingTasks.length; i++) {
           const task = pendingTasks[i]
@@ -37,14 +29,14 @@ export function* takeLatestAndCancel(pattern, cancelPattern, saga, ...args) {
   const task = yield fork(function*() {
     let lastTask
     while (true) {
-      const action = yield take(mergePatterns(pattern, cancelPattern))
+      const action = yield take(mergeActionPatterns(pattern, cancelPattern))
 
       // Cancel previous task
       if (lastTask) {
         yield cancel(lastTask)
       }
       // Fork saga only
-      if (!matchPattern(action, cancelPattern)) {
+      if (!matchActionPattern(action, cancelPattern)) {
         lastTask = yield fork(saga, ...args.concat(action))
       }
     }
@@ -63,7 +55,7 @@ export function* takeLatestAndCancelGroupBy(
   const task = yield fork(function*() {
     const pendingTasks = {}
     while (true) {
-      const action = yield take(mergePatterns(pattern, cancelPattern))
+      const action = yield take(mergeActionPatterns(pattern, cancelPattern))
       const key = groupBy(action)
 
       // Cancel previous task by key
@@ -72,7 +64,7 @@ export function* takeLatestAndCancelGroupBy(
       }
 
       // Fork saga only
-      if (!matchPattern(action, cancelPattern)) {
+      if (!matchActionPattern(action, cancelPattern)) {
         pendingTasks[key] = yield fork(saga, ...args.concat(action))
       }
     }

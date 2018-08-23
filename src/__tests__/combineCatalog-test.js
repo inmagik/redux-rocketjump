@@ -14,6 +14,7 @@ const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
 
 describe('Combine catalog', () => {
   it('Should be able to combine reducers by key', () => {
+    // ... TODO Write Tests ehehhe ...
     const c = combineRjs({}, {
       list: rj({
         type: 'GET_TODOS_LIST',

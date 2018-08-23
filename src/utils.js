@@ -25,3 +25,11 @@ export const proxyReducer = (reducer, proxyFn) => {
   }
   return reducer
 }
+
+export const mergeActionPatterns = (...patterns) =>
+  patterns.reduce((finalPattern, pattern) => {
+    return [...finalPattern, ...arrayze(pattern)]
+  }, [])
+
+export const matchActionPattern = (action, pattern) =>
+  pattern === '*' || arrayze(pattern).indexOf(action.type) !== -1
