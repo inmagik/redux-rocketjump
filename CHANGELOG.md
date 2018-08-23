@@ -1,3 +1,8 @@
+## 1.4.0
+###### *August 23, 2018*
+- Added list catalog to make a paginated list `rj`
+- Added hor catalog with some HORs (higher-order reducer)
+
 ## 1.3.0
 ###### *April 11, 2018*
 - You can now pass `false` to `rj` `state` param to omit reducer creation, util when you need only to
