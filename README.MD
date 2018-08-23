@@ -146,7 +146,7 @@ Basically `rocketjump` is just a function that makes action creators, selectors,
 and saga from a configuration.
 The minum options are:
 - `type`: The action type that trigger side effect and the prefix for related action types dispatched: `type`_LOADING, `type`_SUCCESS, `type`_FAILURE, `type`_UNLOAD.
-- `state`: The base selector for generated selectors, can be a selector, a function or a string with the sintax of https://lodash.com/docs/#get.
+- `state`: The base selector for generated selectors, can be a selector, a function or a string object path with the sintax of https://lodash.com/docs/#get. If `false` was given the reducer and selectors creation is skipped, this is useful when you need only to run action driven side effect in rocketjump environment.
 - `api`: the side effect, a function that return a promise.
 
 So this is a `rocketjump` for fetching some todos from an API:
@@ -187,7 +187,7 @@ This the equivalent without using rocketjump:
 // reducer.js
 const defaultState = { loading: false, error: null, data: null  }
 export default (prevState = defaultState, { type, payload }) => {
-  switch (expression) {
+  switch (type) {
     case 'GET_TODOS_LOADING':
       return {
         ...prevState,
@@ -378,7 +378,30 @@ const rjResetOnLogout = rj({
 ```
 
 ## Catalogs
-WIP
+Out of the box there are some useful "catalogs" that you can use in composition with rocketjump to extend the base functionality.
+
+### Promise
+This catalog add promise to action creator using the awesome library [redux-saga-thunk](https://github.com/diegohaz/redux-saga-thunk).
+```js
+import rjWithPromise from 'redux-rocketjump/catalogs/promise'
+const {
+  actions: {
+    load,
+  },
+  saga,
+ } = rj(rjWithPromise)({
+  type: 'GET_TODOS',
+  state: 'todos',
+  api: loadTodosFromApi,
+})
+
+// ... next ...
+store.dispatch(load())
+  .then(() => /* ... */)
+  .catch(() => /* ... */)
+
+```
+
 
 ## Example
 You can find an example under [example](https://github.com/inmagik/redux-rocketjump/tree/master/example), it's a simple REST todo app that uses the great [json-server](https://github.com/typicode/json-server) as fake API server.
