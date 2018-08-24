@@ -63,9 +63,15 @@ export function* takeLatestAndCancelGroupBy(
         yield cancel(pendingTasks[key])
       }
 
-      // Fork saga only
       if (!matchActionPattern(action, cancelPattern)) {
+        // Fork saga only
         pendingTasks[key] = yield fork(saga, ...args.concat(action))
+      } else if (key === null) {
+        // Clear all pending tasks
+        for (let i = 0; i < pendingTasks.length; i++) {
+          const task = pendingTasks[i]
+          yield cancel(task)
+        }
       }
     }
   })
