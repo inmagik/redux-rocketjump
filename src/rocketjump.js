@@ -4,6 +4,7 @@ import { proxyObject, proxyReducer } from './utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
+import { composeReducers } from './helpers'
 import {
   makeSideEffectDescriptor,
   addConfigToSideEffectDescritor,
@@ -49,6 +50,7 @@ const rocketjump = (...configs) => {
             'proxySelectors',
             'proxyActions',
             'proxyReducer',
+            'composeReducer',
             'mapLoadingAction',
             'mapSuccessAction',
             'mapFailureAction',
@@ -78,6 +80,11 @@ const rocketjump = (...configs) => {
       exp.reducer = typeof exp.reducer === 'undefined'
         ? undefined
         : proxyReducer(exp.reducer, config.proxyReducer)
+      exp.reducer = typeof exp.reducer === 'undefined'
+        ? undefined
+        : Array.isArray(config.composeReducer)
+          ? composeReducers(...[exp.reducer].concat(config.composeReducer))
+          : exp.reducer
       exp.selectors = typeof exp.selectors === 'undefined'
         ? undefined
         : proxyObject(exp.selectors, config.proxySelectors)

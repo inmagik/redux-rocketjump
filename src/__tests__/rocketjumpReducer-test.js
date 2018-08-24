@@ -128,4 +128,53 @@ describe('Rocketjump reducer', () => {
       error: null,
     })
   })
+
+  it('should be composable', () => {
+    const rA = rj({
+      composeReducer: [
+        (prevState, action) => ({ ...prevState, giova: 12 }),
+        (prevState, action) => ({ ...prevState, rinne: 1 }),
+      ]
+    })
+
+    const rA1 = rj(
+      rA,
+      {
+        composeReducer: [
+          (prevState, action) => action.type === 'YEAH' ? ({
+            ...prevState,
+            giova: prevState.giova * 2,
+          }) : prevState
+        ]
+      }
+    )
+
+    const { reducer } = rj(rA1, {
+      type: 'OH',
+      state: 'nevada',
+      composeReducer: [
+        (prevState, action) => action.type === 'YEAH' ? ({
+          ...prevState,
+          giova: `Gio Va Age: ${prevState.giova}`
+        }) : prevState
+      ]
+    })()
+
+    let state = reducer(undefined, {})
+    expect(state).toEqual({
+      loading: false,
+      error: null,
+      data: null,
+      rinne: 1,
+      giova: 12
+    })
+    state = reducer(state, { type: 'YEAH' })
+    expect(state).toEqual({
+      loading: false,
+      error: null,
+      data: null,
+      rinne: 1,
+      giova: 'Gio Va Age: 24'
+    })
+  })
 })
