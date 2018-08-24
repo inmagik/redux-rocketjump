@@ -9,7 +9,8 @@ const defaultKeyMaker = action => action.meta ? action.meta.id : null
 export const makeMapReducer = (
   mainType,
   keyMaker = defaultKeyMaker,
-  dataReducer
+  dataReducer,
+  keepSucceded = true,
 ) => {
   const actionTypes = makeActionTypes(mainType)
   const itemReducer = makeReducer(mainType, dataReducer)
@@ -18,11 +19,22 @@ export const makeMapReducer = (
     switch (action.type) {
       case actionTypes.loading:
       case actionTypes.failure:
-      case actionTypes.success: {
+      {
         const key = keyMaker(action)
         return {
           ...prevState,
           [key]: itemReducer(prevState[key], action)
+        }
+      }
+      case actionTypes.success: {
+        const key = keyMaker(action)
+        if (keepSucceded) {
+          return {
+            ...prevState,
+            [key]: itemReducer(prevState[key], action)
+          }
+        } else {
+          return omit(prevState, key)
         }
       }
       case actionTypes.unload: {
@@ -83,7 +95,8 @@ export default (mapConfig = {}) => (config, ...args) => rj({
   proxyReducer: () => makeMapReducer(
     config.type,
     mapConfig.key,
-    mapConfig.dataReducer
+    mapConfig.dataReducer,
+    mapConfig.keepSucceded,
   ),
   proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
   takeEffect: takeLatestAndCancelGroupBy,

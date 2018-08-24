@@ -3,8 +3,8 @@ import rjUpdate  from '../catalogs/update'
 
 describe('rjUpdate', () => {
   it('should make update actions creators', () => {
-    const { actions: { load: updateHuman } } = rj(
-      rjUpdate,
+    const { actions: { update: updateHuman } } = rj(
+      rjUpdate(),
       {
         type: 'UPDATE_HUMAN',
         state: 'humans',

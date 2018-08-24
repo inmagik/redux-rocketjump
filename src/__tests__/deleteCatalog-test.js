@@ -3,8 +3,8 @@ import rjDelete  from '../catalogs/delete'
 
 describe('rjDelete', () => {
   it('should make delete actions creators', () => {
-    const { actions: { load: deleteHuman } } = rj(
-      rjDelete,
+    const { actions: { performDelete: deleteHuman } } = rj(
+      rjDelete(),
       {
         type: 'DELETE_HUMAN',
         state: 'humans',
