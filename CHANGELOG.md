@@ -1,3 +1,7 @@
+## 1.4.1
+###### *August 24, 2018*
+- Workaround in promise catalog to avoid bug \w React Native
+
 ## 1.4.0
 ###### *August 23, 2018*
 - Added list catalog to make a paginated list `rj`
