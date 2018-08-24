@@ -1,3 +1,11 @@
+## 1.5.0
+###### *August 24, 2018*
+- The `takeLatestAndCancelGroupBy` effect clear all pending tasks when match cancel pattern \w null key
+- Added new core option `composeReducer` to `rj` that expect an array of reducers to compose to current reducer.
+- Added map catalog to handle map like data.
+- Added update catalog to handle multi update entities.
+- Added delete catalog to handle deleting entities.
+
 ## 1.4.1
 ###### *August 24, 2018*
 - Workaround in promise catalog to avoid bug \w React Native
