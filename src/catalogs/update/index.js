@@ -4,9 +4,9 @@ import rjMap from '../map'
 
 export default (c = {}) => {
   const config = {
-    ...c,
     // Default clear state when update success
     keepUpdated: false,
+    ...c,
   }
   return rj(
     rjMap({
