@@ -4,11 +4,11 @@
 
 Rocketjump your redux! Speed up redux-app development.
 
-A set of tools to speed up the development of an a redux based app:
+A set of tools to speed up the development of a redux based app:
 
-- Generate all you need from and for the state from a single function call, easy to extend, easy to compose.
-- An out of the box way to organize redux folders by functionality instead of type.
-- Handy helpers to help you compose functionality.
+- generate all you need from and for the state from a single function call, easy to extend, easy to compose.
+- an out of the box way to organize redux folders by functionality instead of type.
+- handy helpers to help you compose functionality.
 
 ```js
 import { rj, makeAppsReducers, makeAppsSaga } from 'redux-rocketjump'
@@ -95,19 +95,18 @@ npm install --save redux redux-saga reselect
 
 ## Why?
 
-When develop a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and
-automating certain stuff without loosing control of what you are doing.
+When developing a large redux app with a lot of entities is some cases this can lead to a lot of copy-paste code an in a difficult to share functionality, redux-rocketjump try to bridge this gap promoting better code organization and automating certain stuff without losing control of what you are doing.
 
 ## Organize redux code by functionality
 When starting writing a redux app is common to organize code by type Es:. (actions, reducers, selectors, ...).
 But when the app get bigger this approach lead to confusion, unmantenibility and in a difficult scalability.
-So instead yuo should organizing state folders by what they does Es:. (todos, users, tickets, ...).
+So instead you should organizing state folders by what they does Es:. (todos, users, tickets, ...).
 
-To do this `redux-rocketjump` offers you two covenient helpers `makeAppsReducers` and `makeAppsSaga`.
+To do this `redux-rocketjump` offers you two convenient helpers `makeAppsReducers` and `makeAppsSaga`.
 
 Every state folder should export a `reducer` injected into the main reducer and, if needed, a `saga` used to handle side effects.
 
-A tipical `state/index.js` looks like this:
+A typical `state/index.js` looks like this:
 ```js
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
 import createSagaMiddleware from 'redux-saga'
@@ -144,9 +143,9 @@ export default store
 ## Your first rocketjump
 Basically `rocketjump` is just a function that makes action creators, selectors, reducer
 and saga from a configuration.
-The minum options are:
+The minimum options are:
 - `type`: The action type that trigger side effect and the prefix for related action types dispatched: `type`_LOADING, `type`_SUCCESS, `type`_FAILURE, `type`_UNLOAD.
-- `state`: The base selector for generated selectors, can be a selector, a function or a string object path with the sintax of https://lodash.com/docs/#get. If `false` was given the reducer and selectors creation is skipped, this is useful when you need only to run action driven side effect in rocketjump environment.
+- `state`: The base selector for generated selectors, can be a selector, a function or a string object path with the syntax of https://lodash.com/docs/#get. If `false` was given the reducer and selectors creation is skipped, this is useful when you need only to run action driven side effect in rocketjump environment.
 - `api`: the side effect, a function that return a promise.
 
 So this is a `rocketjump` for fetching some todos from an API:
@@ -157,10 +156,10 @@ export const {
   actions: {
     // Trigger side effect
     // the first parameter is an object that is passed as argument to the api function
-    // the second paramter is an object of meta dispached along with all the action dispatched
-    // you can use meta to customize reducer or saga behaviour from outside.
+    // the second parameter is an object of meta dispatched along with all the action dispatched
+    // you can use meta to customize reducer or saga behavior from outside.
     load: loadTodos,
-    // Stop side effect and clear the state, accept an object of meta as paramater
+    // Stop side effect and clear the state, accept an object of meta as parameter
     unload: unloadTods,
   },
   selectors: {
@@ -226,7 +225,7 @@ export const loadTodos = (params = {}, meta = {}) => ({
   },
   meta,
 })
-  
+
 export const unloadTodos = (meta = {}) => ({
   type: 'GET_TODOS_UNLOAD',
   meta
@@ -246,7 +245,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 
 function* fetchTodos({ payload: { params }, meta }) {
   yield put({ type: 'GET_TODOS_LOADING', meta })
-  
+
   try {
     const data = yield call(loadTodosFromApi, params)
     yield put({ type: 'GET_TODOS_SUCCESS', meta, payload: { data, params } })
@@ -261,23 +260,23 @@ export default function* () {
 ```
 
 ## Extend the base rocketjump
-The base rocketjump can be extendend to change how the reducer work, make new action creators, customize selectors and more.
+The base rocketjump can be extended to change how the reducer work, make new action creators, customize selectors and more.
 Here the complete list of available options:
 
-- `proxyActions`: An hook to proxy action creators, if an object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expcted to be the new action creator. Previous action creators will be merged with the given new action creators. If function is given, the return value will be used directly to be merge to the previous actions creators.
+- `proxyActions`: An hook to proxy action creators, if an object is given every keys is used to generate new action creator, every value is called with all the previous generated action creators and the returned value is expected to be the new action creator. Previous action creators will be merged with the given new action creators. If function is given, the return value will be used directly to be merge to the previous actions creators.
 - `proxySelectors`: Works exactly as `proxyActions` but is used to proxy selectors.
 - `dataReducer`: If given is used as a sub reducer to handle the `type_SUCCESS ` action on the piece of state related to data.
-The default implentation is: `(prevState, { type, payload }) => payload.data`
+The default implementation is: `(prevState, { type, payload }) => payload.data`
 - `proxyReducer`: If given, is expected to be a function, it will be called with the previous reducer and the result is used as the new reducer.
-- `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra paramaters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` paramaters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generators.
+- `apiExtraParams`: If given, is expected to be a generator, it will be called from a saga with the params coming from the action creator and is used to provide extra parameters to the `api` function. The return value is expected to be an object it will be merged with the actually `api` parameters. Here you can use all the `redux-saga` effects, so you can even run asynchronous code. You can even pass an array of generators.
 - `callApi`: If given is used instead of the `call` function from `redux-saga` to call the `api` function.
 - `successEffect`: A generator called only when the promise returned from `api` resolves. It receives the resolved value and the meta from the action creator. You can even pass an array of generators.
 - `failureEffect`: A generator called only when the promise returned from `api` reject. It receives the rejection and the meta from the action creator. You can even pass an array of generators.
-- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous tasks, this is usally the best choice for GET api requests.
-If you need a different behaviours of you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js), or you can implement a new one.
+- `takeEffect`: The effect that describe how the task spawned by the main action type is handled. The default value is `takeLatestAndCancel` that spawn a task every time the main action type is dispatched and cancel any previous tasks, this is usually the best choice for GET api requests.
+If you need a different behaviors of you can choose one from [src/effects](https://github.com/inmagik/redux-rocketjump/blob/master/src/effects.js), or you can implement a new one.
 - `takeEffectArgs`: Extra arguments passed to `takeEffect`.
 
-Here some examples to use theese options to handle common tasks.
+Here some examples to use these options to handle common tasks.
 
 Rocketjump that add auth to your api calls:
 ```js
@@ -346,7 +345,7 @@ When you call the last rocketjump the second time actions, reducer, actions and 
 Regarding the saga it can't be composed as the others, instead all the extra parameters generated by the `apiExtraParams` are merged together recursively and the effects of `successEffect` or the `failureEffect` are runned consecutively.
 
 ## Handy helpers
-redux-rocketjump exports two handy helpers `composeReducers` and `resetReducerOn` to help you composin rocketjumps reducers behaviours, here an example:
+redux-rocketjump exports two handy helpers `composeReducers` and `resetReducerOn` to help you composin rocketjumps reducers behaviors, here an example:
 ```js
 import { rj, resetReducerOn, composeReducers, makeActionTypes } from 'redux-rocketjump'
 
