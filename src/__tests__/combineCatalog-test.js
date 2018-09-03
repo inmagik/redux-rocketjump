@@ -1,5 +1,6 @@
 // import configureStore from 'redux-mock-store'
 // import createSagaMiddleware from 'redux-saga'
+import { createSelector } from 'reselect'
 import { rj } from '../rocketjump'
 // import { takeEveryAndCancel } from '../effects'
 import combineRjs from '../catalogs/combine'
@@ -259,4 +260,70 @@ describe('Combine catalog', () => {
     // console.log(JSON.stringify(state, null, 2))
 
   })
+
+  it('Should combine state and proxySelectors', () => {
+
+    const getCoolGuyName = state => state.coolGuyName
+
+    const {
+      connect: {
+        list: {
+          selectors: {
+            getCoolGuys,
+          }
+        }
+      }
+    } = combineRjs({
+      list: rj({
+        type: 'GET_GUYS',
+        proxySelectors: {
+          getCoolGuys: ({ getData }) => createSelector(
+            getData,
+            getCoolGuyName,
+            (guys, coolGuy) => {
+              return guys.map(guy => ({
+                ...guy,
+                cool: guy.name === coolGuy
+              }))
+            }
+          )
+        },
+      })
+    }, {
+      state: 'guys',
+    })
+
+    expect(getCoolGuys({
+      coolGuyName: 'Gio Va',
+      guys: {
+        list: {
+          data: [
+            {
+              name: 'Gio Va'
+            },
+            {
+              name: 'Ma Ik'
+            },
+            {
+              name: 'Nin Ja'
+            }
+          ]
+        }
+      }
+    })).toEqual([
+      {
+        name: 'Gio Va',
+        cool: true,
+      },
+      {
+        name: 'Ma Ik',
+        cool: false,
+      },
+      {
+        name: 'Nin Ja',
+        cool: false,
+      }
+    ])
+  })
+
 })

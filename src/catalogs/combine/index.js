@@ -1,15 +1,19 @@
 import { fork } from 'redux-saga/effects'
-import mapValues from 'lodash.mapvalues'
+import { createSelector } from 'reselect'
 import { combineReducers } from 'redux'
 import { getOrSelect } from '../../helpers'
 
-const namespaceSelectors = (stateSelector, selectors) => {
-  if (!stateSelector) {
-    return selectors
+const mergeStateKey = (baseStateSelector, subStateSelector) => {
+  // No base state to merge
+  if (
+    typeof baseStateSelector !== 'string' &&
+    typeof baseStateSelector !== 'function'
+  ) {
+    return subStateSelector
   }
-  const getPieceOfState = state => getOrSelect(state, stateSelector)
-  return mapValues(selectors, selector =>
-    state => selector(getPieceOfState(state))
+  return createSelector(
+    state => getOrSelect(state, baseStateSelector),
+    baseState => getOrSelect(baseState, subStateSelector)
   )
 }
 
@@ -17,28 +21,33 @@ export default (combine, config) => {
 
   const combined = Object.keys(combine).reduce((result, key) => {
     const givenRj = combine[key]
-    const stateKey = typeof givenRj.config.state === 'undefined'
+
+    const stateSelector = typeof givenRj.config.state === 'undefined'
+      ? mergeStateKey(config.state, key)
+      : givenRj.config.state
+
+    const reducerKey = typeof givenRj.config.state === 'undefined'
       ? key
       : givenRj.config.state
+
     const {
       reducer,
       saga,
       actions,
-      selectors: baseSelectors,
+      selectors,
     } = givenRj({
-      state: stateKey,
+      state: stateSelector,
       callApi: givenRj.config.callApi || config.callApi,
       // apiExtraParams: config.apiExtraParams,
       // successEffect: config.successEffect,
       // failureEffect: config.failureEffect,
     })
-    const selectors = namespaceSelectors(config.state, baseSelectors)
 
     let reducers = result.reducers
     if (typeof reducer !== 'undefined') {
       reducers = {
         ...result.reducers,
-        [stateKey]: reducer,
+        [reducerKey]: reducer,
       }
     }
 
