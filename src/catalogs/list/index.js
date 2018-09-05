@@ -85,6 +85,11 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
     data => data === null ? null : data.pagination.previous
   )
 
+  const getCurrent = createSelector(
+    getData,
+    data => data === null ? null : data.pagination.current
+  )
+
   return {
     getList,
     getCount,
@@ -93,6 +98,7 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
     hasPrev,
     getNext,
     getPrev,
+    getCurrent,
   }
 }
 
