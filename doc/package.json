@@ -3,6 +3,7 @@
   "description": "",
   "dependencies": {
     "catalog": "^3.0.0-rc.4",
+    "query-string": "5",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
