@@ -100,5 +100,9 @@ export default (mapConfig = {}) => (config, ...args) => rj({
   ),
   proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
   takeEffect: takeLatestAndCancelGroupBy,
-  takeEffectArgs: [mapConfig.key],
+  takeEffectArgs: [
+    typeof mapConfig.key === 'function'
+      ? mapConfig.key
+      : defaultKeyMaker
+  ],
 })(config, ...args)
