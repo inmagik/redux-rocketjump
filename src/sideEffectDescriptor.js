@@ -13,7 +13,7 @@ export const makeSideEffectDescriptor = () => ({
 
 export const addConfigToSideEffectDescritor = (sideEffect, config) => ({
   ...sideEffect,
-  ...pick(config, 'callApi', 'takeEffect', 'takeEffectArgs'),
+  ...pick(config, 'callApi', 'takeEffect', 'takeEffectArgs', 'needEffect'),
   apiExtraParams: [
     ...sideEffect.apiExtraParams,
     ...arrayze(get(config, 'apiExtraParams', [])),

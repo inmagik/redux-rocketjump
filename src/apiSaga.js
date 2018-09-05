@@ -10,6 +10,7 @@ export default (
   extraParamsEffects = [],
   takeEffect = takeLatestAndCancel,
   callApi = call,
+  needEffect,
   successEffects = [],
   failureEffects = [],
   takeEffectArgs = [],
@@ -20,6 +21,13 @@ export default (
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
+    // Should perform the call?
+    if (typeof needEffect === 'function') {
+      const needToRun = yield needEffect(meta)
+      if (!needToRun) {
+        return
+      }
+    }
     yield put(mapLoadingAction({ type: actionTypes.loading, meta: meta }))
     try {
       // Get extra shit from outside HOOK
