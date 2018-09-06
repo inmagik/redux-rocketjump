@@ -1,3 +1,9 @@
+## 1.6.0
+###### *September 6, 2018*
+- Rename `catalogs` to `plugins`
+- Added `cache` plugin
+- Added `needEffect` to `rj` API a saga effect to determinate if run api.
+
 ## 1.5.0
 ###### *August 24, 2018*
 - The `takeLatestAndCancelGroupBy` effect clear all pending tasks when match cancel pattern \w null key
