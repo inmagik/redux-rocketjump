@@ -3,7 +3,7 @@ import rjList, {
   makeListDataReducer,
   makeListSelectors,
   nextPreviousPaginationAdapter,
-} from '../catalogs/list'
+} from '../plugins/list'
 
 describe('makeListDataReducer', () => {
   it('should make a list paginated reducer', () => {
@@ -238,7 +238,7 @@ describe('makeListSelectors', () => {
   })
 })
 
-describe('rjList', () => {
+describe('List plugin', () => {
   it('should have a list reducer', () => {
     const { reducer } = rj(rjList({
       pagination: nextPreviousPaginationAdapter,

@@ -3,12 +3,12 @@
 import { createSelector } from 'reselect'
 import { rj } from '../rocketjump'
 // import { takeEveryAndCancel } from '../effects'
-import combineRjs from '../catalogs/combine'
-import rjList, { nextPreviousPaginationAdapter } from '../catalogs/list'
-// import rjMap from '../catalogs/map'
-import rjUpdate from '../catalogs/update'
-import rjDelete from '../catalogs/delete'
-import { makeUpdateReducer, makeRemoveListReducer } from '../catalogs/hor'
+import combineRjs from '../plugins/combine'
+import rjList, { nextPreviousPaginationAdapter } from '../plugins/list'
+// import rjMap from '../plugins/map'
+import rjUpdate from '../plugins/update'
+import rjDelete from '../plugins/delete'
+import { makeUpdateReducer, makeRemoveListReducer } from '../plugins/hor'
 
 // const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
 //   const sagaMiddleware = createSagaMiddleware()
@@ -19,8 +19,8 @@ import { makeUpdateReducer, makeRemoveListReducer } from '../catalogs/hor'
 //   return store
 // }
 
-describe('Combine catalog', () => {
-  it('Should combine reducers', () => {
+describe('Combine plugin', () => {
+  it('should combine reducers', () => {
 
     // MOCKS
     const BROS = [
@@ -261,7 +261,7 @@ describe('Combine catalog', () => {
 
   })
 
-  it('Should combine state and proxySelectors', () => {
+  it('should combine state and proxySelectors', () => {
 
     const getCoolGuyName = state => state.coolGuyName
 

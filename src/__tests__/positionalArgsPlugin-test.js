@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
 import { rj } from '../rocketjump'
-import rjPosArgs from '../catalogs/positionalArgs'
+import rjPosArgs from '../plugins/positionalArgs'
 
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
   const sagaMiddleware = createSagaMiddleware()
@@ -12,8 +12,8 @@ const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
   return store
 }
 
-describe('Positional args catalog', () => {
-  it('Should able to run action creator using positional arguments instead of objects', () => {
+describe('Positional args plugin', () => {
+  it('should able to run action creator using positional arguments instead of objects', () => {
     const api = jest.fn()
     const {
       actions: {
@@ -36,7 +36,7 @@ describe('Positional args catalog', () => {
     expect(api.mock.calls[0][2]).toBe('King Redeem / Queen serene')
   })
 
-  it('Should able to map positional arguments to meta', () => {
+  it('should able to map positional arguments to meta', () => {
     const api = jest.fn()
     const type = 'SOOCIO~'
     const {

@@ -1,7 +1,7 @@
 import { rj } from '../rocketjump'
-import rjUpdate  from '../catalogs/update'
+import rjUpdate  from '../plugins/update'
 
-describe('rjUpdate', () => {
+describe('Update plugin', () => {
   it('should make update actions creators', () => {
     const { actions: { update: updateHuman } } = rj(
       rjUpdate(),

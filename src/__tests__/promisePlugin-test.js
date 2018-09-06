@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
 import { rj } from '../rocketjump'
-import rjWithPromise from '../catalogs/promise'
+import rjWithPromise from '../plugins/promise'
 import { middleware as thunkMiddleware } from 'redux-saga-thunk'
 
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {

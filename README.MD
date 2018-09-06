@@ -376,11 +376,11 @@ const rjResetOnLogout = rj({
 })
 ```
 
-## Catalogs
-Out of the box there are some useful "catalogs" that you can use in composition with rocketjump to extend the base functionality.
+## Plugins
+Out of the box there are some useful plugins that you can use in composition with rocketjump to extend the base functionality.
 
 ### Promise
-This catalog add promise to action creator using the awesome library [redux-saga-thunk](https://github.com/diegohaz/redux-saga-thunk).
+This plugin add promise to action creator using the awesome library [redux-saga-thunk](https://github.com/diegohaz/redux-saga-thunk).
 ```js
 import rjWithPromise from 'redux-rocketjump/catalogs/promise'
 const {

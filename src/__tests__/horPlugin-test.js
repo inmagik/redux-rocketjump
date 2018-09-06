@@ -1,7 +1,7 @@
 import {
   makeUpdateReducer,
   makeRemoveListReducer,
-} from '../catalogs/hor'
+} from '../plugins/hor'
 
 describe('HOR makeUpdateReducer', () => {
 

@@ -7,8 +7,8 @@ import {
   composeReducers,
   takeEveryAndCancel,
 } from 'redux-rocketjump'
-import combineRjs from 'redux-rocketjump/catalogs/combine'
-import rjPosArgs from 'redux-rocketjump/catalogs/positionalArgs'
+import combineRjs from 'redux-rocketjump/plugins/combine'
+import rjPosArgs from 'redux-rocketjump/plugins/positionalArgs'
 import { fork, put } from 'redux-saga/effects'
 
 const API_URL = `http://${window.location.hostname}:3000`

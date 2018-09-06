@@ -3,10 +3,10 @@ import rjMap, {
   // TODO: Test the single functions...
   // makeMapReducer,
   // makeMapSelectors,
-} from '../catalogs/map'
+} from '../plugins/map'
 import { mockStoreWithSaga } from './utils'
 
-describe('rjMap', () => {
+describe('Map plugin', () => {
   it('should make map reducer', () => {
     const { reducer } = rj(
       rjMap(),

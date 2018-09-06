@@ -1,7 +1,7 @@
 import { rj } from '../rocketjump'
-import rjDelete  from '../catalogs/delete'
+import rjDelete  from '../plugins/delete'
 
-describe('rjDelete', () => {
+describe('Delete plugin', () => {
   it('should make delete actions creators', () => {
     const { actions: { performDelete: deleteHuman } } = rj(
       rjDelete(),
