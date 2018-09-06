@@ -1,10 +1,20 @@
+import configureStore from 'redux-mock-store'
+import createSagaMiddleware from 'redux-saga'
 import { rj } from '../rocketjump'
 import rjMap, {
   // TODO: Test the single functions...
   // makeMapReducer,
   // makeMapSelectors,
 } from '../plugins/map'
-import { mockStoreWithSaga } from './utils'
+
+const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
+  const sagaMiddleware = createSagaMiddleware()
+  const middlewares = [sagaMiddleware]
+  const mockStore = configureStore(middlewares)
+  const store = mockStore(...mockStoreArgs)
+  sagaMiddleware.run(saga)
+  return store
+}
 
 describe('Map plugin', () => {
   it('should make map reducer', () => {
