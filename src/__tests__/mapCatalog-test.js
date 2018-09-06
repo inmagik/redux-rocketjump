@@ -4,6 +4,7 @@ import rjMap, {
   // makeMapReducer,
   // makeMapSelectors,
 } from '../catalogs/map'
+import { mockStoreWithSaga } from './utils'
 
 describe('rjMap', () => {
   it('should make map reducer', () => {
@@ -207,5 +208,79 @@ describe('rjMap', () => {
       type: 'GET_USER_UNLOAD',
       meta: { id: 23 }
     })
+  })
+
+  it('should make map group by saga default using meta id', (done) => {
+    const mockApi = jest.fn()
+      .mockResolvedValueOnce('GioVa')
+      .mockResolvedValueOnce('KING')
+      .mockResolvedValueOnce('4EVER')
+    const {
+      actions: {
+        loadKey,
+      },
+      saga,
+    } = rj(
+      rjMap(),
+      {
+        type: 'GET_USER',
+        state: 'users',
+        api: mockApi,
+      }
+    )()
+
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(loadKey(23))
+    store.dispatch(loadKey(32))
+    store.dispatch(loadKey(23))
+
+    mockApi.mock.results[2].value.then(() => {
+      expect(store.getActions()).toEqual([
+        // First call
+        {
+          type: 'GET_USER',
+          payload: { params: { id: 23 } },
+          meta: { id: 23 }
+        },
+        {
+          type: 'GET_USER_LOADING',
+          meta: { id: 23 }
+        },
+        // Second call
+        {
+          type: 'GET_USER',
+          payload: { params: { id: 32 } },
+          meta: { id: 32 }
+        },
+        {
+          type: 'GET_USER_LOADING',
+          meta: { id: 32 }
+        },
+        // Third call
+        {
+          type: 'GET_USER',
+          payload: { params: { id: 23 } },
+          meta: { id: 23 }
+        },
+        {
+          type: 'GET_USER_LOADING',
+          meta: { id: 23 }
+        },
+        // Second call success
+        {
+          type: 'GET_USER_SUCCESS',
+          meta: { id: 32 },
+          payload: { data: 'KING', params: { id: 32 } }
+        },
+        // Third call success (The first call was cancelled)
+        {
+          type: 'GET_USER_SUCCESS',
+          meta: { id: 23 },
+          payload: { data: '4EVER', params: { id: 23 } }
+        },
+      ])
+      done()
+    })
+
   })
 })

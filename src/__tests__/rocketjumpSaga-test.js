@@ -1,30 +1,9 @@
-import configureStore from 'redux-mock-store'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import { combineReducers } from 'redux'
 import { select } from 'redux-saga/effects'
 import omit from 'lodash/omit'
 import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
-
-const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const middlewares = [sagaMiddleware]
-  const mockStore = configureStore(middlewares)
-  const store = mockStore(...mockStoreArgs)
-  sagaMiddleware.run(saga)
-  return store
-}
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware),
-  )
-  sagaMiddleware.run(saga)
-  return store
-}
+import { mockStoreWithSaga, createRealStoreWithSagaAndReducer } from './utils'
 
 describe('Rocketjump saga', () => {
   const type = 'GET_SOCI'
