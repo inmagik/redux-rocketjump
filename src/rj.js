@@ -1,62 +1,44 @@
-import mapValues from 'lodash.mapvalues'
-import get from 'lodash.get'
-// config
-// ---> namespace
-// ---> state
-// ---> actionTypes
-//
-// export
-// actionTypes
-const makeExport = (config, extendExport = {}) => {
-  const {
-    // Action namespace
-    namespace,
-  } = config
+import makeExport from './export'
 
-  // Make the actionTypes from config
-  let actionTypes = config.actionTypes(namespace)
-  // Merge \w given extended export
-  if (extendExport.actionTypes) {
-    actionTypes = {
-      ...extendExport.actionTypes,
-      ...actionTypes,
-    }
-  }
-
-  // TODO
-  // Make the actions
-  const actions = mapValues(config.actions, makeAction => makeAction(
-    actionTypes,
-    extendExport.actions || {},
-    namespace,
-  ))
-
-  // TODO
-  // Make the reducer
-
-  // TODO
-  // Make the selectors
-
-  // Make the final export
-  return {
-    actionTypes,
-    actions,
-  }
-}
-
+// Here is where the magic starts the functional recursive rjs combining \*.*/
 export default (...args) => {
+  // Take the last arguments of rj invocation as base config:
+  /*
+    rj(
+      // List of extends rjs
+      rj(...),
+      rj(...),
+      // Expected to be a config plain object
+      {
+        ...
+      }
+  )
+  */
   const [ baseConfig, ...rjs ] = [...args].reverse()
 
   return (runConfig, extendExport) => {
+    // Merged the base rj config with the finally invokation config
+    // can be undefined
     const config = {
       ...runConfig,
       ...baseConfig,
     }
 
+    // Invoke all rjs and merge returned exports
+    // ... yeah a mindfuck but is coool. ..
     const combinedExport = rjs.reduce((finalExport, rj) => {
       return rj(config, finalExport)
     }, extendExport)
 
-    return makeExport(config, combinedExport)
+    // Make the exports
+    return makeExport(
+      config,
+      combinedExport,
+      // when extendExport is undefined we really "create" the export
+      // (otherewise the rj is using to extending another rj...)
+      // so basically this means that we can create the saga from
+      // the side effect descriptor
+      typeof extendExport === 'undefined',
+    )
   }
 }

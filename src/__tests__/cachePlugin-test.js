@@ -68,4 +68,52 @@ describe('Cache plugin', () => {
       done()
     })
   })
+  it('can be purged by certain actions', done => {
+    const mockApi = jest.fn().mockResolvedValue('GioVa')
+    const {
+      actions: {
+        load,
+      },
+      reducer,
+      saga,
+    } = rj(rjCache({
+      purge: 'LOGOUT'
+    }), {
+      type: 'GET_SOCI',
+      state: 'soci',
+      api: mockApi,
+    })()
+
+    const store = createRealStoreWithSagaAndReducer(saga, combineReducers({
+      soci: reducer,
+    }))
+    expect(store.getState()).toEqual({
+      soci: {
+        loading: false,
+        error: null,
+        data: null,
+      }
+    })
+    store.dispatch(load())
+    mockApi.mock.results[0].value.then(() => {
+      expect(store.getState()).toEqual({
+        soci: {
+          loading: false,
+          error: null,
+          data: 'GioVa'
+        }
+      })
+      store.dispatch({
+        type: 'LOGOUT',
+      })
+      expect(store.getState()).toEqual({
+        soci: {
+          loading: false,
+          error: null,
+          data: null,
+        }
+      })
+      done()
+    })
+  })
 })

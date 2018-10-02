@@ -1,6 +1,8 @@
 import { rj } from '../../rocketjump'
 import { makeSelectors } from '../../selectors'
+import { resetReducerOn } from '../../helpers'
 import { select } from 'redux-saga/effects'
+
 export default (cacheConfig = {}) => (config, ...args) => rj({
   proxyActions: {
     load: ({ load }) => (params = {}, meta = {}) =>
@@ -8,6 +10,12 @@ export default (cacheConfig = {}) => (config, ...args) => rj({
 
     // Skip cache
     loadForce: ({ load }) => load,
+  },
+  proxyReducer: reducer => {
+    if (cacheConfig.purge) {
+      return resetReducerOn(cacheConfig.purge, reducer)
+    }
+    return reducer
   },
   needEffect: function *(meta) {
     if (!meta.cache) {

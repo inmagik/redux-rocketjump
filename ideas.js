@@ -10,10 +10,22 @@ rj({
 rj(rjFetch(), {
   namespace: '@users',
   state: 'users',
-  effects: {
-    fetch: (params, t) => request.get('/'),
-    // update: ()
+
+  effectsConfig: {
+
   },
+  // effects: {
+  //   fetch: {
+  //     take: takeLatestAndGroupBy,
+  //     // takeArgs: 23,
+  //     // cancelBy
+  //     call: callApi,
+  //     run: () => 23,
+  //     // need:
+  //     // success: function *() {},
+  //     // failure
+  //   }
+ },
 })()
 
 
