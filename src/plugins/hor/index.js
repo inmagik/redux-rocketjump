@@ -75,3 +75,39 @@ export const makeRemoveListReducer = (
     return prevState
   }
 }
+
+const defaultAddToList = (list, action) => list.concat(action.payload.data)
+
+// HOR for add item to list
+export const makeAddListReducer = (
+  type,
+  listPath = 'data.list',
+  paginationPath = 'data.pagination',
+  addToList = defaultAddToList,
+) => {
+  const pattern = makePattern(type)
+
+  return (prevState, action) => {
+    const oldList = get(prevState, listPath)
+
+    if (matchActionPattern(action, pattern) && oldList) {
+      let nextState
+
+      const newList = addToList(oldList, action)
+      nextState = set(prevState, listPath, newList)
+
+      if (paginationPath) {
+        const oldPagination = get(prevState, paginationPath)
+        const newPagination = {
+          ...oldPagination,
+          count: oldPagination.count + 1,
+        }
+        nextState = set(nextState, paginationPath, newPagination)
+      }
+
+      return nextState
+    }
+
+    return prevState
+  }
+}
