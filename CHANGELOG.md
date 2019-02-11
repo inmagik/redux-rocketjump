@@ -1,3 +1,7 @@
+## 1.7.2
+###### *February 11, 2019*
+- Fixed a bug with `unloadBy` and `state` options setted to `false`
+
 ## 1.7.1
 ###### *October 12, 2018*
 - Added `makeAddListReducer` to `hor` plugin
