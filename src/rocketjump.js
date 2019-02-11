@@ -133,7 +133,12 @@ const rocketjump = (...configs) => {
       )
       return {
         ...omit(finalExport, 'sideEffect'),
-        reducer: sideEffect.unloadBy.length > 0
+        reducer: (
+          // Enhance reducer \w reset only when configurated unloadBy action
+          // and reducer is not undefined (rj \w state false)
+          sideEffect.unloadBy.length > 0 &&
+          typeof finalExport.reducer === 'function'
+        )
           ? resetReducerOn(sideEffect.unloadBy, finalExport.reducer)
           : finalExport.reducer,
         saga,

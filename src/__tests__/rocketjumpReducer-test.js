@@ -229,4 +229,25 @@ describe('Rocketjump reducer', () => {
     expect(reducer(prevState, { type: 'KLOOSE' })).toEqual(guestInitalState)
     expect(reducer(prevState, { type: 'STAKKA' })).toEqual(guestInitalState)
   })
+
+  it('should ignore unloadBy for reducer when state is to false', () => {
+
+    const { reducer } = rj(
+      rj({
+        unloadBy: 'LOGOUT',
+      }),
+      rj({
+        unloadBy: 'KLOOSE',
+      }),
+      {
+        type: 'BELLA',
+        state: false,
+        unloadBy: 'STAKKA',
+        // FIXME: This is need but is wrong....
+        api: () => 23,
+      }
+    )()
+
+    expect(reducer).toBeUndefined()
+  })
 })
