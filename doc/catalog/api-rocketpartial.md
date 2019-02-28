@@ -177,6 +177,7 @@ Example: skip some calls to an API because we are caching the value
 lang: js
 ---
 rj({
+    // ... other config options ...
     proxyActions: {
         load: ({ load }) => 
                 (params = {}, meta = {}) =>
@@ -201,6 +202,7 @@ Example: do something with the result
 lang: js
 ---
 {
+    // ... other config options ...
     successEffect: function *(data, meta) {
         if (meta.successMessage) {
             yield put(showSuccessMessage(meta.successMessage))
@@ -217,7 +219,7 @@ Example: alert errors
 lang: js
 ---
 {
-    {
+    // ... other config options ...
     failureEffect: function *(error) {
         yield put(showErrorToast(`Sorry our monkeys are trying to do their best, ${error.message}`))
     }
@@ -238,3 +240,25 @@ If provided, it **must** be a function that is applied to the action dispatched 
 
 ## mapFailureAction *(function)*
 If provided, it **must** be a function that is applied to the action dispatched when `api` fails before it is dispatched. It **must** return the modified action.
+
+## composeReducer *(function[])*
+It is possibile to pass a list of reducer functions to be composed together, along with the default reducer. Composition here means that any action dispatched to the reducer built by rocketjump will be dispatched through the default reducer, and then through all this list of reducers. This allows the combination of reducers handling different action types
+
+Example: combining more HOR plugins
+```code
+lang: js
+---
+{
+    // ... other config options ...
+    composeReducer: [
+        makeUpdateReducer(
+            SET_USER_STARRED,
+            'data.list',
+            undefined,
+            ({ payload: { data: { starred } } }, obj) => ({ ...obj, starred }),
+        ),
+        makeRemoveListReducer(DELETE_USER),
+        makeUpdateReducer(UPDATE_USER, 'data.list'),
+    ]
+}
+```
