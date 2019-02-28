@@ -101,7 +101,11 @@ const {
         getMapError: getUserError
     },
     saga
-} = rjMap()
+} = rjMap({
+        keepSucceeded: true             // Set to false to remove elements from the map
+                                        // when the async task completes with success
+                                        // for them
+    })
     ({
         type: 'GET_USER',
         state: 'users',
