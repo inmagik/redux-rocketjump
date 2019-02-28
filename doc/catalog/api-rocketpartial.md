@@ -229,3 +229,12 @@ The effect that describes how the tasks spawned by the main action type are hand
 
 ## takeEffectArgs *(any[])*
 If provided, it **must** be an array of additional params to be passed to `takeEffect`. The elements contained in the array are arbitrary. When `takeEffect` is used, these params are spread as arguments.
+
+## mapLoadingAction *(function)*
+If provided, it **must** be a function that is applied to the action dispatched by a `load` call and that should be used to transform the action before it is dispatched. It **must** return the modified action.
+
+## mapSuccessAction *(function)*
+If provided, it **must** be a function that is applied to the action dispatched when `api` completes before it is dispatched. It **must** return the modified action.
+
+## mapFailureAction *(function)*
+If provided, it **must** be a function that is applied to the action dispatched when `api` fails before it is dispatched. It **must** return the modified action.
