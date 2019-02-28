@@ -24,35 +24,28 @@ import rjList, { nextPreviousPaginationAdapter } from 'redux-rocketjump/plugins/
 const GET_ITEMS = 'GET_ITEMS'
 
 const {
-  selectors: {
-    getList: getItems,
-    getCount: getItemsCount,
-    getNumPages: getItemsNumPages,
-    getPrev: getItemsPrev,
-    getNext: getItemsNext,
-    hasPrev: hasItemsPrev,
-    hasNext: hasItemsNext,
-  },
-  actions: {
-    load: loadItems,
-    unload: unloadItems,
-  }
-} = rj(
-
-  // adding plugin to rocketjump
-  rjList({
-    pageSize: 50,
-    pagination: nextPreviousPaginationAdapter
-  }),
-
-  // rocketjump configuration
-  {
-    state: 'items',
-    type: GET_ITEMS,
-    api: ({page}) => fetch(`http://example.com/items?page=${page}`)
-      .then(response => response.json())
-  }
-)()
+    selectors: {
+        getList: getItems,
+        getCount: getItemsCount,
+        getNumPages: getItemsNumPages,
+        getPrev: getItemsPrev,
+        getNext: getItemsNext,
+        hasPrev: hasItemsPrev,
+        hasNext: hasItemsNext,
+    },
+    actions: {
+        load: loadItems,
+        unload: unloadItems,
+    }
+} = rjList({
+        pageSize: 50,
+        pagination: nextPreviousPaginationAdapter
+    })({
+        state: 'items',
+        type: GET_ITEMS,
+        api: ({page}) => fetch(`http://example.com/items?page=${page}`)
+            .then(response => response.json())
+    })
 
 ```
 

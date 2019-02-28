@@ -19,11 +19,9 @@ const {
         getFailures: getHumanDeletionErrors
     },
     saga
-} = rj(
-        rjDelete({
-            keepDeleted: false                      // Set to true to perform a soft delete
-        })
-    )({
+} = rjDelete({
+        keepDeleted: false                      // Set to true to perform a soft delete
+    })({
         type: 'DELETE_HUMAN',
         state: 'humans',
     })

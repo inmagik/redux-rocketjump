@@ -95,7 +95,6 @@ lang: js
 ---
 {
     // ... other config options ...
-    type: 'MY_COOL_ACTION_',
     proxyReducer: oldReducer => (state, action) => {
         switch(action.type) {
             case 'MY_COOL_ACTION_ERROR':

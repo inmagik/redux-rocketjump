@@ -18,11 +18,9 @@ const {
         getFailures: getHumanDeletionErrors,
     },
     saga
-} = rj(
-        rjUpdate({
-            keepUpdated: true               // Set to false to remove updated entities from state
-        })
-    )({
+} = rjUpdate({
+        keepUpdated: true               // Set to false to remove updated entities from state
+    })({
         type: 'UPDATE_HUMAN',
         state: 'humans',
     })

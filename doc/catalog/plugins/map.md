@@ -101,11 +101,9 @@ const {
         getMapError: getUserError
     },
     saga
-} = rj(
-    rjMap(),
-    {
+} = rjMap()
+    ({
         type: 'GET_USER',
         state: 'users',
-    }
-)()
+    })
 ```
