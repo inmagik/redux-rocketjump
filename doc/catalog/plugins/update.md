@@ -2,6 +2,8 @@ This plugin is based on the map plugin, and adds over it logic to manage updatin
 
 This plugin wraps the standard `load` action in order to extract the key of the entity being updated and correlate the api action with the update in the local state. The `api` function is supposed to return the full updated entity.
 
+Differently from [Map Plugin](/plugins/map), it is not possible to customize the key derivation logic in this plugin: the primary key must be contained in the `id` property of the objects inserted in the map.
+
 ## Example
 ```code
 lang: js

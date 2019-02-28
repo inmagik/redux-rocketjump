@@ -2,6 +2,8 @@ This plugin is based on the map plugin, and adds over it logic to manage soft an
 
 The provided action dispatcher takes the same parameters as the `loadKey` function provided by the [Map plugin](/plugins/map)
 
+Differently from [Map Plugin](/plugins/map), it is not possible to customize the key derivation logic in this plugin: the primary key must be contained in the `id` property of the objects inserted in the map.
+
 ## Example
 ```code
 lang: js
