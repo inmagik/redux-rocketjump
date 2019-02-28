@@ -17,9 +17,19 @@ const pages = [
     title: "API",
     pages: [
       {
-        path: "/api/rj",
-        title: "rj",
-        content: pageLoader(() => import("./api-rj.md")),
+        path: "/api/rocketpartial",
+        title: "RocketPartial",
+        content: pageLoader(() => import("./api-rocketpartial.md")),
+      },
+      {
+        path: "/api/rocketjump",
+        title: "RocketJump",
+        content: pageLoader(() => import("./api-rocketjump.md")),
+      },
+      {
+        path: "/api/composition",
+        title: "Composition",
+        content: pageLoader(() => import("./api-composition.md")),
       },
     ]
   },
@@ -32,9 +42,39 @@ const pages = [
         content: pageLoader(() => import("./plugins.md")),
       },
       {
+        path: "/plugins/cache",
+        title: "Cache Plugin",
+        content: pageLoader(() => import("./plugins/cache.md")),
+      },
+      {
+        path: "/plugins/delete",
+        title: "Delete Plugin",
+        content: pageLoader(() => import("./plugins/delete.md")),
+      },
+      {
+        path: "/plugins/map",
+        title: "Map Plugin",
+        content: pageLoader(() => import("./plugins/map.md")),
+      },
+      {
         path: "/plugins/list",
         title: "List",
-        content: pageLoader(() => import("./plugins-list.md")),
+        content: pageLoader(() => import("./plugins/list.md")),
+      },
+      {
+        path: "/plugins/promise",
+        title: "Promise Plugin",
+        content: pageLoader(() => import("./plugins/promise.md")),
+      },
+      {
+        path: "/plugins/positionalArgs",
+        title: "Positional Args Plugin",
+        content: pageLoader(() => import("./plugins/positionalArgs.md")),
+      },
+      {
+        path: "/plugins/update",
+        title: "Update Plugin",
+        content: pageLoader(() => import("./plugins/update.md")),
       },
     ]
   },
@@ -42,7 +82,15 @@ const pages = [
 
 ];
 
+const theme = {
+  codeStyles: {
+    comment: { color: '#61E288' },
+    keyword: { color: '#0000FF' },
+    function: { color: '#FF0000' }
+  },
+};
+
 ReactDOM.render(
-  <Catalog title="redux-rocketjump" pages={pages} />,
+  <Catalog title="Redux-RocketJump" pages={pages} theme={theme}  />,
   document.getElementById("catalog")
 );
