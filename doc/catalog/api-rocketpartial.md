@@ -170,6 +170,30 @@ lang: js
 }
 ```
 
+## needEffect *(generator)*
+If this property is provided, it is expected to be a generator, which is invoked right before the `api` task begins to run: if the generator yields a falsy value, the `api` run is skipped.
+
+Example: skip some calls to an API because we are caching the value
+```code
+lang: js
+---
+rj({
+    proxyActions: {
+        load: ({ load }) => 
+                (params = {}, meta = {}) =>
+                  load(params, { ...meta, cache: true }),
+    },
+    needEffect: function *(meta) {
+        if (!meta.cache) {
+            return true
+        }
+        const { getData } = makeSelectors(config.state)
+        const data = yield select(getData)
+        return data === null
+    }
+})
+```
+
 ## successEffect *(generator|generator[])*
 If this property is provided, it is expected to be a generator or an array of generators. These generators are invoked when the Promise returned by the `api` function resolves, and each of them is called with the data obtained from the promise resolution along with the `meta` object passed in the action dispatcher.
 
