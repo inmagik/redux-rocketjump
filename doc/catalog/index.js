@@ -47,19 +47,29 @@ const pages = [
         content: pageLoader(() => import("./plugins/cache.md")),
       },
       {
+        path: "/plugins/combine",
+        title: "Combine Plugin",
+        content: pageLoader(() => import("./plugins/combine.md")),
+      },
+      {
         path: "/plugins/delete",
         title: "Delete Plugin",
         content: pageLoader(() => import("./plugins/delete.md")),
       },
       {
-        path: "/plugins/map",
-        title: "Map Plugin",
-        content: pageLoader(() => import("./plugins/map.md")),
+        path: "/plugins/hor",
+        title: "HOR Plugin",
+        content: pageLoader(() => import("./plugins/hor.md")),
       },
       {
         path: "/plugins/list",
-        title: "List",
+        title: "List Plugin",
         content: pageLoader(() => import("./plugins/list.md")),
+      },
+      {
+        path: "/plugins/map",
+        title: "Map Plugin",
+        content: pageLoader(() => import("./plugins/map.md")),
       },
       {
         path: "/plugins/promise",

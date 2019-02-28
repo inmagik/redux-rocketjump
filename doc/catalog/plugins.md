@@ -16,8 +16,10 @@ rows:
   Feature: "Combines several `RocketJump`s in an object-like fashion, much like *Redux*'s *combineReducers*"
 - Name: Delete Plugin
   Feature: "Provides common logic to sync state with deleting apis, for both hard and soft deletes. It is based on the map plugin"
+- Name: Hor Plugin
+  Feature: "Provides some handy functions to craft reducers for common tasks"
 - Name: List Plugin
-  Feature: 
+  Feature: "Provides common logic to deal with paginated lists"
 - Name: Map Plugin
   Feature: "Provides key-based state management: data returned by asynchronous task are indexed by key and managed in the same piece of state"
 - Name: PositionalArgs Plugin

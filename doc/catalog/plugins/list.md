@@ -19,7 +19,7 @@ Some common adapters are provided, specifically implemented for django-rest-fram
 lang: js
 ---
 import { rj } from 'redux-rocketjump'
-import rjList, { nextPreviousPaginationAdapter } from 'redux-rocketjump/plugins/list' // <- importing the plugin
+import rjList, { nextPreviousPaginationAdapter } from 'redux-rocketjump/plugins/list' 
 
 const GET_ITEMS = 'GET_ITEMS'
 
@@ -57,8 +57,29 @@ const {
 ```
 
 
-## Creating a pagination adapter
+### Creating a pagination adapter
+A pagination adapter is just a plain JavaScript object with a fixed interface. Any field can be a string or a selector. If it is a string, is will be used through lodash.get()
 
-## Explicit pagination
+```code
+lang: js
+---
+{
+  
+  // When a request to the paginated API is made, this selector is used to extract actual data from response
+  list: 'results',
+  
+  // When a request to the paginated API is made, this selector is used to extract the number of data elements contained in the response
+  count: 'count',
 
-## Infinite scroll
+  // When a request to the paginated API is made, this selector is used to determine the number of the loaded page 
+  current: pickPage,
+
+  // When a request to the paginated API is made, this selector is used to extract the params to pass to the request to load the next page
+  // If there is no next page, this should return null
+  next: ({ next }) => pickParamsFromUrl(next, pickPage),
+
+  // When a request to the paginated API is made, this selector is used to extract the params to pass to the request to load the previous page
+  // If there is no previous page, this should return null
+  previous: ({ previous }) => pickParamsFromUrl(previous, pickPage),
+}
+```
