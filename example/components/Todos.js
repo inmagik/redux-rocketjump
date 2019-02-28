@@ -51,7 +51,8 @@ class Todos extends PureComponent {
 }
 
 export default connect(state => ({
-  todos: todoListStore.selectors.getData(state),
+  todos: getTodos(state),
+  // todos: todoListStore.selectors.getData(state),
   loading: areTodosLoading(state),
   adding: isAddingTodo(state),
   updating: getUpdatingTodos(state),

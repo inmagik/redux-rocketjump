@@ -374,6 +374,38 @@ describe('Rocketjump saga', () => {
     })
   })
 
+  it('can unload a side effect using given unloadBy', done => {
+    const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
+    const { actions: { load }, saga } = rj({
+      type,
+      state,
+      api: mockApi,
+      unloadBy: 'LOGOUT',
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    store.dispatch({
+      type: 'LOGOUT',
+    })
+    mockApi.mock.results[0].value.then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type,
+          payload: { params: {} },
+          meta: {},
+        },
+        {
+          type: `${type}_LOADING`,
+          meta: {},
+        },
+        {
+          type: `LOGOUT`,
+        },
+      ])
+      done()
+    })
+  })
+
   it('take only the last side effect as default', done => {
     const mockApi = jest
       .fn()

@@ -177,4 +177,77 @@ describe('Rocketjump reducer', () => {
       giova: 'Gio Va Age: 24'
     })
   })
+
+  it('should clear reducer state using unloadBy', () => {
+
+    const { reducer } = rj(
+      rj({
+        unloadBy: 'LOGOUT',
+      }),
+      rj({
+        composeReducer: [
+          (prevState = { pippo: 23 }) => prevState,
+        ]
+      }),
+      rj({
+        composeReducer: [
+          (prevState = { socio: 23 }) => prevState,
+        ]
+      }),
+      rj({
+        unloadBy: 'KLOOSE',
+      }),
+      {
+        type: 'BELLA',
+        state: 'bella',
+        composeReducer: [
+          (prevState = { giova: 23 }) => prevState,
+        ],
+        unloadBy: 'STAKKA',
+        // FIXME: This is need but is wrong....
+        api: () => 23,
+      }
+    )()
+
+    const prevState = {
+      loading: false,
+      error: null,
+      data: ['Un', 'Dos', 'Tres'],
+      pippo: 'Pippo Tek',
+      socio: null,
+      giova: 69,
+    }
+    const guestInitalState = {
+      loading: false,
+      error: null,
+      data: null,
+      pippo: 23,
+      socio: 23,
+      giova: 23,
+    }
+    expect(reducer(prevState, { type: 'LOGOUT' })).toEqual(guestInitalState)
+    expect(reducer(prevState, { type: 'KLOOSE' })).toEqual(guestInitalState)
+    expect(reducer(prevState, { type: 'STAKKA' })).toEqual(guestInitalState)
+  })
+
+  it('should ignore unloadBy for reducer when state is to false', () => {
+
+    const { reducer } = rj(
+      rj({
+        unloadBy: 'LOGOUT',
+      }),
+      rj({
+        unloadBy: 'KLOOSE',
+      }),
+      {
+        type: 'BELLA',
+        state: false,
+        unloadBy: 'STAKKA',
+        // FIXME: This is need but is wrong....
+        api: () => 23,
+      }
+    )()
+
+    expect(reducer).toBeUndefined()
+  })
 })

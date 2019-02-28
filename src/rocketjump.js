@@ -4,7 +4,7 @@ import { proxyObject, proxyReducer } from './utils'
 import { makeActions } from './actions'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
-import { composeReducers } from './helpers'
+import { composeReducers, resetReducerOn } from './helpers'
 import {
   makeSideEffectDescriptor,
   addConfigToSideEffectDescritor,
@@ -55,6 +55,7 @@ const rocketjump = (...configs) => {
             'mapLoadingAction',
             'mapSuccessAction',
             'mapFailureAction',
+            'unloadBy',
           ]),
           finalExport
         )
@@ -128,9 +129,18 @@ const rocketjump = (...configs) => {
         sideEffect.mapLoadingAction,
         sideEffect.mapSuccessAction,
         sideEffect.mapFailureAction,
+        sideEffect.unloadBy,
       )
       return {
         ...omit(finalExport, 'sideEffect'),
+        reducer: (
+          // Enhance reducer \w reset only when configurated unloadBy action
+          // and reducer is not undefined (rj \w state false)
+          sideEffect.unloadBy.length > 0 &&
+          typeof finalExport.reducer === 'function'
+        )
+          ? resetReducerOn(sideEffect.unloadBy, finalExport.reducer)
+          : finalExport.reducer,
         saga,
       }
     } else {

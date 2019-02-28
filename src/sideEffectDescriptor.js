@@ -6,6 +6,7 @@ export const makeSideEffectDescriptor = () => ({
   apiExtraParams: [],
   successEffect: [],
   failureEffect: [],
+  unloadBy: [],
   mapSuccessAction: a => a,
   mapFailureAction: a => a,
   mapLoadingAction: a => a,
@@ -25,6 +26,10 @@ export const addConfigToSideEffectDescritor = (sideEffect, config) => ({
   failureEffect: [
     ...sideEffect.failureEffect,
     ...arrayze(get(config, 'failureEffect', [])),
+  ],
+  unloadBy: [
+    ...sideEffect.unloadBy,
+    ...arrayze(get(config, 'unloadBy', [])),
   ],
   mapLoadingAction: typeof config.mapLoadingAction === 'function'
     ? a => config.mapLoadingAction(sideEffect.mapLoadingAction(a))

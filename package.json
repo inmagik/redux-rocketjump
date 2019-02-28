@@ -1,6 +1,6 @@
 {
   "name": "redux-rocketjump",
-  "version": "1.6.0",
+  "version": "1.7.2",
   "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "./index.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
@@ -51,7 +51,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
     "jest": "^23.1.0",
-    "json-server": "^0.12.1",
+    "json-server": "^0.12.2",
     "npm-run-all": "^4.1.2",
     "prettier": "1.11.1",
     "react": "^16.2.0",
@@ -73,7 +73,7 @@
   "peerDependencies": {
     "redux": "^3.0.0 || ^4.0.0",
     "redux-saga": ">=0.15.0",
-    "reselect": "^3.0.0"
+    "reselect": ">=3.0.0"
   },
   "dependencies": {
     "invariant": "^2.2.4",

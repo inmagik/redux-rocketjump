@@ -1,7 +1,7 @@
 {
   "todos": [
     {
-      "title": "x",
+      "title": "Ciao",
       "done": true,
       "id": 1
     },
@@ -17,17 +17,12 @@
     },
     {
       "title": "?",
-      "done": false,
+      "done": true,
       "id": 4
     },
     {
-      "title": "aa",
-      "done": false,
-      "id": 5
-    },
-    {
       "title": "~",
-      "done": false,
+      "done": true,
       "id": 6
     }
   ]

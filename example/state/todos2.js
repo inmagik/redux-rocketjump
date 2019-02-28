@@ -48,8 +48,6 @@ export const {
   reducer,
   saga,
 } = combineRjs({
-  state: 'todos2',
-}, {
   list: rj({
     type: 'GET_TODOS',
     state: 'listCulo',
@@ -82,4 +80,6 @@ export const {
     type: 'GET_TODO',
     api: (id) => request.get(`${API_URL}/todos/${id}`).then(({ body }) => body),
   })
+}, {
+  state: 'todos2',
 })

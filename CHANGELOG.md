@@ -1,3 +1,15 @@
+## 1.7.2
+###### *February 11, 2019*
+- Fixed a bug with `unloadBy` and `state` options setted to `false`
+
+## 1.7.1
+###### *October 12, 2018*
+- Added `makeAddListReducer` to `hor` plugin
+
+## 1.7.0
+###### *October 3, 2018*
+- Added `unloadBy` to `rj` API a list of actions to unload the side effect and reset the reducer
+
 ## 1.6.0
 ###### *September 6, 2018*
 - Rename `catalogs` to `plugins`

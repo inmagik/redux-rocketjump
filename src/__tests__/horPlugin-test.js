@@ -1,6 +1,7 @@
 import {
   makeUpdateReducer,
   makeRemoveListReducer,
+  makeAddListReducer,
 } from '../plugins/hor'
 
 describe('HOR makeUpdateReducer', () => {
@@ -366,6 +367,78 @@ describe('HOR makeRemoveListReducer', () => {
           {
             id: 7,
             name: 'Skinny Boy',
+          }
+        ]
+      }
+    })
+  })
+})
+
+describe('HOR makeAddListReducer', () => {
+  it('should add item from list', () => {
+    const reducer = makeAddListReducer('ADD_SOCIO')
+    const prevState = {
+      loading: false,
+      error: null,
+      data: {
+        pagination: {
+          count: 99,
+          current: { page: 1 },
+          next: { page: 2 },
+          previous: null,
+        },
+        list: [
+          {
+            id: 11,
+            name: 'Gio Va',
+          },
+          {
+            id: 23,
+            name: 'Ma IK',
+          },
+          {
+            id: 7,
+            name: 'Skinny Boy',
+          }
+        ]
+      }
+    }
+    const action = {
+      type: 'ADD_SOCIO_SUCCESS',
+      payload: {
+        data: {
+          id: 777,
+          name: 'Dark Side',
+        }
+      }
+    }
+    const nextState = reducer(prevState, action)
+    expect(nextState).toEqual({
+      loading: false,
+      error: null,
+      data: {
+        pagination: {
+          count: 100,
+          current: { page: 1 },
+          next: { page: 2 },
+          previous: null,
+        },
+        list: [
+          {
+            id: 11,
+            name: 'Gio Va',
+          },
+          {
+            id: 23,
+            name: 'Ma IK',
+          },
+          {
+            id: 7,
+            name: 'Skinny Boy',
+          },
+          {
+            id: 777,
+            name: 'Dark Side',
           }
         ]
       }
