@@ -9,7 +9,7 @@ describe('Rocketjump side effect descriptor', () => {
     const rj1 = rj({
       type,
       state,
-    })()
+    })({}, {})
     expect(rj1.sideEffect).not.toBe(undefined)
     const rj2 = rj({
       type,
@@ -104,7 +104,7 @@ describe('Rocketjump side effect descriptor', () => {
           name: 'Because ma friend ' + action.meta.name
         },
       }),
-    })()
+    })({}, {})
     expect(sideEffect.successEffect[0]).toBe(se1)
     expect(sideEffect.successEffect[1]).toBe(se2)
     expect(sideEffect.successEffect[2]).toBe(se3)

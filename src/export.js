@@ -1,57 +1,73 @@
-import mapValues from 'lodash.mapvalues'
-import makeActionTypes from './actionTypes'
-// import get from 'lodash.get'
+import {
+  makeSideEffectDescriptor,
+  addConfigToSideEffectDescritor,
+} from './sideEffectDescriptor'
+import { makeActions } from './actions'
+import { proxyObject, proxyReducer } from './utils'
+import { makeReducer } from './reducer'
+import { makeSelectors } from './selectors'
+import { composeReducers } from './helpers'
 
 // Make the exports
 // take a config and a extended export (the return of this function)
-export default (config, extendExport = {}) => {
-  const {
-    // Action namespace
-    namespace,
-  } = config
+export default (runConfig, jumpConfig, extendExport = {}) => {
 
-  // Make action types for export
-  const actionTypes = makeActionTypes(
-    namespace,
-    config.actionTypes,
-    typeof config.effects !== 'undefined'
-      ? Object.keys(config.effects)
-      : []
-  )
+  // Make side effect descriptor exports
+  let sideEffect
+  if (!extendExport.sideEffect) {
+    // Create fresh seide effect descriptor
+    sideEffect = makeSideEffectDescriptor()
+  } else {
+    // Use the side effect descriptor form extended exports
+    sideEffect = extendExport.sideEffect
+  }
+  // Enanche side effect descriptor \w config
+  sideEffect = addConfigToSideEffectDescritor(sideEffect, jumpConfig)
 
-  // // rj namespace ... simply use a slash append at the end of gived namespace
-  // const rjNS = `${namespace}/`
-  //
-  // // Make the actionTypes from config
-  // let actionTypes = typeof config.actionTypes === 'function'
-  //   ? config.actionTypes(rjNS)
-  //   : {}
-  //
-  // // Merge \w given extended export
-  // if (extendExport.actionTypes) {
-  //   actionTypes = {
-  //     ...extendExport.actionTypes,
-  //     ...actionTypes,
-  //   }
-  // }
+  // Make reducer
+  let reducer
+  if (!extendExport.reducer && runConfig.state !== false) {
+    reducer = makeReducer(runConfig.type, jumpConfig.dataReducer)
+  } else {
+    reducer = extendExport.reducer
+  }
+  if (reducer) {
+    reducer = proxyReducer(reducer, jumpConfig.proxyReducer)
+    if (Array.isArray(jumpConfig.composeReducer)) {
+      reducer = composeReducers(...[reducer].concat(jumpConfig.composeReducer))
+    }
+  }
 
-  // TODO
-  // Make the actions
-  const actions = mapValues(config.actions, makeAction => makeAction(
-    actionTypes,
-    extendExport.actions || {},
-    namespace,
-  ))
+  // Make actions
+  let actions
+  if (!extendExport.actions) {
+    // Make fresh actions from config type
+    actions = makeActions(runConfig.type)
+  } else {
+    // Use actions to extended export
+    actions = extendExport.actions
+  }
+  // Proxy actions
+  actions = proxyObject(actions, jumpConfig.proxyActions)
 
-  // TODO
-  // Make the reducer
+  // Make selectors
+  let selectors
+  if (!extendExport.selectors && runConfig.state !== false) {
+    // Make fresh selectors by type
+    selectors = makeSelectors(runConfig.state)
+  } else {
+    // Use selectors from exports
+    selectors = extendExport.selectors
+  }
+  if (selectors) {
+    selectors = proxyObject(selectors, jumpConfig.proxySelectors)
+  }
 
-  // TODO
-  // Make the selectors
-
-  // Make the final export
   return {
-    actionTypes,
+    ...extendExport,
+    sideEffect,
+    reducer,
     actions,
+    selectors,
   }
 }
