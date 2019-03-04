@@ -9,7 +9,7 @@
   },
   "scripts": {
     "catalog-start": "catalog start",
-    "catalog-build": "catalog build",
+    "catalog-build": "catalog build -u https://inmagik.github.io/redux-rocketjump",
     "deploy": "gh-pages -d catalog/build"
   },
   "devDependencies": {
