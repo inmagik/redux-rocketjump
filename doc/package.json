@@ -9,6 +9,10 @@
   },
   "scripts": {
     "catalog-start": "catalog start",
-    "catalog-build": "catalog build"
+    "catalog-build": "catalog build",
+    "deploy": "gh-pages -d catalog/build"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }
