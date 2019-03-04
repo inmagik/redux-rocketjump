@@ -4,7 +4,7 @@ const spy = jest.spyOn(global.console, 'warn');
 
 describe('rj bad warnings', () => {
   it('shoud warn when last invocation contains something', () => {
-    
+
     spy.mockReset();
 
     rj()({
@@ -31,6 +31,7 @@ describe('rj bad warnings', () => {
       }
     )
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj2();
 
     expect(spy).toHaveBeenCalled()
@@ -51,6 +52,7 @@ describe('rj bad warnings', () => {
       }
     )
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj2();
 
     expect(spy).toHaveBeenCalled()
@@ -71,6 +73,7 @@ describe('rj bad warnings', () => {
       }
     )
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj2();
 
     expect(spy).toHaveBeenCalled()
@@ -78,6 +81,7 @@ describe('rj bad warnings', () => {
   it('should warn if type is defined earlier', () => {
     spy.mockReset();
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj(
       {
         type: 'x'
@@ -93,6 +97,7 @@ describe('rj bad warnings', () => {
   it('should warn if state is defined earlier', () => {
     spy.mockReset();
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj(
       {
         state: 'x'
@@ -108,6 +113,7 @@ describe('rj bad warnings', () => {
   it('should warn if api is defined earlier', () => {
     spy.mockReset();
 
+    // eslint-disable-next-line no-unused-vars
     const result = rj(
       {
         api: () => { }
@@ -124,11 +130,11 @@ describe('rj bad warnings', () => {
     spy.mockReset();
 
     const rj1 = rj({
-      
+
     })
 
     const rj2 = rj({
-      
+
     })
 
     const rj3 = rj(
@@ -136,6 +142,7 @@ describe('rj bad warnings', () => {
       rj2
     )
 
+    // eslint-disable-next-line no-unused-vars
     const rj4 = rj(
       rj3,
       {
@@ -151,11 +158,11 @@ describe('rj bad warnings', () => {
     spy.mockReset();
 
     const rj1 = rj({
-      
+
     })
 
     const rj2 = rj({
-      
+
     })
 
     const rj3 = rj(
@@ -167,6 +174,7 @@ describe('rj bad warnings', () => {
 
     });
 
+    // eslint-disable-next-line no-unused-vars
     const rj4 = rj(
       rj3,
       {
@@ -183,11 +191,11 @@ describe('rj bad warnings', () => {
     spy.mockReset();
 
     const rj1 = rj({
-      
+
     })
 
     const rj2 = rj({
-      
+
     })
 
     const rj3 = rj(
@@ -195,6 +203,7 @@ describe('rj bad warnings', () => {
       rj2
     )
 
+    // eslint-disable-next-line no-unused-vars
     const rj4 = rj(
       rj3,
       { },

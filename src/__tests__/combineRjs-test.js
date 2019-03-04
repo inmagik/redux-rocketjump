@@ -3,7 +3,8 @@
 import { createSelector } from 'reselect'
 import { rj } from '../rocketjump'
 // import { takeEveryAndCancel } from '../effects'
-import combineRjs from '../plugins/combine'
+import combineRjs from '../combineRjs'
+import combineRjsFromPlugins from '../plugins/combine'
 import rjList, { nextPreviousPaginationAdapter } from '../plugins/list'
 // import rjMap from '../plugins/map'
 import rjUpdate from '../plugins/update'
@@ -18,6 +19,9 @@ import { makeUpdateReducer, makeRemoveListReducer } from '../plugins/hor'
 //   sagaMiddleware.run(saga)
 //   return store
 // }
+
+
+const spyWarn = jest.spyOn(global.console, 'warn');
 
 describe('Combine plugin', () => {
   it('should combine reducers', () => {
@@ -324,6 +328,33 @@ describe('Combine plugin', () => {
         cool: false,
       }
     ])
+  })
+
+  it('should not cause rj to warn about the cool combine', () => {
+    spyWarn.mockReset()
+    combineRjs({
+      mb: rj({
+        type: 'GET_20900_GANG_GUARDA_COME_FLEXO',
+      }),
+      oldSchool: rj({
+        type: 'GET_NY_OLD_SCHOOL',
+      })
+    }, {
+      state: 'GANGS',
+    })
+    expect(spyWarn).not.toHaveBeenCalled()
+  })
+
+  it('should warn when use combine from plugins', () => {
+    spyWarn.mockReset()
+    combineRjsFromPlugins({
+      ranger: rj({
+        type: 'GET_RANGERS',
+      })
+    }, {
+      state: 'GANGS',
+    })
+    expect(spyWarn).toHaveBeenCalled()
   })
 
 })

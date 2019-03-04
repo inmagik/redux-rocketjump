@@ -3,8 +3,7 @@ import makeExport from './export'
 import makeApiSaga from './apiSaga'
 import pick from 'lodash.pick'
 import { resetReducerOn } from './helpers'
-
-const $rj = Symbol('rj')
+import { $TYPE_RJ, $TYPE_COMBINE_RJ } from './internals'
 
 // Simple merge and skip when function....
 function mergeRjsOrConfigs(rjsOrConfigs) {
@@ -21,20 +20,39 @@ function mergeRjsOrConfigs(rjsOrConfigs) {
 
 function checkWarns(rjsOrConfigs, extraConfig, extendExport) {
   if (
-    (extraConfig && extraConfig.__rjtype !== $rj) ||
-    (extendExport && extendExport.__rjtype !== $rj)
+    (
+      extraConfig &&
+      // The last config can be called from rocketjump itself
+      // or frome the special combineRjs GAnG!
+      extraConfig.__rjtype !== $TYPE_RJ &&
+      extraConfig.__rjtype !== $TYPE_COMBINE_RJ
+    ) ||
+    (
+      extendExport && extendExport.__rjtype !== $TYPE_RJ
+    )
   ) {
-    console.warn(`redux-rocketjump: the last evalutation should invoke without parameters`)
+    console.warn(
+      '[redux-rocketjump] DeprecationWarning: ' +
+      'the last evalutation should invoke without parameters'
+    )
   }
-  let cfgToCheck = rjsOrConfigs.filter(item => typeof item === 'object');
-  if (extraConfig === undefined) {
+  let cfgToCheck = rjsOrConfigs.filter(item => typeof item === 'object')
+  if (
+    extraConfig === undefined ||
+    // Only combineRjs can inject the last config :P
+    // So for it skip the check for given extra conf
+    extraConfig.__rjtype === $TYPE_COMBINE_RJ
+  ) {
     cfgToCheck = cfgToCheck.slice(0, cfgToCheck.length - 1)
   }
   cfgToCheck.forEach(config => {
     if (config.type || config.api || config.state) {
-      console.warn('type, api and state should be defined only once, in the last object');
+      console.warn(
+        '[redux-rocketjump] DeprecationWarning: ' +
+        'type, api and state should be defined only once, in the last object'
+      )
     }
-  });
+  })
 }
 
 // Here is where the magic starts the functional recursive rjs combining \*.*/
@@ -63,8 +81,8 @@ export function rj (...args) {
     // Detected the run config from partial rjs + configs
     // pick only: state, type and api
     const runConfig = pick(finalConfig, ['state', 'api', 'type'])
-    // Add $rj type
-    runConfig.__rjtype = $rj
+    // Add $TYPE_RJ type
+    runConfig.__rjtype = $TYPE_RJ
 
     // Check for type and state to be required in run config
     invariant(
@@ -87,7 +105,7 @@ export function rj (...args) {
         // Is a config ... run config + jump config = export
         return makeExport(runConfig, rjOrConfig, combinedExport)
       }
-    }, { ...extendExport, __rjtype: $rj })
+    }, { ...extendExport, __rjtype: $TYPE_RJ })
 
     // when extendExport is undefined we really "create" the export
     // (otherewise the rj is using to extending another rj...)
