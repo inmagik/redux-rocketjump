@@ -3,11 +3,13 @@ import createSagaMiddleware from 'redux-saga'
 import { makeAppsReducers, makeAppsSaga } from 'redux-rocketjump'
 import * as todos from './todos'
 import * as todos2 from './todos2'
+import * as trial from './trial'
 
 // Where i see it? hhehe eheh
 const APPS = {
   todos,
   todos2,
+  trial
 }
 
 const rootReducer = combineReducers({

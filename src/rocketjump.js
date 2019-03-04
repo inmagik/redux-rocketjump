@@ -26,6 +26,15 @@ function checkWarns(rjsOrConfigs, extraConfig, extendExport) {
   ) {
     console.warn(`redux-rocketjump: the last evalutation should invoke without parameters`)
   }
+  let cfgToCheck = rjsOrConfigs.filter(item => typeof item === 'object');
+  if (extraConfig === undefined) {
+    cfgToCheck = cfgToCheck.slice(0, cfgToCheck.length - 1)
+  }
+  cfgToCheck.forEach(config => {
+    if (config.type || config.api || config.state) {
+      console.warn('type, api and state should be defined only once, in the last object');
+    }
+  });
 }
 
 // Here is where the magic starts the functional recursive rjs combining \*.*/
