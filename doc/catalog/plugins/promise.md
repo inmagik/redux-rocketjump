@@ -11,11 +11,14 @@ const {
         unload,
     },
     saga,
-} = rj(rjWithPromise)({
-    type: 'GET_TODOS',
-    state: 'todos',
-    api: loadTodosFromApi,
-})
+} = rj(
+      rjWithPromise,
+      {
+          type: 'GET_TODOS',
+          state: 'todos',
+          api: loadTodosFromApi,
+      }
+    )()
 
 // ... next ...
 store.dispatch(load())

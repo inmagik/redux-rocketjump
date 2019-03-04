@@ -5,10 +5,28 @@ In order to do this, you have to invoke the last `RocketJump Partial`.
 ```code
 lang: js
 ---
-const output = myRocketJumpPartial({ /* put yout configuration here */ })
+const output = myRocketJumpPartial()
 ```
 
-The configuration object contains the following properties. All of them are **mandatory**.
+In order to be invokable, a `RocketJump Partial` **must** contain three additional properties. These properties **must** be defined in the last configuration object supplied to the definition of the `RocketJump Partial` you are invoking.
+
+Example
+```code
+lang: js
+---
+const myRocketJumpPartial = rj(
+    rjPlugin1,
+    rjPlugin2,
+    {
+        /* other optional properties */
+
+        /* ----- THIS IS THE IMPORTANT PART ----- */
+        type: 'COOL_API_TYPE',
+        api: myAsyncFunction,
+        state: 'soCool'
+    }
+)
+```
 
 # Configuration settings
 ## type *(string)*

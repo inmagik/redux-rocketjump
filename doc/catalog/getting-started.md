@@ -123,11 +123,11 @@ export const {
   reducer,
   // The generated saga
   saga,
-} = rj()({
+} = rj({
   type: 'GET_TODOS',
   state 'todos',
   api: params => loadTodosFromApi(params),
-})
+})()
 ```
 
 ```hint

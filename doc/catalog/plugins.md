@@ -12,7 +12,7 @@ The following plugins are available out of the box:
 rows:
 - Name: Cache Plugin
   Feature: "Provides caching of results from asynchronous calls: the task is invoked just one time, the following times the result is served from cache"
-- Name: Combine Plugin (????)
+- Name: Combine Plugin
   Feature: "Combines several `RocketJump`s in an object-like fashion, much like *Redux*'s *combineReducers*"
 - Name: Delete Plugin
   Feature: "Provides common logic to sync state with deleting apis, for both hard and soft deletes. It is based on the map plugin"

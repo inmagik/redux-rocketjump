@@ -27,10 +27,13 @@ const {
         getError: getMyDataError
     },
     saga,
-} = rjCache({
-    type: 'MY_DATA',
-    state: 'myData',
-    api: fetchMyDataApi,
-})
+} = rj(
+        rjCache,
+        {
+            type: 'MY_DATA',
+            state: 'myData',
+            api: fetchMyDataApi,
+        }
+    )()
 ```
 

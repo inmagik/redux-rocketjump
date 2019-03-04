@@ -37,15 +37,18 @@ const {
         load: loadItems,
         unload: unloadItems,
     }
-} = rjList({
-        pageSize: 50,
-        pagination: nextPreviousPaginationAdapter
-    })({
-        state: 'items',
-        type: GET_ITEMS,
-        api: ({page}) => fetch(`http://example.com/items?page=${page}`)
-            .then(response => response.json())
-    })
+} = rj(
+        rjList({
+            pageSize: 50,
+            pagination: nextPreviousPaginationAdapter
+        }),
+        {
+            state: 'items',
+            type: GET_ITEMS,
+            api: ({page}) => fetch(`http://example.com/items?page=${page}`)
+                .then(response => response.json())
+        }
+    )
 
 ```
 

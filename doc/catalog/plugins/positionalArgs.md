@@ -24,13 +24,16 @@ import rjPosArgs from 'redux-rocketjump/plugins/positionalArgs'
 
 const {
     actions: { load: variadicLoad }
-} = rjPosArgs(
-        'id', null, false, 'tek', 'isCool'
-    )({
-        type,
-        state: 'ocio',
-        api,
-    })
+} = rj(
+        rjPosArgs(
+            'id', null, false, 'tek', 'isCool'
+        ),
+        {
+            type: 'EXAMPLE',
+            state: 'example',
+            api: exampleApiDefinition,
+        }
+    )
 
 // Then, invoke action like
 variadicLoad(777, 'rocket', 'jump', 23);

@@ -1,6 +1,6 @@
 The entry point for RocketJump is called `rj`.
 
-The `rj` function takes any number of parameters, each of which is a configuration object or another `RocketJump Partial`, and returns a `RocketJump Partial`. This allows for recursive composition (see composition). To stop composing and get a real rocketjump, you have to invoke the last `RocketJump Partial`.
+The `rj` function takes any number of parameters, each of which is a configuration object or another `RocketJump Partial`, and returns a `RocketJump Partial`. This allows for recursive composition (see [composition](/api/composition)). To stop composing and get a real rocketjump, you have to invoke the last `RocketJump Partial`.
 
 ```code
 lang: js
