@@ -1,13 +1,8 @@
 {
   "plugins": [
-    "transform-object-rest-spread",
-    "transform-class-properties",
-    "transform-regenerator",
-    ["transform-runtime", {
-      "helpers": false,
-      "polyfill": false,
-      "regenerator": true
-    }]
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-regenerator",
   ],
-  "presets": ["env", "react"]
+  "presets": ["@babel/env", "@babel/react"]
 }
