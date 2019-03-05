@@ -112,5 +112,5 @@ const {
             state: 'users',
             api: fetchUsers
         }
-    )
+    )()
 ```

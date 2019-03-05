@@ -33,7 +33,7 @@ const {
             state: 'example',
             api: exampleApiDefinition,
         }
-    )
+    )()
 
 // Then, invoke action like
 variadicLoad(777, 'rocket', 'jump', 23);

@@ -29,5 +29,5 @@ const {
             state: 'humans',
             api: putHuman
         }
-    )
+    )()
 ```

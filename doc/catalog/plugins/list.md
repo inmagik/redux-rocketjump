@@ -48,7 +48,7 @@ const {
             api: ({page}) => fetch(`http://example.com/items?page=${page}`)
                 .then(response => response.json())
         }
-    )
+    )()
 
 ```
 

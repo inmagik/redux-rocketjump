@@ -29,5 +29,5 @@ const {
             type: 'DELETE_HUMAN',
             state: 'humans',
         }
-    )
+    )()
 ```
