@@ -1,4 +1,5 @@
 import { rj } from '../rocketjump'
+import { $TYPE_RJ } from '../internals'
 
 describe('Rocketjump side effect descriptor', () => {
   const type = 'GET_SOCI'
@@ -9,7 +10,7 @@ describe('Rocketjump side effect descriptor', () => {
     const rj1 = rj({
       type,
       state,
-    })({}, {})
+    })(undefined, { __rjtype: $TYPE_RJ })
     expect(rj1.sideEffect).not.toBe(undefined)
     const rj2 = rj({
       type,
@@ -31,8 +32,6 @@ describe('Rocketjump side effect descriptor', () => {
     function ep3() {}
 
     const rj1 = rj({
-      type,
-      state,
       successEffect: se1,
       failureEffect: fe1,
       apiExtraParams: ep1,
@@ -56,8 +55,6 @@ describe('Rocketjump side effect descriptor', () => {
       }),
     })
     const rj2 = rj({
-      type,
-      state,
       successEffect: se2,
       failureEffect: fe2,
       apiExtraParams: ep2,
@@ -104,7 +101,7 @@ describe('Rocketjump side effect descriptor', () => {
           name: 'Because ma friend ' + action.meta.name
         },
       }),
-    })({}, {})
+    })(undefined, { __rjtype: $TYPE_RJ })
     expect(sideEffect.successEffect[0]).toBe(se1)
     expect(sideEffect.successEffect[1]).toBe(se2)
     expect(sideEffect.successEffect[2]).toBe(se3)

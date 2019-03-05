@@ -40,4 +40,18 @@ describe('Rocketjump', () => {
       yeah: 23,
     })
   })
+  it('should ignore when try to override the exports from outside', () => {
+    expect(
+      rj({
+        type: 'HARMLESS_TYPE',
+        state: 'HARMLESS_STATE',
+        api: () => {},
+      })(undefined, {
+        reducer: () => 'KILL ALL HUMANS'
+      }).reducer(
+        // Call the reducer as redux did
+        undefined, { type: 'HELLO@REDUX' }
+      )
+    ).not.toBe('KILL ALL HUMANS')
+  })
 })

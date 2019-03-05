@@ -18,18 +18,13 @@ function mergeRjsOrConfigs(rjsOrConfigs) {
   }, {})
 }
 
-function checkWarns(rjsOrConfigs, extraConfig, extendExport) {
+function checkWarns(rjsOrConfigs, extraConfig) {
   if (
-    (
-      extraConfig &&
-      // The last config can be called from rocketjump itself
-      // or frome the special combineRjs GAnG!
-      extraConfig.__rjtype !== $TYPE_RJ &&
-      extraConfig.__rjtype !== $TYPE_COMBINE_RJ
-    ) ||
-    (
-      extendExport && extendExport.__rjtype !== $TYPE_RJ
-    )
+    extraConfig &&
+    // The last config can be called from rocketjump itself
+    // or frome the special combineRjs GAnG!
+    extraConfig.__rjtype !== $TYPE_RJ &&
+    extraConfig.__rjtype !== $TYPE_COMBINE_RJ
   ) {
     console.warn(
       '[redux-rocketjump] DeprecationWarning: ' +
@@ -63,10 +58,16 @@ export function rj (...args) {
   // ... make the partial config
   const partialConfig = mergeRjsOrConfigs(rjsOrConfigs)
 
-  const partialRj = (extraConfig, extendExport) => {
+  const partialRj = (extraConfig, extendExportArg) => {
+    let extendExport
+    // Take the extended exports seriusly only when came from rj
+    if (typeof extendExportArg === 'object' && extendExportArg.__rjtype === $TYPE_RJ) {
+      extendExport = extendExportArg
+    }
+
     // Check warns from all params...
     if (process.env.NODE_ENV !== 'production') {
-      checkWarns(rjsOrConfigs, extraConfig, extendExport)
+      checkWarns(rjsOrConfigs, extraConfig)
     }
 
     // Add the extra given config
@@ -90,7 +91,7 @@ export function rj (...args) {
       'You must specify a type key for actions and reducer'
     )
     invariant(
-      typeof runConfig.state !== 'undefined',
+      runConfig.state !== undefined,
       'You must specify a state key for create selectors' +
       ', if you want to omit the state creation set state explice to false.'
     )
@@ -111,10 +112,13 @@ export function rj (...args) {
     // (otherewise the rj is using to extending another rj...)
     // so basically this means that we can create the saga from
     // the side effect descriptor
-    if (typeof extendExport === 'undefined') {
+    if (extendExport === undefined) {
+      // ~~ END OF CHAIN RECURSION ~~
       let { sideEffect, __rjtype, reducer, ...rjExport } = finalExport
 
-      // Make saga
+      // Use the curried-combined-merged side effect descriptor
+      // to create the really side effect the "saga" generator
+      // .. or use a custom saga .. old quiet unused rj api ...
       let saga
       if (typeof finalConfig.saga === 'function') {
         // Make custom saga...
