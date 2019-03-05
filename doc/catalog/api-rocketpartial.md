@@ -119,7 +119,7 @@ lang: js
 ```
 
 Example: deserialize date objects
-```
+```code
 lang: js
 ---
 {
