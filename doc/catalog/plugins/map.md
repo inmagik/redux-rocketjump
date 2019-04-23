@@ -96,9 +96,9 @@ const {
     },
     reducer,
     selectors: {
-        getMapLoading: getUserLoadingState,
+        getMapLoadings: getUserLoadingState,
         getMapData: getUserData,
-        getMapError: getUserError
+        getMapFailures: getUserError
     },
     saga
 } = rj(
