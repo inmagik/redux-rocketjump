@@ -1,4 +1,4 @@
-import { forgeRocketJump } from 'rocketjump-core'
+import { forgeRocketJump, isPartialRj } from 'rocketjump-core'
 import makeExport from './export'
 import createMakeRxObservable from './createMakeRxObservable'
 
@@ -7,14 +7,17 @@ function makeRunConfig(finalConfig) {
   return null
 }
 
-const $TYPE_RJ_PARTIAL = 23
-
-function makeRecursionRjs(partialRjsOrConfigs, extraConfig, isLastRjInvocation) {
+function makeRecursionRjs(
+  partialRjsOrConfigs,
+  // Ingore the extra config ...
+  extraConfig,
+  isLastRjInvocation
+) {
   let hasEffectConfigured = !isLastRjInvocation
   const rjsOrConfigs = partialRjsOrConfigs.map(config => {
     if (typeof config === 'function') {
       // A Partial RJ
-      if (config.__rjtype === $TYPE_RJ_PARTIAL) {
+      if (isPartialRj(config)) {
         return config
       } else {
         // Use as EFFECT Call
@@ -24,7 +27,8 @@ function makeRecursionRjs(partialRjsOrConfigs, extraConfig, isLastRjInvocation) 
         }
       }
     }
-    hasEffectConfigured = hasEffectConfigured || typeof config.effect === 'function'
+    hasEffectConfigured =
+      hasEffectConfigured || typeof config.effect === 'function'
     return config
   })
 
@@ -76,7 +80,9 @@ function adjustConfig(c) {
   }
 }
 
-rj.fromReduxRj = reduxRj => {
+// FIXME For complex rjs i think is bugged
+// unstable shit use at your own risks ...
+rj.__unstableFromReduxRj = reduxRj => {
   const proxyImpl = { ...reactRjImpl }
 
   proxyImpl.makeRecursionRjs = (partialRjsOrConfigs, ...args) => {

@@ -1,7 +1,8 @@
 import omit from 'lodash.omit'
 import { rj } from '../../rocketjump'
 
-const isReactNative = typeof(navigator) !== 'undefined' && navigator.product === 'ReactNative'
+const isReactNative =
+  typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
 
 export default rj({
   mapLoadingAction: a => ({
@@ -10,6 +11,6 @@ export default rj({
   }),
   proxyActions: {
     load: ({ load }) => (params = {}, meta = {}) =>
-      load(params, { ...meta, thunk: isReactNative ? {} : true })
-  }
+      load(params, { ...meta, thunk: isReactNative ? {} : true }),
+  },
 })

@@ -15,11 +15,7 @@ export default (c = {}) => {
       dataReducer: () => true,
     }),
     {
-      proxySelectors: ({
-        getMapLoadings,
-        getMapFailures,
-        getMapData,
-      }) => ({
+      proxySelectors: ({ getMapLoadings, getMapFailures, getMapData }) => ({
         // Simply "export" a more consistent names...
         getDeleting: getMapLoadings,
         getDeleted: getMapData,

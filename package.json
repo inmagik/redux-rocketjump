@@ -7,6 +7,7 @@
     "extends": "react-app"
   },
   "scripts": {
+    "format": "prettier --no-semi --single-quote --trailing-comma es5  --write \"{packages/*/src,__{tests,mocks}__}/**/*.js\"",
     "test": "jest",
     "dev": "webpack-dev-server"
   },
@@ -26,6 +27,7 @@
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.5.0",
     "jest": "^24.7.1",
+    "prettier": "^1.17.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "style-loader": "^0.23.1",

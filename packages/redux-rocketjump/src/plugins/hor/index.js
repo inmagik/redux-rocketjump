@@ -27,9 +27,7 @@ export const makeUpdateReducer = (
       if (Array.isArray(oldData)) {
         // Update as list
         newData = oldData.map(item =>
-          !identity(action, item)
-            ? item
-            : updater(action, item)
+          !identity(action, item) ? item : updater(action, item)
         )
       } else {
         newData = identity(action, oldData) ? updater(action, oldData) : oldData
@@ -83,7 +81,7 @@ export const makeAddListReducer = (
   type,
   listPath = 'data.list',
   paginationPath = 'data.pagination',
-  addToList = defaultAddToList,
+  addToList = defaultAddToList
 ) => {
   const pattern = makePattern(type)
 

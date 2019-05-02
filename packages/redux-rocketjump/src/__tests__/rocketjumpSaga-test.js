@@ -20,7 +20,7 @@ const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
   const store = createStore(
     reducer,
     preloadedState,
-    applyMiddleware(sagaMiddleware),
+    applyMiddleware(sagaMiddleware)
   )
   sagaMiddleware.run(saga)
   return store
@@ -42,7 +42,10 @@ describe('Rocketjump saga', () => {
 
   it('should run an async api and dispatch LOADING and SUCCESS actions when resolved', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -80,7 +83,10 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockBadApi,
@@ -111,7 +117,10 @@ describe('Rocketjump saga', () => {
 
   it('should pass params to api function', () => {
     const mockApi = jest.fn()
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -123,7 +132,10 @@ describe('Rocketjump saga', () => {
 
   it('can provide extra params to api function', () => {
     const mockApi = jest.fn()
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       /* eslint-disable require-yield */
@@ -139,7 +151,10 @@ describe('Rocketjump saga', () => {
 
   it('can map actions dispatched', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       mapSuccessAction: a => ({
@@ -147,7 +162,7 @@ describe('Rocketjump saga', () => {
         meta: {
           ...a.meta,
           maik: a.meta.maik * 2,
-        }
+        },
       }),
       mapLoadingAction: a => ({
         ...a,
@@ -185,7 +200,10 @@ describe('Rocketjump saga', () => {
     const successEffect = jest.fn()
     const failureEffect = jest.fn()
     const mockApi = jest.fn().mockResolvedValueOnce('maik')
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       successEffect,
@@ -203,19 +221,26 @@ describe('Rocketjump saga', () => {
 
   it('should call need effect to decide if run api', done => {
     const mockApi = jest.fn().mockResolvedValueOnce('maik')
-    const needEffect = function *(meta) {
+    const needEffect = function*(meta) {
       const isDataEmpty = yield select(state => state.soci.data === null)
       return isDataEmpty
     }
-    const { actions: { load }, reducer, saga } = rj({
+    const {
+      actions: { load },
+      reducer,
+      saga,
+    } = rj({
       type,
       state,
       needEffect,
       api: mockApi,
     })()
-    const store = createRealStoreWithSagaAndReducer(saga, combineReducers({
-      soci: reducer,
-    }))
+    const store = createRealStoreWithSagaAndReducer(
+      saga,
+      combineReducers({
+        soci: reducer,
+      })
+    )
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -235,7 +260,10 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       successEffect,
@@ -277,7 +305,10 @@ describe('Rocketjump saga', () => {
 
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -315,7 +346,10 @@ describe('Rocketjump saga', () => {
           reject('Bad shit')
         })
     )
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockBadApi,
@@ -346,7 +380,10 @@ describe('Rocketjump saga', () => {
 
   it('can unload a side effect', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load, unload }, saga } = rj({
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -376,7 +413,10 @@ describe('Rocketjump saga', () => {
 
   it('can unload a side effect using given unloadBy', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -411,7 +451,10 @@ describe('Rocketjump saga', () => {
       .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -457,7 +500,10 @@ describe('Rocketjump saga', () => {
       .fn()
       .mockResolvedValueOnce('bananasplit')
       .mockResolvedValueOnce('splitbanana')
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,
@@ -516,7 +562,10 @@ describe('Rocketjump saga', () => {
           resolve(`${name} is cool ${counterByName[name]}`)
         })
     )
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       api: mockApi,

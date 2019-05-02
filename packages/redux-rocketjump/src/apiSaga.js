@@ -17,7 +17,7 @@ export default (
   mapLoadingAction = id,
   mapSuccessAction = id,
   mapFailureAction = id,
-  unloadTypes = [],
+  unloadTypes = []
 ) => {
   const actionTypes = makeActionTypes(actionType)
   function* handleApi({ payload: { params }, meta }) {
@@ -35,8 +35,8 @@ export default (
       for (let i = 0; i < extraParamsEffects.length; i++) {
         const extraParams = yield extraParamsEffects[i](finalParams, meta)
         finalParams = Array.isArray(finalParams)
-          ? finalParams = extraParams
-          : finalParams = { ...finalParams, ...extraParams }
+          ? (finalParams = extraParams)
+          : (finalParams = { ...finalParams, ...extraParams })
       }
 
       // Run api using given call api function \w all the merged params
@@ -47,15 +47,17 @@ export default (
         data = yield callApi(apiFn, finalParams)
       }
 
-      yield put(mapSuccessAction({
-        type: actionTypes.success,
-        meta,
-        payload: {
-          data,
-          // Sha la la la
-          params: finalParams,
-        },
-      }))
+      yield put(
+        mapSuccessAction({
+          type: actionTypes.success,
+          meta,
+          payload: {
+            data,
+            // Sha la la la
+            params: finalParams,
+          },
+        })
+      )
       yield all(successEffects.map(effect => effect(data, meta)))
     } catch (error) {
       // Avoid headache
@@ -67,12 +69,14 @@ export default (
       ) {
         throw error
       }
-      yield put(mapFailureAction({
-        type: actionTypes.failure,
-        payload: error,
-        error: true,
-        meta,
-      }))
+      yield put(
+        mapFailureAction({
+          type: actionTypes.failure,
+          payload: error,
+          error: true,
+          meta,
+        })
+      )
       yield all(failureEffects.map(effect => effect(error, meta)))
     }
   }

@@ -29,13 +29,13 @@ describe('makeListDataReducer', () => {
             {
               id: 7,
               name: 'Skinny Boy',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     }
     const nextState = reducer(prevState, action)
-    expect(nextState).toEqual(({
+    expect(nextState).toEqual({
       pagination: {
         count: 99,
         current: { page: 1 },
@@ -54,9 +54,9 @@ describe('makeListDataReducer', () => {
         {
           id: 7,
           name: 'Skinny Boy',
-        }
-      ]
-    }))
+        },
+      ],
+    })
   })
 
   it('should append items when meta append', () => {
@@ -65,9 +65,9 @@ describe('makeListDataReducer', () => {
       list: [
         {
           id: 99,
-          name: 'Ninja'
-        }
-      ]
+          name: 'Ninja',
+        },
+      ],
     }
     const action = {
       type: 'GET_CA$_SUCCESS',
@@ -90,13 +90,13 @@ describe('makeListDataReducer', () => {
             {
               id: 7,
               name: 'Skinny Boy',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     }
     const nextState = reducer(prevState, action)
-    expect(nextState).toEqual(({
+    expect(nextState).toEqual({
       pagination: {
         count: 99,
         current: { page: 1 },
@@ -106,7 +106,7 @@ describe('makeListDataReducer', () => {
       list: [
         {
           id: 99,
-          name: 'Ninja'
+          name: 'Ninja',
         },
         {
           id: 23,
@@ -120,8 +120,8 @@ describe('makeListDataReducer', () => {
           id: 7,
           name: 'Skinny Boy',
         },
-      ]
-    }))
+      ],
+    })
   })
 
   it('should prepend items when meta prepend', () => {
@@ -130,9 +130,9 @@ describe('makeListDataReducer', () => {
       list: [
         {
           id: 99,
-          name: 'Ninja'
-        }
-      ]
+          name: 'Ninja',
+        },
+      ],
     }
     const action = {
       type: 'GET_CA$_SUCCESS',
@@ -155,13 +155,13 @@ describe('makeListDataReducer', () => {
             {
               id: 7,
               name: 'Skinny Boy',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     }
     const nextState = reducer(prevState, action)
-    expect(nextState).toEqual(({
+    expect(nextState).toEqual({
       pagination: {
         count: 99,
         current: { page: 1 },
@@ -183,13 +183,12 @@ describe('makeListDataReducer', () => {
         },
         {
           id: 99,
-          name: 'Ninja'
+          name: 'Ninja',
         },
-      ]
-    }))
+      ],
+    })
   })
 })
-
 
 describe('makeListSelectors', () => {
   it('should make selectors for list', () => {
@@ -224,9 +223,9 @@ describe('makeListSelectors', () => {
           {
             id: 7,
             name: 'Skinny Boy',
-          }
-        ]
-      }
+          },
+        ],
+      },
     }
     expect(getList(state)).toBe(state.data.list)
     expect(getCount(state)).toBe(99)
@@ -240,13 +239,16 @@ describe('makeListSelectors', () => {
 
 describe('List plugin', () => {
   it('should have a list reducer', () => {
-    const { reducer } = rj(rjList({
-      pagination: nextPreviousPaginationAdapter,
-      pageSize: 10,
-    }), {
-      type: 'S@CI@',
-      state: 'users',
-    })()
+    const { reducer } = rj(
+      rjList({
+        pagination: nextPreviousPaginationAdapter,
+        pageSize: 10,
+      }),
+      {
+        type: 'S@CI@',
+        state: 'users',
+      }
+    )()
 
     const prevState = {
       loading: true,
@@ -273,13 +275,13 @@ describe('List plugin', () => {
             {
               id: 7,
               name: 'Skinny Boy',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     })
 
-    expect(nextState).toEqual(({
+    expect(nextState).toEqual({
       loading: false,
       error: null,
       data: {
@@ -301,20 +303,23 @@ describe('List plugin', () => {
           {
             id: 7,
             name: 'Skinny Boy',
-          }
-        ]
-      }
-    }))
+          },
+        ],
+      },
+    })
   })
 
   it('should have a list selectors', () => {
-    const { selectors } = rj(rjList({
-      pagination: nextPreviousPaginationAdapter,
-      pageSize: 10,
-    }), {
-      type: 'S@CI@',
-      state: 'users',
-    })()
+    const { selectors } = rj(
+      rjList({
+        pagination: nextPreviousPaginationAdapter,
+        pageSize: 10,
+      }),
+      {
+        type: 'S@CI@',
+        state: 'users',
+      }
+    )()
 
     const {
       getList,
@@ -349,10 +354,10 @@ describe('List plugin', () => {
             {
               id: 7,
               name: 'Skinny Boy',
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     }
     expect(getList(state)).toBe(state.users.data.list)
     expect(getCount(state)).toBe(99)

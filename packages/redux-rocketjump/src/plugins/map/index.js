@@ -5,12 +5,12 @@ import { makeActionTypes } from '../../actions'
 import { takeLatestAndCancelGroupBy } from '../../effects'
 import { makeReducer } from '../../reducer'
 
-const defaultKeyMaker = action => action.meta ? action.meta.id : null
+const defaultKeyMaker = action => (action.meta ? action.meta.id : null)
 export const makeMapReducer = (
   mainType,
   keyMaker = defaultKeyMaker,
   dataReducer,
-  keepSucceded = true,
+  keepSucceded = true
 ) => {
   const actionTypes = makeActionTypes(mainType)
   const itemReducer = makeReducer(mainType, dataReducer)
@@ -18,12 +18,11 @@ export const makeMapReducer = (
   return (prevState = {}, action) => {
     switch (action.type) {
       case actionTypes.loading:
-      case actionTypes.failure:
-      {
+      case actionTypes.failure: {
         const key = keyMaker(action)
         return {
           ...prevState,
-          [key]: itemReducer(prevState[key], action)
+          [key]: itemReducer(prevState[key], action),
         }
       }
       case actionTypes.success: {
@@ -31,7 +30,7 @@ export const makeMapReducer = (
         if (keepSucceded) {
           return {
             ...prevState,
-            [key]: itemReducer(prevState[key], action)
+            [key]: itemReducer(prevState[key], action),
           }
         } else {
           return omit(prevState, key)
@@ -52,18 +51,20 @@ export const makeMapReducer = (
   }
 }
 
-export const makeMapSelectors = (getBaseState) => {
-
+export const makeMapSelectors = getBaseState => {
   const getMapLoadings = createSelector(
     getBaseState,
-    state => Object.keys(state)
-      .reduce((r, key) => state[key].loading ? { ...r, [key]: true } : r, {})
+    state =>
+      Object.keys(state).reduce(
+        (r, key) => (state[key].loading ? { ...r, [key]: true } : r),
+        {}
+      )
   )
 
   const getMapFailures = createSelector(
     getBaseState,
-    state => Object.keys(state)
-      .reduce((r, key) => {
+    state =>
+      Object.keys(state).reduce((r, key) => {
         const error = state[key].error
         return error !== null ? { ...r, [key]: error } : r
       }, {})
@@ -71,8 +72,8 @@ export const makeMapSelectors = (getBaseState) => {
 
   const getMapData = createSelector(
     getBaseState,
-    state => Object.keys(state)
-      .reduce((r, key) => {
+    state =>
+      Object.keys(state).reduce((r, key) => {
         const data = state[key].data
         return data !== null ? { ...r, [key]: data } : r
       }, {})
@@ -85,24 +86,24 @@ export const makeMapSelectors = (getBaseState) => {
   }
 }
 
-export default (mapConfig = {}) => (config, ...args) => rj({
-  proxyActions: {
-    loadKey: ({ load }) => (id, params = {}, meta = {}) =>
-      load({ id, ...params }, { id, ...meta }),
-    unloadKey: ({ unload }) => id => unload({ id }),
-  },
-  // SWAP reducer \w new map reducer
-  proxyReducer: () => makeMapReducer(
-    config.type,
-    mapConfig.key,
-    mapConfig.dataReducer,
-    mapConfig.keepSucceded,
-  ),
-  proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
-  takeEffect: takeLatestAndCancelGroupBy,
-  takeEffectArgs: [
-    typeof mapConfig.key === 'function'
-      ? mapConfig.key
-      : defaultKeyMaker
-  ],
-})(config, ...args)
+export default (mapConfig = {}) => (config, ...args) =>
+  rj({
+    proxyActions: {
+      loadKey: ({ load }) => (id, params = {}, meta = {}) =>
+        load({ id, ...params }, { id, ...meta }),
+      unloadKey: ({ unload }) => id => unload({ id }),
+    },
+    // SWAP reducer \w new map reducer
+    proxyReducer: () =>
+      makeMapReducer(
+        config.type,
+        mapConfig.key,
+        mapConfig.dataReducer,
+        mapConfig.keepSucceded
+      ),
+    proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
+    takeEffect: takeLatestAndCancelGroupBy,
+    takeEffectArgs: [
+      typeof mapConfig.key === 'function' ? mapConfig.key : defaultKeyMaker,
+    ],
+  })(config, ...args)

@@ -15,24 +15,22 @@ const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
 
 describe('Promise catalog', () => {
   it('Should dispatch a promise!', done => {
-
     const {
-      actions: {
-        load,
-      },
+      actions: { load },
       saga,
     } = rj(rjWithPromise)({
       type: 'OCIO',
       state: 'X',
-      api: ({ maik }) => new Promise((resolve, reject) => {
-        if (maik === 23) {
-          resolve({
-            message: 'Time 2 Rave on!',
-          })
-        } else {
-          reject('Invalid Maik try again')
-        }
-      })
+      api: ({ maik }) =>
+        new Promise((resolve, reject) => {
+          if (maik === 23) {
+            resolve({
+              message: 'Time 2 Rave on!',
+            })
+          } else {
+            reject('Invalid Maik try again')
+          }
+        }),
     })
 
     const store = mockStoreWithSaga(saga, {})
@@ -41,9 +39,9 @@ describe('Promise catalog', () => {
       store.dispatch(load({ maik: 23 })).then(data => {
         expect(data).toEqual({
           data: {
-            message: 'Time 2 Rave on!'
+            message: 'Time 2 Rave on!',
           },
-          params: { maik: 23 }
+          params: { maik: 23 },
         })
         done()
       })

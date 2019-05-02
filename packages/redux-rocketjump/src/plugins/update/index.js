@@ -13,10 +13,7 @@ export default (c = {}) => {
       keepSucceded: config.keepUpdated,
     }),
     {
-      proxySelectors: ({
-        getMapLoadings,
-        getMapFailures,
-      }) => ({
+      proxySelectors: ({ getMapLoadings, getMapFailures }) => ({
         // Simply "export" a more consistent names...
         getUpdating: getMapLoadings,
         getFailures: getMapFailures,

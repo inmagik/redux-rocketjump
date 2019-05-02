@@ -11,7 +11,6 @@ import { composeReducers } from './helpers'
 // Make the exports
 // take a config and a extended export (the return of this function)
 export default (runConfig, jumpConfig, extendExport = {}) => {
-
   // Make side effect descriptor exports
   let sideEffect
   if (!extendExport.sideEffect) {

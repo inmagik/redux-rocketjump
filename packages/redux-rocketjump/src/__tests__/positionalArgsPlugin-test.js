@@ -16,9 +16,7 @@ describe('Positional args plugin', () => {
   it('should able to run action creator using positional arguments instead of objects', () => {
     const api = jest.fn()
     const {
-      actions: {
-        load,
-      },
+      actions: { load },
       saga,
     } = rj(rjPosArgs())({
       type: 'SOOCIO~',
@@ -49,11 +47,11 @@ describe('Positional args plugin', () => {
     expect(load(23)).toEqual({
       type,
       payload: { params: [23] },
-      meta: { id: 23 }
+      meta: { id: 23 },
     })
 
     const {
-      actions: { load: load2 }
+      actions: { load: load2 },
     } = rjPosArgs('id', null, false, 'tek', 'isCool')({
       type,
       state: 'ocio',
@@ -63,7 +61,7 @@ describe('Positional args plugin', () => {
     expect(load2(777, 'maik', 'giova', 23)).toEqual({
       type,
       payload: { params: [777, 'maik', 'giova', 23] },
-      meta: { id: 777, tek: 23 }
+      meta: { id: 777, tek: 23 },
     })
   })
 })

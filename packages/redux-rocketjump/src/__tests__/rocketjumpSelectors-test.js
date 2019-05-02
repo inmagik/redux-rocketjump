@@ -39,17 +39,22 @@ describe('Rocketjump selectors', () => {
       state,
       proxySelectors: {
         getData: ({ getData }) =>
-          createSelector(getData, soci =>
-            soci.map(s => ({
-              ...s,
-              name: s.name.toUpperCase(),
-              fresh: true,
-            }))
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                name: s.name.toUpperCase(),
+                fresh: true,
+              }))
           ),
         getOldest: ({ getData }) =>
-          createSelector(getData, soci => {
-            return orderBy(soci, 'age', 'desc')[0]
-          }),
+          createSelector(
+            getData,
+            soci => {
+              return orderBy(soci, 'age', 'desc')[0]
+            }
+          ),
       },
     })()
 
@@ -75,11 +80,13 @@ describe('Rocketjump selectors', () => {
     const rjIsAlive = rj({
       proxySelectors: {
         getData: ({ getData }) =>
-          createSelector(getData, soci =>
-            soci.map(s => ({
-              ...s,
-              isAlive: s.age < 27,
-            }))
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                isAlive: s.age < 27,
+              }))
           ),
       },
     })
@@ -88,13 +95,15 @@ describe('Rocketjump selectors', () => {
     const rjRangerName = rj({
       proxySelectors: {
         getData: ({ getData }) =>
-          createSelector(getData, soci =>
-            soci.map(s => ({
-              ...s,
-              rangerName: [s.name.slice(0, -2), s.name.slice(-2)]
-                .map(capitalize)
-                .join(' '),
-            }))
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                rangerName: [s.name.slice(0, -2), s.name.slice(-2)]
+                  .map(capitalize)
+                  .join(' '),
+              }))
           ),
       },
     })
@@ -103,23 +112,27 @@ describe('Rocketjump selectors', () => {
       state,
       proxySelectors: {
         getData: ({ getData }) =>
-          createSelector(getData, soci =>
-            soci.map(s => ({
-              ...s,
-              hello: `My name is ${s.rangerName} an i am ${s.age}`,
-            }))
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                hello: `My name is ${s.rangerName} an i am ${s.age}`,
+              }))
           ),
       },
     })({
       proxySelectors: {
         getData: ({ getData }) =>
-          createSelector(getData, soci =>
-            soci.map(s => ({
-              ...s,
-              hello: s.isAlive
-                ? `${s.hello} and i am alive`
-                : `${s.hello} and i am a ghost`,
-            }))
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                hello: s.isAlive
+                  ? `${s.hello} and i am alive`
+                  : `${s.hello} and i am a ghost`,
+              }))
           ),
       },
     })

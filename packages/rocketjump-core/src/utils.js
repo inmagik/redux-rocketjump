@@ -46,7 +46,6 @@ export const mergeActionPatterns = (...patterns) =>
 export const matchActionPattern = (action, pattern) =>
   pattern === '*' || arrayze(pattern).indexOf(action.type) !== -1
 
-
 export const composeReducers = (...reducers) => (prevState, action) =>
   reducers.reduce((nextState, reducer) => {
     if (typeof prevState === 'undefined') {

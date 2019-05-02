@@ -5,7 +5,6 @@ import {
 } from '../plugins/hor'
 
 describe('HOR makeUpdateReducer', () => {
-
   it('should immutable update an object', () => {
     const reducer = makeUpdateReducer('KILL_GHOST')
     const prevState = {
@@ -15,7 +14,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Gio Va',
         work: 'Monkey Teacher',
-      }
+      },
     }
     const action = {
       type: 'KILL_GHOST_SUCCESS',
@@ -25,8 +24,8 @@ describe('HOR makeUpdateReducer', () => {
           id: 23,
           name: '@theReal',
           work: 'Pick Up Girlz',
-        }
-      }
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -36,7 +35,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: '@theReal',
         work: 'Pick Up Girlz',
-      }
+      },
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
@@ -49,21 +48,23 @@ describe('HOR makeUpdateReducer', () => {
     const prevState = {
       loading: false,
       log: ['~'],
-      data: [{
-        id: 23,
-        name: 'Gio Va',
-        work: 'Monkey Teacher',
-      },
-      {
-        id: 777,
-        name: 'DarkSide',
-        work: 'DPG',
-      },
-      {
-        id: 69,
-        name: 'Liza',
-        work: 'Selling Shit',
-      }]
+      data: [
+        {
+          id: 23,
+          name: 'Gio Va',
+          work: 'Monkey Teacher',
+        },
+        {
+          id: 777,
+          name: 'DarkSide',
+          work: 'DPG',
+        },
+        {
+          id: 69,
+          name: 'Liza',
+          work: 'Selling Shit',
+        },
+      ],
     }
     const action = {
       type: 'KILL_GHOST_SUCCESS',
@@ -73,28 +74,30 @@ describe('HOR makeUpdateReducer', () => {
           id: 777,
           name: 'DarkSide',
           work: 'N/A',
-        }
-      }
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
       loading: false,
       log: ['~'],
-      data: [{
-        id: 23,
-        name: 'Gio Va',
-        work: 'Monkey Teacher',
-      },
-      {
-        id: 777,
-        name: 'DarkSide',
-        work: 'N/A',
-      },
-      {
-        id: 69,
-        name: 'Liza',
-        work: 'Selling Shit',
-      }]
+      data: [
+        {
+          id: 23,
+          name: 'Gio Va',
+          work: 'Monkey Teacher',
+        },
+        {
+          id: 777,
+          name: 'DarkSide',
+          work: 'N/A',
+        },
+        {
+          id: 69,
+          name: 'Liza',
+          work: 'Selling Shit',
+        },
+      ],
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
@@ -103,7 +106,10 @@ describe('HOR makeUpdateReducer', () => {
   })
 
   it('should immutable update nested path', () => {
-    const reducer = makeUpdateReducer('KILL_GHOST', 'data.friends.best.withMoney')
+    const reducer = makeUpdateReducer(
+      'KILL_GHOST',
+      'data.friends.best.withMoney'
+    )
     const prevState = {
       loading: false,
       log: ['~'],
@@ -116,10 +122,10 @@ describe('HOR makeUpdateReducer', () => {
             withMoney: {
               id: 10,
               name: 'MR M$X',
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     }
     const action = {
       type: 'KILL_GHOST_SUCCESS',
@@ -127,9 +133,9 @@ describe('HOR makeUpdateReducer', () => {
       payload: {
         data: {
           id: 10,
-          name: 'DAN'
-        }
-      }
+          name: 'DAN',
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -144,15 +150,17 @@ describe('HOR makeUpdateReducer', () => {
             withMoney: {
               id: 10,
               name: 'DAN',
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
     expect(nextState.data).not.toBe(prevState.data)
-    expect(nextState.data.friends.best.withMoney).not.toBe(prevState.data.friends.best.withMoney)
+    expect(nextState.data.friends.best.withMoney).not.toBe(
+      prevState.data.friends.best.withMoney
+    )
     expect(nextState.data.friends.other).toBe(prevState.data.friends.other)
   })
 
@@ -167,7 +175,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Gio Va',
         age: 25,
-      }
+      },
     }
     const action = {
       type: 'KILL_GHOST_SUCCESS',
@@ -176,9 +184,9 @@ describe('HOR makeUpdateReducer', () => {
         data: {
           id: 10,
           age: 25,
-          name: 'DAN'
-        }
-      }
+          name: 'DAN',
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -187,8 +195,8 @@ describe('HOR makeUpdateReducer', () => {
       data: {
         id: 10,
         age: 25,
-        name: 'DAN'
-      }
+        name: 'DAN',
+      },
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
@@ -205,7 +213,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Gio Va',
         age: 25,
-      }
+      },
     }
     const action = {
       type: 'KILL_GHOST_FAILURE',
@@ -214,9 +222,9 @@ describe('HOR makeUpdateReducer', () => {
         data: {
           id: 10,
           age: 25,
-          name: 'DAN'
-        }
-      }
+          name: 'DAN',
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -226,7 +234,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Gio Va',
         age: 25,
-      }
+      },
     })
     // Immutability check
     expect(nextState).toBe(prevState)
@@ -235,7 +243,10 @@ describe('HOR makeUpdateReducer', () => {
   })
 
   it('should match a list of action type success', () => {
-    const reducer = makeUpdateReducer(['KILL_GHOST', 'SACRIFICE_VIRGIN'], 'data')
+    const reducer = makeUpdateReducer(
+      ['KILL_GHOST', 'SACRIFICE_VIRGIN'],
+      'data'
+    )
     const prevState = {
       loading: false,
       log: ['~'],
@@ -243,7 +254,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Gio Va',
         age: 25,
-      }
+      },
     }
     const action = {
       type: 'SACRIFICE_VIRGIN_SUCCESS',
@@ -253,8 +264,8 @@ describe('HOR makeUpdateReducer', () => {
           id: 23,
           name: 'Papa Emeritus II',
           age: Infinity,
-        }
-      }
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -264,7 +275,7 @@ describe('HOR makeUpdateReducer', () => {
         id: 23,
         name: 'Papa Emeritus II',
         age: Infinity,
-      }
+      },
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
@@ -290,7 +301,7 @@ describe('HOR makeUpdateReducer', () => {
         name: 'Gio Va',
         money: 11,
         age: 25,
-      }
+      },
     }
     const action = {
       type: 'KILL_GHOST_SUCCESS',
@@ -306,7 +317,7 @@ describe('HOR makeUpdateReducer', () => {
         name: 'Gio Va',
         money: 1010,
         age: 25,
-      }
+      },
     })
     // Immutability check
     expect(nextState).not.toBe(prevState)
@@ -340,9 +351,9 @@ describe('HOR makeRemoveListReducer', () => {
           {
             id: 7,
             name: 'Skinny Boy',
-          }
-        ]
-      }
+          },
+        ],
+      },
     }
     const action = {
       type: 'RM_RF_SUCCESS',
@@ -367,9 +378,9 @@ describe('HOR makeRemoveListReducer', () => {
           {
             id: 7,
             name: 'Skinny Boy',
-          }
-        ]
-      }
+          },
+        ],
+      },
     })
   })
 })
@@ -399,9 +410,9 @@ describe('HOR makeAddListReducer', () => {
           {
             id: 7,
             name: 'Skinny Boy',
-          }
-        ]
-      }
+          },
+        ],
+      },
     }
     const action = {
       type: 'ADD_SOCIO_SUCCESS',
@@ -409,8 +420,8 @@ describe('HOR makeAddListReducer', () => {
         data: {
           id: 777,
           name: 'Dark Side',
-        }
-      }
+        },
+      },
     }
     const nextState = reducer(prevState, action)
     expect(nextState).toEqual({
@@ -439,9 +450,9 @@ describe('HOR makeAddListReducer', () => {
           {
             id: 777,
             name: 'Dark Side',
-          }
-        ]
-      }
+          },
+        ],
+      },
     })
   })
 })

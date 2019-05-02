@@ -3,7 +3,7 @@ import { forgeRocketJump } from 'rocketjump-core'
 import pick from 'lodash.pick'
 import { resetReducerOn } from './helpers'
 import makeExport from './export'
-import { $TYPE_RJ, $TYPE_COMBINE_RJ } from './internals'
+import { $TYPE_RJ_RUN_CONFIG, $TYPE_RJ_COMBINE_CONFIG } from './internals'
 import makeApiSaga from './apiSaga'
 
 function checkWarns(rjsOrConfigs, extraConfig) {
@@ -11,12 +11,12 @@ function checkWarns(rjsOrConfigs, extraConfig) {
     extraConfig &&
     // The last config can be called from rocketjump itself
     // or frome the special combineRjs GAnG!
-    extraConfig.__rjtype !== $TYPE_RJ &&
-    extraConfig.__rjtype !== $TYPE_COMBINE_RJ
+    extraConfig.__rjtype !== $TYPE_RJ_RUN_CONFIG &&
+    extraConfig.__rjtype !== $TYPE_RJ_COMBINE_CONFIG
   ) {
     console.warn(
       '[redux-rocketjump] DeprecationWarning: ' +
-      'the last evalutation should invoke without parameters'
+        'the last evalutation should invoke without parameters'
     )
   }
   let cfgToCheck = rjsOrConfigs.filter(item => typeof item === 'object')
@@ -24,7 +24,7 @@ function checkWarns(rjsOrConfigs, extraConfig) {
     extraConfig === undefined ||
     // Only combineRjs can inject the last config :P
     // So for it skip the check for given extra conf
-    extraConfig.__rjtype === $TYPE_COMBINE_RJ
+    extraConfig.__rjtype === $TYPE_RJ_COMBINE_CONFIG
   ) {
     cfgToCheck = cfgToCheck.slice(0, cfgToCheck.length - 1)
   }
@@ -32,7 +32,7 @@ function checkWarns(rjsOrConfigs, extraConfig) {
     if (config.type || config.api || config.state) {
       console.warn(
         '[redux-rocketjump] DeprecationWarning: ' +
-        'type, api and state should be defined only once, in the last object'
+          'type, api and state should be defined only once, in the last object'
       )
     }
   })
@@ -42,9 +42,9 @@ function makeRunConfig(finalConfig) {
   // Detected the run config from partial rjs + configs
   // pick only: state, type and api
   const runConfig = pick(finalConfig, ['state', 'api', 'type'])
-  // Add $TYPE_RJ type
+  // Mark as a run config
   Object.defineProperty(runConfig, '__rjtype', {
-    value: $TYPE_RJ,
+    value: $TYPE_RJ_RUN_CONFIG,
   })
 
   // Check for type and state to be required in run config
@@ -55,13 +55,17 @@ function makeRunConfig(finalConfig) {
   invariant(
     runConfig.state !== undefined,
     'You must specify a state key for create selectors' +
-    ', if you want to omit the state creation set state explice to false.'
+      ', if you want to omit the state creation set state explice to false.'
   )
 
   return runConfig
 }
 
-function makeRecursionRjs(partialRjsOrConfigs, extraConfig, isLastRjInvocation) {
+function makeRecursionRjs(
+  partialRjsOrConfigs,
+  extraConfig,
+  isLastRjInvocation
+) {
   if (process.env.NODE_ENV !== 'production') {
     checkWarns(partialRjsOrConfigs, extraConfig)
   }
@@ -71,7 +75,7 @@ function makeRecursionRjs(partialRjsOrConfigs, extraConfig, isLastRjInvocation) 
   return partialRjsOrConfigs
 }
 
-function finalizeExport (finalExport, runConfig, finalConfig) {
+function finalizeExport(finalExport, runConfig, finalConfig) {
   // ~~ END OF CHAIN RECURSION ~~
   let { sideEffect, __rjtype, reducer, ...rjExport } = finalExport
 
@@ -109,7 +113,7 @@ function finalizeExport (finalExport, runConfig, finalConfig) {
       sideEffect.mapLoadingAction,
       sideEffect.mapSuccessAction,
       sideEffect.mapFailureAction,
-      sideEffect.unloadBy,
+      sideEffect.unloadBy
     )
   }
 
@@ -126,7 +130,7 @@ function finalizeExport (finalExport, runConfig, finalConfig) {
   return {
     ...rjExport,
     reducer,
-    saga
+    saga,
   }
 }
 

@@ -9,8 +9,9 @@ describe('Rocketjump reducer', () => {
   })()
 
   it('should be undefined when state is explicit set to false', () => {
-    expect(rj({ type: 'DESTROY_HUMANS', state: false })().reducer)
-      .toBeUndefined()
+    expect(
+      rj({ type: 'DESTROY_HUMANS', state: false })().reducer
+    ).toBeUndefined()
   })
 
   it('should return the initial state', () => {
@@ -41,7 +42,11 @@ describe('Rocketjump reducer', () => {
       error: null,
     }
     expect(
-      reducer(prevState, { type: `${type}_FAILURE`, error: true, payload: 'Shiiit' })
+      reducer(prevState, {
+        type: `${type}_FAILURE`,
+        error: true,
+        payload: 'Shiiit',
+      })
     ).toEqual({
       loading: false,
       data: null,
@@ -134,30 +139,33 @@ describe('Rocketjump reducer', () => {
       composeReducer: [
         (prevState, action) => ({ ...prevState, giova: 12 }),
         (prevState, action) => ({ ...prevState, rinne: 1 }),
-      ]
+      ],
     })
 
-    const rA1 = rj(
-      rA,
-      {
-        composeReducer: [
-          (prevState, action) => action.type === 'YEAH' ? ({
-            ...prevState,
-            giova: prevState.giova * 2,
-          }) : prevState
-        ]
-      }
-    )
+    const rA1 = rj(rA, {
+      composeReducer: [
+        (prevState, action) =>
+          action.type === 'YEAH'
+            ? {
+                ...prevState,
+                giova: prevState.giova * 2,
+              }
+            : prevState,
+      ],
+    })
 
     const { reducer } = rj(rA1, {
       type: 'OH',
       state: 'nevada',
       composeReducer: [
-        (prevState, action) => action.type === 'YEAH' ? ({
-          ...prevState,
-          giova: `Gio Va Age: ${prevState.giova}`
-        }) : prevState
-      ]
+        (prevState, action) =>
+          action.type === 'YEAH'
+            ? {
+                ...prevState,
+                giova: `Gio Va Age: ${prevState.giova}`,
+              }
+            : prevState,
+      ],
     })()
 
     let state = reducer(undefined, {})
@@ -166,7 +174,7 @@ describe('Rocketjump reducer', () => {
       error: null,
       data: null,
       rinne: 1,
-      giova: 12
+      giova: 12,
     })
     state = reducer(state, { type: 'YEAH' })
     expect(state).toEqual({
@@ -174,25 +182,20 @@ describe('Rocketjump reducer', () => {
       error: null,
       data: null,
       rinne: 1,
-      giova: 'Gio Va Age: 24'
+      giova: 'Gio Va Age: 24',
     })
   })
 
   it('should clear reducer state using unloadBy', () => {
-
     const { reducer } = rj(
       rj({
         unloadBy: 'LOGOUT',
       }),
       rj({
-        composeReducer: [
-          (prevState = { pippo: 23 }) => prevState,
-        ]
+        composeReducer: [(prevState = { pippo: 23 }) => prevState],
       }),
       rj({
-        composeReducer: [
-          (prevState = { socio: 23 }) => prevState,
-        ]
+        composeReducer: [(prevState = { socio: 23 }) => prevState],
       }),
       rj({
         unloadBy: 'KLOOSE',
@@ -200,9 +203,7 @@ describe('Rocketjump reducer', () => {
       {
         type: 'BELLA',
         state: 'bella',
-        composeReducer: [
-          (prevState = { giova: 23 }) => prevState,
-        ],
+        composeReducer: [(prevState = { giova: 23 }) => prevState],
         unloadBy: 'STAKKA',
         // FIXME: This is need but is wrong....
         api: () => 23,
@@ -231,7 +232,6 @@ describe('Rocketjump reducer', () => {
   })
 
   it('should ignore unloadBy for reducer when state is to false', () => {
-
     const { reducer } = rj(
       rj({
         unloadBy: 'LOGOUT',

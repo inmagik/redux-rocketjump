@@ -8,7 +8,7 @@ const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
   const store = createStore(
     reducer,
     preloadedState,
-    applyMiddleware(sagaMiddleware),
+    applyMiddleware(sagaMiddleware)
   )
   sagaMiddleware.run(saga)
   return store
@@ -18,9 +18,7 @@ describe('Cache plugin', () => {
   it('run api only when is empty', done => {
     const mockApi = jest.fn().mockResolvedValue('GioVa')
     const {
-      actions: {
-        load,
-      },
+      actions: { load },
       reducer,
       saga,
     } = rj(rjCache(), {
@@ -29,9 +27,12 @@ describe('Cache plugin', () => {
       api: mockApi,
     })()
 
-    const store = createRealStoreWithSagaAndReducer(saga, combineReducers({
-      soci: reducer,
-    }))
+    const store = createRealStoreWithSagaAndReducer(
+      saga,
+      combineReducers({
+        soci: reducer,
+      })
+    )
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -45,10 +46,7 @@ describe('Cache plugin', () => {
   it('run api only when is empty excpet when use force action', done => {
     const mockApi = jest.fn().mockResolvedValue('GioVa')
     const {
-      actions: {
-        load,
-        loadForce,
-      },
+      actions: { load, loadForce },
       reducer,
       saga,
     } = rj(rjCache(), {
@@ -57,9 +55,12 @@ describe('Cache plugin', () => {
       api: mockApi,
     })()
 
-    const store = createRealStoreWithSagaAndReducer(saga, combineReducers({
-      soci: reducer,
-    }))
+    const store = createRealStoreWithSagaAndReducer(
+      saga,
+      combineReducers({
+        soci: reducer,
+      })
+    )
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -71,28 +72,32 @@ describe('Cache plugin', () => {
   it('can be purged by certain actions', done => {
     const mockApi = jest.fn().mockResolvedValue('GioVa')
     const {
-      actions: {
-        load,
-      },
+      actions: { load },
       reducer,
       saga,
-    } = rj(rjCache({
-      purge: 'LOGOUT'
-    }), {
-      type: 'GET_SOCI',
-      state: 'soci',
-      api: mockApi,
-    })()
+    } = rj(
+      rjCache({
+        purge: 'LOGOUT',
+      }),
+      {
+        type: 'GET_SOCI',
+        state: 'soci',
+        api: mockApi,
+      }
+    )()
 
-    const store = createRealStoreWithSagaAndReducer(saga, combineReducers({
-      soci: reducer,
-    }))
+    const store = createRealStoreWithSagaAndReducer(
+      saga,
+      combineReducers({
+        soci: reducer,
+      })
+    )
     expect(store.getState()).toEqual({
       soci: {
         loading: false,
         error: null,
         data: null,
-      }
+      },
     })
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
@@ -100,8 +105,8 @@ describe('Cache plugin', () => {
         soci: {
           loading: false,
           error: null,
-          data: 'GioVa'
-        }
+          data: 'GioVa',
+        },
       })
       store.dispatch({
         type: 'LOGOUT',
@@ -111,7 +116,7 @@ describe('Cache plugin', () => {
           loading: false,
           error: null,
           data: null,
-        }
+        },
       })
       done()
     })

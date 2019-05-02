@@ -5,9 +5,18 @@ import { getOrSelect } from './helpers'
 export const makeSelectors = stateSelector => {
   const getBaseState = state => getOrSelect(state, stateSelector)
 
-  const getData = createSelector(getBaseState, ({ data }) => data)
-  const isLoading = createSelector(getBaseState, ({ loading }) => loading)
-  const getError = createSelector(getBaseState, ({ error }) => error)
+  const getData = createSelector(
+    getBaseState,
+    ({ data }) => data
+  )
+  const isLoading = createSelector(
+    getBaseState,
+    ({ loading }) => loading
+  )
+  const getError = createSelector(
+    getBaseState,
+    ({ error }) => error
+  )
 
   return { getBaseState, getData, isLoading, getError }
 }
