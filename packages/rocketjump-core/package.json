@@ -1,0 +1,19 @@
+{
+  "name": "rocketjump-core",
+  "version": "1.0.0",
+  "description": "The core of rocketjump",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "repository": "https://github.com/inmagik/redux-rocketjump",
+  "authors": [
+    "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
+    "Mauro Bianchi <mauro.bianchi@inmagik.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inmagik/redux-rocketjump/issues"
+  },
+  "keywords": [
+    "rocketjump"
+  ]
+}

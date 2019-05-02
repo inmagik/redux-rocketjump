@@ -1,88 +1,36 @@
 {
-  "name": "redux-rocketjump",
-  "version": "1.7.2",
-  "description": "Rocketjump your redux! Speed up redux-app development",
-  "main": "./index.js",
-  "repository": "https://github.com/inmagik/redux-rocketjump",
-  "authors": [
-    "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
-    "Mauro Bianchi <mauro.bianchi@inmagik.com>"
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/inmagik/redux-rocketjump/issues"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "keywords": [
-    "redux",
-    "rest",
-    "api"
-  ],
   "scripts": {
-    "format": "prettier --single-quote --trailing-comma es5 --no-semi --write \"{src,__{tests,mocks}__}/**/*.js\"",
     "test": "jest",
-    "lint": "eslint src",
-    "start": "npm-run-all -p dev fake-api",
-    "dev": "webpack-dev-server",
-    "fake-api": "json-server --watch --delay 400 example/db.json",
-    "build:copyfiles": "copyfiles README.MD LICENSE package.json lib",
-    "build:js": "babel src --out-dir lib --ignore __tests__",
-    "build": "rimraf lib && npm run build:js && npm run build:copyfiles",
-    "build:watch": "npm run build && babel src --out-dir lib --ignore __tests__ --watch"
+    "dev": "webpack-dev-server"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
-    "babel-jest": "^23.0.1",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "classnames": "^2.2.5",
-    "copyfiles": "^2.0.0",
-    "css-loader": "^0.28.10",
-    "eslint": "^4.1.1",
-    "eslint-config-react-app": "^2.1.0",
-    "eslint-plugin-flowtype": "^2.34.1",
-    "eslint-plugin-import": "^2.6.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0",
-    "jest": "^23.1.0",
-    "json-server": "^0.12.2",
-    "npm-run-all": "^4.1.2",
-    "prettier": "1.11.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
-    "redux-mock-store": "^1.5.1",
-    "redux-saga": "^0.16.0",
-    "redux-saga-thunk": "^0.7.1",
-    "regenerator-runtime": "^0.11.1",
-    "reselect": "^3.0.1",
-    "rimraf": "^2.6.2",
-    "style-loader": "^0.20.2",
-    "superagent": "^3.8.2",
-    "webpack": "^4.1.0",
-    "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0"
-  },
-  "peerDependencies": {
-    "redux": "^3.0.0 || ^4.0.0",
-    "redux-saga": ">=0.15.0",
-    "reselect": ">=3.0.0"
-  },
-  "dependencies": {
-    "invariant": "^2.2.4",
-    "lodash.get": "^4.4.2",
-    "lodash.mapvalues": "^4.6.0",
-    "lodash.omit": "^4.5.0",
-    "lodash.pick": "^4.4.0",
-    "object-path-immutable": "^3.0.0",
-    "query-string": "5"
-  },
-  "sideEffects": false
+    "@babel/core": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "9.x",
+    "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.5",
+    "eslint": "5.x",
+    "eslint-config-react-app": "^4.0.0",
+    "eslint-plugin-flowtype": "2.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "1.5.0",
+    "jest": "^24.7.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1",
+    "webpack-dev-server": "^3.3.1"
+  }
 }

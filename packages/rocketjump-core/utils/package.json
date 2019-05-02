@@ -1,0 +1,6 @@
+{
+  "name": "rocketjump-core/utils",
+  "private": true,
+  "main": "../src/utils.js",
+  "module": "../src/utils.js"
+}

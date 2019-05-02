@@ -1,0 +1,24 @@
+{
+  "name": "react-rocketjump",
+  "version": "0.0.1",
+  "description": "Rocketjump your react!",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "repository": "https://github.com/inmagik/redux-rocketjump",
+  "authors": [
+    "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
+    "Mauro Bianchi <mauro.bianchi@inmagik.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inmagik/redux-rocketjump/issues"
+  },
+  "keywords": [
+    "rocketjump"
+  ],
+  "dependencies": {
+    "rocketjump-core": "^1.0.0",
+    "hoist-non-react-statics": "^3.3.0",
+    "rxjs": "^6.5.1"
+  }
+}
