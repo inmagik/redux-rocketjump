@@ -1,6 +1,6 @@
 {
   "name": "redux-rocketjump",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0-rc2",
   "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
@@ -19,7 +19,7 @@
     "api"
   ],
   "scripts": {
-    "prebuild": "rimraf lib",
+    "prebuild": "rimraf lib && node scripts/make-plugin-defs.js",
     "build": "rollup -c",
     "test": "jest"
   },
