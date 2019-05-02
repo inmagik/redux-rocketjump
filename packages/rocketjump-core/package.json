@@ -2,18 +2,27 @@
   "name": "rocketjump-core",
   "version": "1.0.0",
   "description": "The core of rocketjump",
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "main": "./lib/index.cjs.js",
+  "module": "./lib/index.esm.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
   "authors": [
     "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
     "Mauro Bianchi <mauro.bianchi@inmagik.com>"
   ],
+  "scripts": {
+    "build": "rollup -c"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/inmagik/redux-rocketjump/issues"
   },
   "keywords": [
     "rocketjump"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "rollup": "^1.10.1",
+    "rollup-plugin-babel": "^4.3.2"
+  }
 }
