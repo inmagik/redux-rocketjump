@@ -1,6 +1,6 @@
 import { rj } from '../../rocketjump'
 import { takeEveryAndCancel } from '../../effects'
-import rjMap from '../map'
+import rjMap from '../map/index'
 
 export default (c = {}) => {
   const config = {

@@ -1,5 +1,5 @@
 import { TAKE_EFFECT_LATEST } from './createMakeRxObservable'
-import arrayze from 'rocketjump-core/utils'
+import { arrayze } from 'rocketjump-core/utils'
 
 export const makeSideEffectDescriptor = () => ({
   takeEffect: [TAKE_EFFECT_LATEST],
