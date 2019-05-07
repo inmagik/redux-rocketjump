@@ -1,4 +1,5 @@
 import { forgeRocketJump, isPartialRj } from 'rocketjump-core'
+import { $TYPE_RJ_EXTREA_CONFIG } from './internals'
 import makeExport from './export'
 import createMakeRxObservable from './createMakeRxObservable'
 
@@ -14,7 +15,12 @@ function makeRecursionRjs(
   isLastRjInvocation
 ) {
   let hasEffectConfigured = !isLastRjInvocation
-  const rjsOrConfigs = partialRjsOrConfigs.map(config => {
+  let rjsOrConfigs = [...partialRjsOrConfigs]
+  // Extends only from ConfigureRj
+  if (extraConfig !== null && typeof extraConfig === 'object' && extraConfig.__rjtype === $TYPE_RJ_EXTREA_CONFIG) {
+    rjsOrConfigs.push(extraConfig)
+  }
+  rjsOrConfigs = rjsOrConfigs.map(config => {
     if (typeof config === 'function') {
       // A Partial RJ
       if (isPartialRj(config)) {

@@ -33,6 +33,7 @@ export function run(...params) {
   return runAdvanced(params)
 }
 
+// TODO: Better clear or teardown
 export function unload(meta = {}) {
   return makeEffectAction({ type: UNLOAD, meta })
 }

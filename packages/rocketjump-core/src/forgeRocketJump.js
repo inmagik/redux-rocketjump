@@ -28,6 +28,7 @@ export function forgeRocketJump(rjImpl, extendsPartialRj = noop) {
       let extendExport
       if (
         typeof extendExportArg === 'object' &&
+        extendExportArg !== null &&
         extendExportArg.__rjtype === $TYPE_RJ_EXPORT
       ) {
         extendExport = extendExportArg

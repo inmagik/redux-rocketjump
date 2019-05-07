@@ -7,7 +7,23 @@ import {
   composeReducers,
   takeEveryAndCancel,
 } from 'redux-rocketjump'
+import { rj as reactRj } from 'react-rocketjump'
 import { fork, put } from 'redux-saga/effects'
+
+const callMaMen = (apiFn, ...params) => {
+  return apiFn(...params, 'GIOVA THE KING @@@23')
+}
+
+export const todosState = reactRj({
+  effect: (gang = '') => Promise.resolve([{
+    id: 23,
+    title: `Kill Humans ~${gang}`,
+  }]),
+  // () => request.get(`${API_URL}/todos`).then(({ body }) => body),
+})({
+  callEffect: callMaMen,
+})
+
 
 const API_URL = `http://${window.location.hostname}:3000`
 

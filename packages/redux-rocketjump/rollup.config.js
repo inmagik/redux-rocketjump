@@ -11,6 +11,8 @@ const vendors = []
   .concat(
     Object.keys(pkg.dependencies),
     Object.keys(pkg.peerDependencies),
+    'redux-saga/effects',
+    'rocketjump-core/utils',
   )
 
 export default ['esm', 'cjs'].map(format => ({

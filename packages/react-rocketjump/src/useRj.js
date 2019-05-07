@@ -1,15 +1,16 @@
 import { useMemo } from 'react'
-import { useRxSubject, useReduxReducer, useConstant } from './hooks'
+import { useRxSubject, useReduxReducer, useConstant, useCreateRjState } from './hooks'
 import bindActionCreators from './bindActionCreators'
 
 const defaultMapActions = a => a
 
 export default function useRj(
-  // The returned value of rj()()
-  rjRunnableState,
+  // The returned value of rj()() or a partialRj rj()
+  rjStateOrPartial,
   selectState,
   mapActions = defaultMapActions
 ) {
+  const rjRunnableState = useCreateRjState(rjStateOrPartial)
   const {
     makeRxObservable,
     actionCreators,

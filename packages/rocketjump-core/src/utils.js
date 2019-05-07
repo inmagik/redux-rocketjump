@@ -19,7 +19,7 @@ export const proxyObject = (obj, proxy) => {
       ...proxy(obj),
     }
   }
-  if (typeof proxy === 'object') {
+  if (typeof proxy === 'object' && proxy !== null) {
     return {
       ...obj,
       ...mapValues(proxy, proxyFn => proxyFn(obj)),

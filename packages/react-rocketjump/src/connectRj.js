@@ -1,25 +1,27 @@
 import React, { useMemo } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 import bindActionCreators from './bindActionCreators'
-import { useRxSubject, useReduxReducer, useConstant } from './hooks'
+import { useRxSubject, useReduxReducer, useConstant, useCreateRjState } from './hooks'
 
 const defaultMapActionsToProps = a => a
 
 export default function connectRj(
-  // The returned value of rj()()
-  rjRunnableState,
+  // The returned value of rj()() or a partialRj rj()
+  rjStateOrPartial,
   mapStateToProps,
   mapActionsToProps = defaultMapActionsToProps
 ) {
   return function wrapWithConnect(WrappedComponent) {
-    const {
-      makeRxObservable,
-      actionCreators,
-      reducer,
-      makeSelectors,
-    } = rjRunnableState
 
     function ConnectFunction(props) {
+      const rjRunnableState = useCreateRjState(rjStateOrPartial)
+      const {
+        makeRxObservable,
+        actionCreators,
+        reducer,
+        makeSelectors,
+      } = rjRunnableState
+
       const [state, dispatch] = useReduxReducer(reducer)
 
       const subject = useRxSubject(makeRxObservable, dispatch)
@@ -43,7 +45,7 @@ export default function connectRj(
           dispatch,
           subject
         )
-      }, [subject, dispatch])
+      }, [subject, dispatch, actionCreators])
 
       return (
         <WrappedComponent

@@ -1,9 +1,9 @@
 {
   "name": "react-rocketjump",
   "version": "0.0.1",
-  "description": "Rocketjump your react!",
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "description": "Rocketjump your react! Handle state and side effects with classy",
+  "main": "lib/index.cjs.js",
+  "module": "lib/index.esm.js",
   "repository": "https://github.com/inmagik/redux-rocketjump",
   "authors": [
     "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",

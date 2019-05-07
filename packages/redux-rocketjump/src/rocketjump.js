@@ -19,7 +19,10 @@ function checkWarns(rjsOrConfigs, extraConfig) {
         'the last evalutation should invoke without parameters'
     )
   }
-  let cfgToCheck = rjsOrConfigs.filter(item => typeof item === 'object')
+  let cfgToCheck = rjsOrConfigs.filter(item => (
+    typeof item === 'object' &&
+    item !== null
+  ))
   if (
     extraConfig === undefined ||
     // Only combineRjs can inject the last config :P
