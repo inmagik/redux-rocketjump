@@ -7,7 +7,8 @@
   "repository": "https://github.com/inmagik/redux-rocketjump",
   "authors": [
     "Giovanni Fumagalli <giovanni.fumagalli@inmagik.com>",
-    "Mauro Bianchi <mauro.bianchi@inmagik.com>"
+    "Mauro Bianchi <mauro.bianchi@inmagik.com>",
+    "Alberto Osio <osioalberto@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {
