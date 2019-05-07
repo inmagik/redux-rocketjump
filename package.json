@@ -8,6 +8,8 @@
   },
   "scripts": {
     "format": "prettier --no-semi --single-quote --trailing-comma es5  --write \"{packages/*/src,__{tests,mocks}__}/**/*.js\"",
+    "build:core": "yarn --cwd ./packages/rocketjump-core run build",
+    "pretest": "yarn run build:core",
     "test": "jest",
     "dev": "webpack-dev-server"
   },
