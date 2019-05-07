@@ -14,8 +14,7 @@ const makeEffectAction = action => {
 
 // TODO: Bro i'm not totaly pround of this name
 // but i can't fine a better name ....
-// pass object
-export function runAdvanced(params = [], meta = {}, onSuccess, onFailure) {
+export function runAdvanced({ params = [], meta = {}, onSuccess, onFailure } = {}) {
   return makeEffectAction({
     type: RUN,
     payload: {
@@ -30,7 +29,7 @@ export function runAdvanced(params = [], meta = {}, onSuccess, onFailure) {
 }
 
 export function run(...params) {
-  return runAdvanced(params)
+  return runAdvanced({ params })
 }
 
 // TODO: Better clear or teardown
