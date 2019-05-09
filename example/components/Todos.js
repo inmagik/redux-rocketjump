@@ -19,8 +19,21 @@ import NewTodo from './NewTodo'
 
 class Todos extends PureComponent {
   componentDidMount() {
-    this.props.loadTodos()
-    // this.props.loadTodo(3)
+    
+    this.props.loadTodos
+      .meta({c: 3})
+      .onSuccess(() => console.log(1))
+      .onFailure(() => console.log(2))
+      .run(1)
+
+    // this.props.loadTodos(3)
+    
+    // this.props.loadTodos(1, 2, 3)
+
+    // this.props.unloadTodos()
+
+    // this.props.unloadTodos.meta({ id: 2 }).run()
+
   }
 
   // onToggle = todo => this.props.updateTodo({
@@ -83,8 +96,9 @@ export default connectRj(
   state => ({
     todos: state.data,
   }),
-  ({ run }) => ({
+  ({ run, unload }) => ({
     loadTodos: run,
+    unloadTodos: unload
   })
 )(Todos)
 

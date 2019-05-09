@@ -14,15 +14,29 @@ const callMaMen = (apiFn, ...params) => {
   return apiFn(...params, 'GIOVA THE KING @@@23')
 }
 
-export const todosState = reactRj({
+const todosState0 = reactRj({
+  actions: ({ run }) => ({
+    run: id => run(id).withMeta({ id, z: 1 })
+  })
+})
+
+const todosState1 = reactRj(todosState0, {
+  actions: ({ run }) => ({
+    run: id => run(id * 2)
+  })
+})
+
+export const todosState = reactRj(todosState1, {
+  callEffect: callMaMen,
   effect: (gang = '') => Promise.resolve([{
     id: 23,
     title: `Kill Humans ~${gang}`,
   }]),
+  actions: ({ run }) => ({
+    run: id => run(id).withMeta({ w: 3 })
+  }),
   // () => request.get(`${API_URL}/todos`).then(({ body }) => body),
-})({
-  callEffect: callMaMen,
-})
+})()
 
 
 const API_URL = `http://${window.location.hostname}:3000`
@@ -151,7 +165,7 @@ export const {
   })
 })()
 
-export const saga = function*() {
+export const saga = function* () {
   yield fork(todoListSaga)
   yield fork(addTodoSaga)
   yield fork(deleteTodoSaga)

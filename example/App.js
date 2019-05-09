@@ -31,9 +31,9 @@ export default function App() {
   return (
     // <ConfigureRj callEffect={callMaMen}>
       <div>
-      <button onClick={() => setCount(count + 1)}>INC {count}</button>
-      <Todos />
-    </div>
+        <button onClick={() => setCount(count + 1)}>INC {count}</button>
+        <Todos />
+      </div>
     // </ConfigureRj>
   )
 }
