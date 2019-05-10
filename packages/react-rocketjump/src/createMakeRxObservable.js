@@ -7,7 +7,7 @@ import {
   groupBy,
   tap,
 } from 'rxjs/operators'
-import { SUCCESS, FAILURE, LOADING, UNLOAD } from './actionTypes'
+import { SUCCESS, FAILURE, PENDING, CLEAN } from './actionTypes'
 
 export const TAKE_EFFECT_LATEST = 'latest'
 export const TAKE_EFFECT_EVERY = 'every'
@@ -24,14 +24,14 @@ export default function createMakeRxObservable({
     const [effectType, ...effectTypeArgs] = takeEffect
 
     const mapActionToObserableEffect = action => {
-      if (action.type === UNLOAD) {
+      if (action.type === CLEAN) {
         return of(action)
       }
       const { payload, meta, callbacks } = action
       const params = payload.params
 
       return concat(
-        of({ type: LOADING, meta }),
+        of({ type: PENDING, meta }),
         from(callEffect(effectCall, ...params)).pipe(
           map(data => ({ type: SUCCESS, payload: { data, params }, meta })),
           catchError(error => of({ type: FAILURE, payload: error, meta })),

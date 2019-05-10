@@ -2,7 +2,7 @@ import React from 'react'
 import { rj as reactRj, connectRj } from '..'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { RUN, UNLOAD, SUCCESS, FAILURE } from '../actionTypes'
+import { RUN, CLEAN, SUCCESS, FAILURE } from '../actionTypes'
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -32,7 +32,7 @@ describe('React-RocketJump actions', () => {
     const wrapper = makeRjComponent(rjState)
 
     expect(wrapper.props()).toHaveProperty('run')
-    expect(wrapper.props()).toHaveProperty('unload')
+    expect(wrapper.props()).toHaveProperty('clean')
 
   })
 
@@ -49,7 +49,7 @@ describe('React-RocketJump actions', () => {
     wrapper.prop('run')(1, 'a', {}, undefined)
 
     expect(actionLog[0]).toEqual({
-      type: 'RUN',
+      type: RUN,
       payload: {
         params: [1, 'a', {}, undefined]
       },
@@ -61,20 +61,20 @@ describe('React-RocketJump actions', () => {
     })
   })
 
-  it('should produce a good unload action', () => {
+  it('should produce a good clean action', () => {
     const actionLog = [];
 
     const rjState = reactRj({
       effect: () => [{ id: 1, name: 'admin' }],
-      reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [UNLOAD])
+      reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [CLEAN])
     });
 
     const wrapper = makeRjComponent(rjState)
 
-    wrapper.prop('unload')(1, 'a', {}, undefined)
+    wrapper.prop('clean')(1, 'a', {}, undefined)
 
     expect(actionLog[0]).toEqual({
-      type: 'UNLOAD',
+      type: CLEAN,
       payload: {
         params: [1, 'a', {}, undefined]
       },
@@ -245,17 +245,17 @@ describe('React-RocketJump actions', () => {
 
     const Component = (props) => null
 
-    const RjComponent = connectRj(rjState, undefined, ({ run, unload }) => ({
+    const RjComponent = connectRj(rjState, undefined, ({ run, clean }) => ({
       fetchTodos: run,
-      unloadTodos: unload
+      cleanTodos: clean
     }))(Component)
 
     const wrapper = shallow(<RjComponent />).find(Component)
 
     expect(wrapper.props()).toHaveProperty('fetchTodos')
-    expect(wrapper.props()).toHaveProperty('unloadTodos')
+    expect(wrapper.props()).toHaveProperty('cleanTodos')
     expect(wrapper.props()).not.toHaveProperty('run')
-    expect(wrapper.props()).not.toHaveProperty('unload')
+    expect(wrapper.props()).not.toHaveProperty('clean')
 
   })
 
@@ -447,9 +447,9 @@ describe('React-RocketJump actions', () => {
 
     const Component = (props) => null
 
-    const RjComponent = connectRj(rjState, undefined, ({ run, unload }) => ({
+    const RjComponent = connectRj(rjState, undefined, ({ run, clean }) => ({
       run,
-      unload,
+      clean,
       custom: () => ({ type: 'CUSTOM' })
     }))(Component)
 
@@ -472,9 +472,9 @@ describe('React-RocketJump actions', () => {
 
     const Component = (props) => null
 
-    const RjComponent = connectRj(rjState, undefined, ({ run, unload }) => ({
+    const RjComponent = connectRj(rjState, undefined, ({ run, clean }) => ({
       run,
-      unload,
+      clean,
       custom: () => ({ type: 'CUSTOM' })
     }))(Component)
 

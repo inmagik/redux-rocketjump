@@ -1,9 +1,9 @@
-import { LOADING, FAILURE, SUCCESS, UNLOAD } from './actionTypes'
+import { FAILURE, SUCCESS, PENDING, CLEAN } from './actionTypes'
 
 // Barebone reducer for handle an async effect
 
 const defaultState = {
-  loading: false,
+  pending: false,
   error: null,
   data: null,
 }
@@ -11,25 +11,25 @@ const defaultState = {
 export default function reducer(prevState = defaultState, action) {
   const { type } = action
   switch (type) {
-    case LOADING:
+    case PENDING:
       return {
         ...prevState,
         error: null,
-        loading: true,
+        pending: true,
       }
     case FAILURE:
       return {
         ...prevState,
-        loading: false,
+        pending: false,
         error: action.payload,
       }
     case SUCCESS:
       return {
         ...prevState,
-        loading: false,
+        pending: false,
         data: action.payload.data,
       }
-    case UNLOAD:
+    case CLEAN:
       // So easy if someone add some shit to state
       // simply preserve that keys!
       return { ...prevState, ...defaultState }

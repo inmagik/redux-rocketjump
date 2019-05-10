@@ -1,4 +1,4 @@
-import { RUN, UNLOAD, EFFECT_ACTION } from './actionTypes'
+import { RUN, CLEAN, EFFECT_ACTION } from './actionTypes'
 
 
 /**
@@ -82,6 +82,7 @@ export function run(...params) {
   return makeLibraryAction(RUN, ...params)
 }
 
-export function unload(...params) {
-  return makeLibraryAction(UNLOAD, ...params)
+
+export function clean(...params) {
+  return makeLibraryAction(CLEAN, ...params)
 }
