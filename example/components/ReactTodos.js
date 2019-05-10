@@ -12,7 +12,7 @@ class Todos extends PureComponent {
 
   render() {
     const { todos, deleteTodo, updateTodo, addTodo } = this.props
-    console.log(this.props)
+    const next = todos ? Math.max(...todos.map(t => t.id)) + 1 : 0
     return (
       <div className='todos'>
         <div className='todo-list'>
@@ -25,7 +25,7 @@ class Todos extends PureComponent {
             />
           ))}
         </div>
-        <button type="button" onClick={() => addTodo({ title: 'Sei', id: 6, done: false })}>Add</button>
+        <button type="button" onClick={() => addTodo({ title: next + 1, id: next, done: false })}>Add</button>
       </div>
     )
   }

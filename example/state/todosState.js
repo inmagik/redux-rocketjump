@@ -14,29 +14,29 @@ export const TodosListState = reactRj(
   {
     effect: () => Promise.resolve([
       {
-        title: 'Uno',
+        title: 1,
         done: false,
+        id: 0
+      },
+      {
+        title: 2,
+        done: true,
         id: 1
       },
       {
-        title: 'Due',
-        done: true,
+        title: 3,
+        done: false,
         id: 2
       },
       {
-        title: 'Tre',
+        title: 4,
         done: false,
         id: 3
       },
       {
-        title: 'Quattro',
+        title: 5,
         done: false,
         id: 4
-      },
-      {
-        title: 'Cinque',
-        done: false,
-        id: 5
       },
     ])
   }
