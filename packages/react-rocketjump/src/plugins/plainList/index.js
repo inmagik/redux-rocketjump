@@ -1,6 +1,8 @@
-import { rj } from '../..'
-import { get } from '../../helpers'
+import { rj } from '../../index'
 import { SUCCESS } from '../../actionTypes'
+import rjListInsert from '../listInsert';
+import rjListUpdate from '../listUpdate';
+import rjListDelete from '../listDelete';
 
 // Data reducer for a list paginated
 export const makeListDataReducer = (
@@ -22,22 +24,17 @@ export const makeListDataReducer = (
       ? customListReducer
       : defaultListReducer
 
-  return (prevState, action) => ({
-    list: listReducer(get(prevState, 'list'), action),
-  })
+  return (prevState, action) => listReducer(prevState, action)
 }
 
 // Selectors for a list
 export const makeListSelectors = getData => {
 
-  const getList = state => {
-    const data = getData(state)
-    return data === null ? null : data.list
-  }
+  const getList = getData
 
   const getCount = state => {
-    const data = getData(state);
-    return data === null ? null : data.pagination.count
+    const data = getList(state);
+    return data === null ? null : data.length
   }
 
   return {
@@ -49,20 +46,24 @@ export const makeListSelectors = getData => {
 // RJ List
 const rjPlainList = (config = {}) => {
   const dataReducer = makeListDataReducer(config.customListReducer)
-  return rj({
-    selectors: ({ getData }) => makeListSelectors(getData),
-    reducer: oldReducer => (state, action) => {
-      if (action.type === SUCCESS) {
-        return {
-          ...state,
-          pending: false,
-          data: dataReducer(state.data, action),
+  return rj(
+    rjListInsert(),
+    rjListUpdate(),
+    rjListDelete(),
+    {
+      selectors: ({ getData }) => makeListSelectors(getData),
+      reducer: oldReducer => (state, action) => {
+        if (action.type === SUCCESS) {
+          return {
+            ...state,
+            pending: false,
+            data: dataReducer(state.data, action),
+          }
+        } else {
+          return oldReducer(state, action)
         }
-      } else {
-        return oldReducer(state, action)
       }
-    }
-  })
+    })
 }
 
 export default rjPlainList
