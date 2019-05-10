@@ -11,7 +11,7 @@ import { SUCCESS, FAILURE, PENDING, CLEAN } from './actionTypes'
 
 export const TAKE_EFFECT_LATEST = 'latest'
 export const TAKE_EFFECT_EVERY = 'every'
-export const TAKE_EFFECT_GROP_BY = 'groupBy'
+export const TAKE_EFFECT_GROUP_BY = 'groupBy'
 
 const defaultCallEffect = (call, ...args) => call(...args)
 
@@ -62,7 +62,7 @@ export default function createMakeRxObservable({
       )
     } else if (effectType === TAKE_EFFECT_LATEST) {
       return $source.pipe(switchMap(mapActionToObserableEffect))
-    } else if (effectType === TAKE_EFFECT_GROP_BY) {
+    } else if (effectType === TAKE_EFFECT_GROUP_BY) {
       const groupByFn = effectTypeArgs[0]
       if (typeof groupByFn !== 'function') {
         throw new Error(
