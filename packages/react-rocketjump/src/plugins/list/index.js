@@ -1,9 +1,9 @@
-import { rj } from '../..'
+import { rj } from '../../index'
 import { get, getOrSelect } from '../../helpers'
 import { SUCCESS } from '../../actionTypes'
-import rjListInsert from '../listInsert';
-import rjListUpdate from '../listUpdate';
-import rjListDelete from '../listDelete';
+import rjListInsert from '../listInsert'
+import rjListUpdate from '../listUpdate'
+import rjListDelete from '../listDelete'
 
 // Data reducer for a list paginated
 export const makeListDataReducer = (

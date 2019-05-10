@@ -1,4 +1,4 @@
-import { rj } from '../..'
+import { rj } from '../../index'
 import { set, get } from '../../helpers'
 
 const TYPE = 'RJ_LIST_DELETE'

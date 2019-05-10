@@ -1,5 +1,5 @@
 import { omit } from '../../helpers'
-import { rj } from '../..'
+import { rj } from '../../index'
 import { PENDING, SUCCESS, FAILURE, CLEAN } from '../../actionTypes';
 
 const defaultKeyMaker = action => (action.meta ? action.meta.id : null)

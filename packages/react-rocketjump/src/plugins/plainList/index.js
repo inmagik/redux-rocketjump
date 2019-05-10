@@ -1,4 +1,4 @@
-import { rj } from '../..'
+import { rj } from '../../index'
 import { SUCCESS } from '../../actionTypes'
 import rjListInsert from '../listInsert';
 import rjListUpdate from '../listUpdate';
