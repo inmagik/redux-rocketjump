@@ -7,12 +7,16 @@ import { EFFECT_ACTION } from './actionTypes'
  */
 function Builder(actionCreator, dispatch, subject) {
   const callbacks = {};
-  let builtMeta = {};
+  let metaTransforms = [];
 
   this.withMeta = meta => {
-    builtMeta = {
-      ...builtMeta,
-      ...meta
+    if (typeof meta === 'function') {
+      metaTransforms.push(meta)
+    } else {
+      metaTransforms.push(oldMeta => ({
+        ...oldMeta,
+        ...meta
+      }))
     }
     return this
   }
@@ -32,9 +36,11 @@ function Builder(actionCreator, dispatch, subject) {
     console.log(action)
     if (action[EFFECT_ACTION] === true) {
       action = action.extend({
-        meta: builtMeta, 
         callbacks,
       })
+      action = metaTransforms.reduce((action, transform) => {
+        return action.withMeta(transform)
+      }, action)
       delete action.extend
       delete action.withMeta
       console.log(action)
@@ -104,8 +110,8 @@ function attachBuilder(boundActionCreator, actionCreator, dispatch, subject) {
  * The basic call has no way to leverage `meta`, `onSuccess` or `onFailure` features provided by the library
  * 
  * In the advanced call it is possible to call the three methods `withMeta`, `onSuccess` and `onFailure` in 
- *  any order and even more than one time: metadata are merged using JS plain object merging, and the callbacks
- *  are overwritten. It is mandatory that the last method of the call is the `run` method, which takes the 
+ *  any order and even more than one time: the callbacks are overwritten, and meta transformation are stacked. 
+ *  It is mandatory that the last method of the call is the `run` method, which takes the 
  *  arguments to be passed to the action creator. Apart from the `run` method, the advanced call must contain
  *  at least one other method among those documented here in order to be valid. In other words, the call
  * 
@@ -113,6 +119,14 @@ function attachBuilder(boundActionCreator, actionCreator, dispatch, subject) {
  * 
  *  is not valid in will raise an exception. It is in fact meaningless to dispatch an action in this way, since
  *  it would be semantically equivalent but more verbose with respect to the direct call action(arg1, arg2, arg3)
+ * 
+ *  A note about meta transformations:
+ *    the withMeta helper accepts either a plain object or a function. In case of function, that function will
+ *    be invoked with the previous meta object as a parameter, and is expected to return the next meta object,
+ *    which will overwrite the previous one. If instead it is given a plain object, its behaviour is equivalent
+ *    of giving a function that spreads the object over the previous meta, and returns the result, such as 
+ * 
+ *    withMeta(obj) is equivalent to withMeta(oldMeta => ({ ...oldMeta, ...obj }))
  * 
  */
 function bindActionCreator(actionCreator, dispatch, subject) {

@@ -14,14 +14,21 @@ const makeEffectAction = action => {
 }
 
 /**
- * Just a shortcut to extend an action object with some more metadata,
- * its behaviour is equivalent to the behaviour of extend when the extension object contains
- * just a bunch of metadata
+ * Powerful helper to work with metadata
+ * Its arg can either be a plain object, in which case it is merged in , or a function, in which
+ *  case meta is hard set to the return value of the function
  */
 function withMeta(meta) {
-  return this.extend({
-    meta
+  const out = makeEffectAction({
+    ...this,
+    meta: typeof meta === 'function' ? meta(this.meta) : {
+      ...this.meta,
+      ...meta
+    }
   })
+  out.extend = extend.bind(out)
+  out.withMeta = withMeta.bind(out)
+  return out
 }
 
 /**

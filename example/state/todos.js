@@ -33,7 +33,7 @@ export const todosState = reactRj(todosState1, {
     title: `Kill Humans ~${gang} - ${ns}`,
   }]),
   actions: ({ run }) => ({
-    run: id => run(id).withMeta({ w: 3 })
+    run: id => run(id).withMeta(meta => ({ ...meta, w: 3, k: meta.z }))
   }),
   // () => request.get(`${API_URL}/todos`).then(({ body }) => body),
 })()
