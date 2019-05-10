@@ -5,6 +5,12 @@ import { PENDING, SUCCESS, FAILURE, CLEAN } from '../../actionTypes';
 const defaultKeyMaker = action => (action.meta ? action.meta.id : null)
 const defaultDataTransform = arg => arg
 
+const defaultState = {
+  pending: false,
+  error: null,
+  data: null,
+}
+
 const makeItemReducer = dataTransform => (prevState, action) => {
   const { type } = action
   switch (type) {
@@ -126,7 +132,7 @@ const rjMap = (mapConfig = {}) =>
         mapConfig.keepCompleted,
         oldReducer
       ),
-    selectors: () => makeMapSelectors(getBaseState),
+    selectors: () => makeMapSelectors(),
     takeEffect: ["groupBy", typeof mapConfig.key === 'function' ? mapConfig.key : defaultKeyMaker],
   })
 

@@ -1,13 +1,15 @@
 import { rj } from '../..'
+import { set, get } from '../../helpers'
 
 const TYPE = 'RJ_LIST_UPDATE'
 
 const defaultIdentity = (action, listItem) => action.item.id === listItem.id
-const defaultUpdater = (action, listItem) => action.item
+const defaultUpdater = (action) => action.item
 
 const rjListUpdate = (config = {}) => {
   const identity = config.identity || defaultIdentity
   const updater = config.updater || defaultUpdater
+  const path = config.path || 'data'
 
   return rj({
     actions: () => ({
@@ -15,13 +17,9 @@ const rjListUpdate = (config = {}) => {
     }),
     reducer: oldReducer => (state, action) => {
       if (action.type === TYPE) {
-        return {
-          ...state,
-          data: {
-            ...state.data,
-            list: state.data.list.map(listItem => identity(action, listItem) ? updater(action, listItem) : listItem )
-          }
-        }
+        const newState = { ...state }
+        set(newState, path, get(newState, path).map(listItem => identity(action, listItem) ? updater(action, listItem) : listItem))
+        return newState
       }
       return oldReducer(state, action)
     }

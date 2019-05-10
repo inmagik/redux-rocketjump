@@ -1,6 +1,9 @@
 import { rj } from '../..'
 import { get, getOrSelect } from '../../helpers'
 import { SUCCESS } from '../../actionTypes'
+import rjListInsert from '../listInsert';
+import rjListUpdate from '../listUpdate';
+import rjListDelete from '../listDelete';
 
 // Data reducer for a list paginated
 export const makeListDataReducer = (
@@ -65,10 +68,10 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
 
   const getNumPages = state => {
     const count = getCount(state)
-    const getPageSize = getPageSize(state)
+    const pageSize = getPageSize(state)
     return count === null ? null : Math.ceil(count / pageSize)
   }
-  
+
   const hasNext = state => {
     const data = getData(state)
     return data === null ? false : data.pagination.next !== null
@@ -111,20 +114,24 @@ const rjList = (config = {}) => {
   if (!config.pagination) throw new Error('[reactRj - rjList] Please define a pagination adapter (config.pagination)');
   if (!config.pageSize) throw new Error('[reactRj - rjList] Please define the page size (config.pageSize)')
   const dataReducer = makeListDataReducer(config.pagination)
-  return rj({
-    selectors: ({ getData }) => makeListSelectors(getData, config.pageSize),
-    reducer: oldReducer => (state, action) => {
-      if (action.type === SUCCESS) {
-        return {
-          ...state,
-          pending: false,
-          data: dataReducer(state.data, action),
+  return rj(
+    rjListInsert({ path: 'data.list' }),
+    rjListUpdate({ path: 'data.list' }),
+    rjListDelete({ path: 'data.list' }),
+    {
+      selectors: ({ getData }) => makeListSelectors(getData, config.pageSize),
+      reducer: oldReducer => (state, action) => {
+        if (action.type === SUCCESS) {
+          return {
+            ...state,
+            pending: false,
+            data: dataReducer(state.data, action),
+          }
+        } else {
+          return oldReducer(state, action)
         }
-      } else {
-        return oldReducer(state, action)
       }
-    }
-  })
+    })
 }
 
 export default rjList

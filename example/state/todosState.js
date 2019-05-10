@@ -1,16 +1,8 @@
 import { rj as reactRj } from 'react-rocketjump'
 import rjPlainList from 'react-rocketjump/plugins/plainList'
-import rjListInsert from 'react-rocketjump/plugins/listInsert'
-import rjListUpdate from 'react-rocketjump/plugins/listUpdate'
-import rjListDelete from 'react-rocketjump/plugins/listDelete'
-
-const API_URL = `http://${window.location.hostname}:3000`
 
 export const TodosListState = reactRj(
   rjPlainList(),
-  rjListInsert(),
-  rjListUpdate(),
-  rjListDelete(),
   {
     effect: () => Promise.resolve([
       {
