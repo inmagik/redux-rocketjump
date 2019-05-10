@@ -27,7 +27,7 @@ describe('React-RocketJump actions', () => {
 
   it('should produce default actions', () => {
 
-    const rjState = reactRj(() => [{ id: 1, name: 'admin' }]);
+    const rjState = reactRj(() => Promise.resolve([{ id: 1, name: 'admin' }]));
 
     const wrapper = makeRjComponent(rjState)
 
@@ -40,7 +40,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [RUN])
     });
 
@@ -65,7 +65,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [CLEAN])
     });
 
@@ -89,7 +89,7 @@ describe('React-RocketJump actions', () => {
   it('should expose builder', () => {
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
     });
 
     const wrapper = makeRjComponent(rjState)
@@ -103,7 +103,7 @@ describe('React-RocketJump actions', () => {
   it('should now allow direct run invocation', () => {
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
     });
 
     const wrapper = makeRjComponent(rjState)
@@ -113,7 +113,7 @@ describe('React-RocketJump actions', () => {
 
   it('should use onSuccess', done => {
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }]
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }])
     });
 
     const wrapper = makeRjComponent(rjState)
@@ -153,7 +153,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [RUN])
     });
 
@@ -174,7 +174,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [RUN])
     });
 
@@ -197,7 +197,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [RUN])
     });
 
@@ -219,7 +219,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = [];
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }],
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, [RUN])
     });
 
@@ -240,7 +240,7 @@ describe('React-RocketJump actions', () => {
   it('should allow action renaming', () => {
 
     const rjState = reactRj({
-      effect: () => [{ id: 1, name: 'admin' }]
+      effect: () => Promise.resolve([{ id: 1, name: 'admin' }])
     });
 
     const Component = (props) => null
@@ -263,7 +263,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: id => [{ id: id + 7, name: 'admin' }],
+      effect: id => Promise.resolve([{ id: id + 7, name: 'admin' }]),
       actions: ({ run }) => ({
         run: id => run(id * 2)
       }),
@@ -281,9 +281,8 @@ describe('React-RocketJump actions', () => {
         type: 'SUCCESS',
         meta: {},
         payload: {
-          data: { id: 9, name: 'admin' }, // Array?
+          data: [{ id: 9, name: 'admin' }],
           params: [2]
-          // params: [1]
         }
       })
       done()
@@ -298,7 +297,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: id => [{ id: id + 7, name: 'admin' }],
+      effect: id => Promise.resolve([{ id: id + 7, name: 'admin' }]),
       actions: ({ run }) => ({
         runDouble: id => run(id * 2)
       }),
@@ -316,9 +315,8 @@ describe('React-RocketJump actions', () => {
         type: 'SUCCESS',
         meta: {},
         payload: {
-          data: { id: 9, name: 'admin' }, // Array?
+          data: [{ id: 9, name: 'admin' }],
           params: [2]
-          // params: [1]
         }
       })
       done()
@@ -336,7 +334,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: (id, name) => [{ id: id + 7, name: name }],
+      effect: (id, name) => Promise.resolve([{ id: id + 7, name: name }]),
       actions: ({ run }) => ({
         runObject: object => run(object.id, object.name)
       }),
@@ -354,9 +352,8 @@ describe('React-RocketJump actions', () => {
         type: 'SUCCESS',
         meta: {},
         payload: {
-          data: { id: 8, name: 'admin' }, // Array?
+          data: [{ id: 8, name: 'admin' }],
           params: [1, 'admin']
-          // params: [1]
         }
       })
       done()
@@ -371,7 +368,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: (id, name) => [{ id: id + 7, name: name }],
+      effect: (id, name) => Promise.resolve([{ id: id + 7, name: name }]),
       actions: ({ run }) => ({
         runObject: object => run(object.id, object.name).withMeta({ z: 1 })
       }),
@@ -389,9 +386,8 @@ describe('React-RocketJump actions', () => {
         type: 'SUCCESS',
         meta: { z: 1 },
         payload: {
-          data: { id: 8, name: 'admin' }, // Array?
+          data: [{ id: 8, name: 'admin' }],
           params: [1, 'admin']
-          // params: [1]
         }
       })
       done()
@@ -406,7 +402,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: (id, name) => [{ id: id + 7, name: name }],
+      effect: (id, name) => Promise.resolve([{ id: id + 7, name: name }]),
       actions: ({ run }) => ({
         runObject: object => run(object.id, object.name).withMeta({ z: 1 }).withMeta(({ z }) => ({ x: z }))
       }),
@@ -424,9 +420,8 @@ describe('React-RocketJump actions', () => {
         type: 'SUCCESS',
         meta: { x: 1 },
         payload: {
-          data: { id: 8, name: 'admin' }, // Array?
+          data: [{ id: 8, name: 'admin' }],
           params: [1, 'admin']
-          // params: [1]
         }
       })
       done()
@@ -441,7 +436,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: (id, name) => [{ id: id + 7, name: name }],
+      effect: (id, name) => Promise.resolve([{ id: id + 7, name: name }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, ['CUSTOM'])
     });
 
@@ -466,7 +461,7 @@ describe('React-RocketJump actions', () => {
     const actionLog = []
 
     const rjState = reactRj({
-      effect: (id, name) => [{ id: id + 7, name: name }],
+      effect: (id, name) => Promise.resolve([{ id: id + 7, name: name }]),
       reducer: oldReducer => makeActionObserver(oldReducer, actionLog, ['CUSTOM'])
     });
 
