@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 // import { rj } from 'redux-rocketjump'
 import { rj as reactRj, ConfigureRj } from 'react-rocketjump'
 import Todos from './components/Todos'
+import ReactTodos from './components/ReactTodos'
 
 // const reduxRj = rj({
 //   type: 'DRAGO_23',
@@ -26,13 +27,10 @@ const callMaMen = (apiFn, ...params) => {
 }
 
 export default function App() {
-  const [count, setCount] = useState(0)
-  // console.log('RENDER APP!')
   return (
     // <ConfigureRj callEffect={callMaMen}>
       <div>
-        <button onClick={() => setCount(count + 1)}>INC {count}</button>
-        <Todos />
+        <ReactTodos />
       </div>
     // </ConfigureRj>
   )
