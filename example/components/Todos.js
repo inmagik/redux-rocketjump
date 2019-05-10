@@ -21,7 +21,7 @@ class Todos extends PureComponent {
   componentDidMount() {
     
     this.props.loadTodos
-      .meta({c: 3})
+      .withMeta({c: 3})
       .onSuccess(() => console.log(1))
       .onFailure(() => console.log(2))
       .run(1)

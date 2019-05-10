@@ -28,9 +28,9 @@ const todosState1 = reactRj(todosState0, {
 
 export const todosState = reactRj(todosState1, {
   callEffect: callMaMen,
-  effect: (gang = '') => Promise.resolve([{
+  effect: (gang = '', ns = '') => Promise.resolve([{
     id: 23,
-    title: `Kill Humans ~${gang}`,
+    title: `Kill Humans ~${gang} - ${ns}`,
   }]),
   actions: ({ run }) => ({
     run: id => run(id).withMeta({ w: 3 })

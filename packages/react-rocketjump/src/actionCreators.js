@@ -1,24 +1,34 @@
 import { RUN, UNLOAD, EFFECT_ACTION } from './actionTypes'
 
 
-// Mark an action as an effect action
-// When an action is marked as an "effect action"
-// in addition of beeing dispatched in the local rj store
-// is passed to the rj observable to interact to sief effect:
-// run the side effect, cance it etc...
+/**
+ * Mark an action as an effect action
+ * When an action is marked as an "effect action"
+ *  in addition of being dispatched in the local rj store
+ *  it is passed to the rj observable to interact with the side effect:
+ *  run the side effect, cancel it etc...
+ */
 const makeEffectAction = action => {
   Object.defineProperty(action, EFFECT_ACTION, { value: true })
   return action
 }
 
-// Barebone action creators
-
+/**
+ * Just a shortcut to extend an action object with some more metadata,
+ * its behaviour is equivalent to the behaviour of extend when the extension object contains
+ * just a bunch of metadata
+ */
 function withMeta(meta) {
   return this.extend({
     meta
   })
 }
 
+/**
+ * This function allows to inject some extra params in a library action
+ * It is a delicate operation, since it works by constructing a new action object
+ * and rebinding the operations (extends and withMeta) to it
+ */
 function extend(extensions) {
   const out = makeEffectAction({
     ...this,
@@ -36,9 +46,15 @@ function extend(extensions) {
   return out
 }
 
-export function run(...params) {
+/**
+ * Creates a new library action
+ * A library action is a predefined action that can be handled in the context of rocketjump side effect model
+ * Such actions are wired into the library and are extremely general: customization with the `actions` directive
+ * is provided in order to adapt them (and their interface and behaviour) to user needs
+ */
+function makeLibraryAction(type, ...params) {
   const baseObject = makeEffectAction({
-    type: RUN,
+    type,
     payload: {
       params,
     },
@@ -51,51 +67,14 @@ export function run(...params) {
   baseObject.extend = extend.bind(baseObject)
   baseObject.withMeta = withMeta.bind(baseObject)
   return baseObject
+}
+
+// Barebone action creators
+
+export function run(...params) {
+  return makeLibraryAction(RUN, ...params)
 }
 
 export function unload(...params) {
-  const baseObject = makeEffectAction({
-    type: UNLOAD,
-    payload: {
-      params,
-    },
-    meta: {},
-    callbacks: {
-      onSuccess: undefined,
-      onFailure: undefined,
-    },
-  })
-  baseObject.extend = extend.bind(baseObject)
-  baseObject.withMeta = withMeta.bind(baseObject)
-  return baseObject
+  return makeLibraryAction(UNLOAD, ...params)
 }
-
-// TODO: Bro i'm not totaly pround of this name
-// but i can't fine a better name ....
-// export function run({ params = [], meta = {}, onSuccess, onFailure } = {}) {
-//   return makeEffectAction({
-//     type: RUN,
-//     payload: {
-//       params,
-//     },
-//     meta,
-//     callbacks: {
-//       onSuccess,
-//       onFailure,
-//     },
-//   })
-// }
-// run.__builder__ = {
-//   props: ['meta'],
-//   call: (fn, args, meta, { onSuccess, onFailure }) => fn({ params: args, meta, onSuccess, onFailure })
-// }
-
-// TODO: Better clear or teardown
-// export function unload(meta = {}, onSuccess = undefined, onFailure = undefined) {
-//   return makeEffectAction({ type: UNLOAD, meta, callbacks: { onSuccess, onFailure } })
-// }
-// unload.__builder__ = {
-//   props: ['meta'],
-//   call: (fn, args, meta, { onSuccess, onFailure }) => fn(meta, onSuccess, onFailure)
-// }
-
