@@ -1,8 +1,8 @@
 import { rj } from '../../index'
 import { SUCCESS } from '../../actionTypes'
-import rjListInsert from '../listInsert';
-import rjListUpdate from '../listUpdate';
-import rjListDelete from '../listDelete';
+import rjListInsert from '../listInsert/index'
+import rjListUpdate from '../listUpdate/index'
+import rjListDelete from '../listDelete/index'
 
 // Data reducer for a list paginated
 export const makeListDataReducer = (
