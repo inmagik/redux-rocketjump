@@ -33,7 +33,6 @@ function Builder(actionCreator, dispatch, subject) {
 
   this.run = (...args) => {
     let action = actionCreator(...args)
-    console.log(action)
     if (action[EFFECT_ACTION] === true) {
       action = action.extend({
         callbacks,
@@ -43,7 +42,6 @@ function Builder(actionCreator, dispatch, subject) {
       }, action)
       delete action.extend
       delete action.withMeta
-      console.log(action)
       subject.next(action)
     }
     dispatch(action)
@@ -132,7 +130,6 @@ function attachBuilder(boundActionCreator, actionCreator, dispatch, subject) {
 function bindActionCreator(actionCreator, dispatch, subject) {
   const out = (...args) => {
     const action = actionCreator(...args)
-    console.log(action)
     if (action[EFFECT_ACTION] === true) {
       delete action.extend
       delete action.withMeta
