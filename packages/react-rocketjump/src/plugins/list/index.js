@@ -48,62 +48,51 @@ export const makeListDataReducer = (
 // Selectors for a list
 export const makeListSelectors = (getData, pageSizeSelector) => {
 
-  const createSelector = (...args) => state => {
-    const last = args.pop()
-    return last(args.map(arg => arg(state)))
-  }
-
   const getPageSize =
     typeof pageSizeSelector === 'function'
       ? pageSizeSelector
       : () => pageSizeSelector
 
-  const getList = createSelector(
-    getData,
-    data => (data === null ? null : data.list)
-  )
+  const getList = state => {
+    const data = getData(state)
+    return data === null ? null : data.list
+  }
 
-  const getCount = createSelector(
-    getData,
-    data => (data === null ? null : data.pagination.count)
-  )
+  const getCount = state => {
+    const data = getData(state)
+    return data === null ? null : data.pagination.count
+  }
 
-  const getNumPages = createSelector(
-    getCount,
-    getPageSize,
-    (count, pageSize) => (count === null ? null : Math.ceil(count / pageSize))
-  )
+  const getNumPages = state => {
+    const count = getCount(state)
+    const getPageSize = getPageSize(state)
+    return count === null ? null : Math.ceil(count / pageSize)
+  }
+  
+  const hasNext = state => {
+    const data = getData(state)
+    return data === null ? false : data.pagination.next !== null
+  }
 
-  const hasNext = createSelector(
-    getData,
-    data => (data === null ? false : data.pagination.next !== null)
-  )
+  const hasPrev = state => {
+    const data = getData(state)
+    return data === null ? false : data.pagination.previous !== null
+  }
 
-  const getNumPages = createSelector(
-    getCount,
-    getPageSize,
-    (count, pageSize) => (count === null ? null : Math.ceil(count / pageSize))
-  )
+  const getNext = state => {
+    const data = getData(state)
+    return data === null ? null : data.pagination.next
+  }
 
-  const hasPrev = createSelector(
-    getData,
-    data => (data === null ? false : data.pagination.previous !== null)
-  )
+  const getPrev = state => {
+    const data = getData(state)
+    return data === null ? null : data.pagination.previous
+  }
 
-  const getNext = createSelector(
-    getData,
-    data => (data === null ? null : data.pagination.next)
-  )
-
-  const getPrev = createSelector(
-    getData,
-    data => (data === null ? null : data.pagination.previous)
-  )
-
-  const getCurrent = createSelector(
-    getData,
-    data => (data === null ? null : data.pagination.current)
-  )
+  const getCurrent = state => {
+    const data = getData(state)
+    return data === null ? null : data.pagination.current
+  }
 
   return {
     getList,
