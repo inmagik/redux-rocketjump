@@ -1,5 +1,10 @@
 import babel from 'rollup-plugin-babel'
+import fs from 'fs'
 import pkg from './package.json'
+
+const plugins = fs
+  .readdirSync('src/plugins')
+  .filter(item => item[0] !== '.')
 
 const vendors = []
   // Make all external dependencies to be exclude from rollup
@@ -10,12 +15,22 @@ const vendors = []
     'rocketjump-core/utils',
   )
 
-export default {
-  input: `src/index.js`,
+export default ['esm', 'cjs'].map(format => ({
+  input: {
+    'index': 'src/index.js',
+    ...plugins.reduce((all, plugin) => ({
+      ...all,
+      [`plugins/${plugin}/index`]: `src/plugins/${plugin}/index.js`
+    }), {})
+  },
   output: [
-    { file: `lib/index.cjs.js`, format: 'cjs', exports: 'named' },
-    { file: `lib/index.esm.js`, format: 'esm' },
+    {
+      dir: 'lib',
+      entryFileNames: '[name].[format].js',
+      exports: 'named',
+      format
+    }
   ],
   external: vendors,
-  plugins: [babel({ exclude: 'node_modules/**' })]
-}
+  plugins: [babel({ exclude: 'node_modules/**' })],
+}))
