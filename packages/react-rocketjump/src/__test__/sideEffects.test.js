@@ -1,7 +1,7 @@
 import { rj } from '..'
 import { Subject } from 'rxjs';
 import { PENDING, SUCCESS, FAILURE, CLEAN } from '../actionTypes'
-import { TAKE_EFFECT_EVERY, TAKE_EFFECT_GROUP_BY } from '../createMakeRxObservable';
+import { RUN, TAKE_EFFECT_EVERY, TAKE_EFFECT_GROUP_BY } from '../createMakeRxObservable'
 
 describe('RJ side effect model', () => {
 
@@ -20,7 +20,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
@@ -31,7 +31,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(3)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -69,7 +69,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
@@ -80,7 +80,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(3)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -115,7 +115,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [1, 'a', {}, undefined] },
       meta: {},
       callbacks: {}
@@ -145,7 +145,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: { a: 1, b: 2 },
       callbacks: {}
@@ -156,7 +156,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(3)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: { a: 1, b: 2 },
         callbacks: {}
@@ -194,7 +194,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: { a: 1, b: 2 },
       callbacks: {}
@@ -205,7 +205,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(3)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: { a: 1, b: 2 },
         callbacks: {}
@@ -241,7 +241,7 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
@@ -259,7 +259,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(3)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -298,14 +298,14 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
     })
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
@@ -317,7 +317,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(5)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -329,7 +329,7 @@ describe('RJ side effect model', () => {
       })
 
       expect(mockCallback).nthCalledWith(3, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -372,14 +372,14 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
     })
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {}
@@ -390,7 +390,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(6)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -402,7 +402,7 @@ describe('RJ side effect model', () => {
       })
 
       expect(mockCallback).nthCalledWith(3, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: [] },
         meta: {},
         callbacks: {}
@@ -459,28 +459,28 @@ describe('RJ side effect model', () => {
     makeRxObservable(subject.asObservable()).subscribe(mockCallback)
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: ['Alice'] },
       meta: { name: 'Alice' },
       callbacks: {}
     })
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: ['Bob'] },
       meta: { name: 'Bob' },
       callbacks: {}
     })
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: ['Alice'] },
       meta: { name: 'Alice' },
       callbacks: {}
     })
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: ['Eve'] },
       meta: { name: 'Eve' },
       callbacks: {}
@@ -491,7 +491,7 @@ describe('RJ side effect model', () => {
       expect(mockCallback).toBeCalledTimes(11)
 
       expect(mockCallback).nthCalledWith(1, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: ['Alice'] },
         meta: { name: 'Alice' },
         callbacks: {}
@@ -503,7 +503,7 @@ describe('RJ side effect model', () => {
       })
 
       expect(mockCallback).nthCalledWith(3, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: ['Bob'] },
         meta: { name: 'Bob' },
         callbacks: {}
@@ -515,7 +515,7 @@ describe('RJ side effect model', () => {
       })
 
       expect(mockCallback).nthCalledWith(5, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: ['Alice'] },
         meta: { name: 'Alice' },
         callbacks: {}
@@ -527,7 +527,7 @@ describe('RJ side effect model', () => {
       })
 
       expect(mockCallback).nthCalledWith(7, {
-        type: 'RUN',
+        type: RUN,
         payload: { params: ['Eve'] },
         meta: { name: 'Eve' },
         callbacks: {}
@@ -638,7 +638,7 @@ describe('RJ side effect model', () => {
     }
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {
@@ -668,7 +668,7 @@ describe('RJ side effect model', () => {
     }
 
     subject.next({
-      type: 'RUN',
+      type: RUN,
       payload: { params: [] },
       meta: {},
       callbacks: {
