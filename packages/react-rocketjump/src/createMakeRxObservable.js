@@ -31,6 +31,7 @@ export default function createMakeRxObservable({
       const params = payload.params
 
       return concat(
+        of(action),
         of({ type: PENDING, meta }),
         from(callEffect(effectCall, ...params)).pipe(
           map(data => ({ type: SUCCESS, payload: { data, params }, meta })),

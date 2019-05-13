@@ -43,8 +43,9 @@ function Builder(actionCreator, dispatch, subject) {
       delete action.extend
       delete action.withMeta
       subject.next(action)
+    } else {
+      dispatch(action)
     }
-    dispatch(action)
   }
   
   return this
@@ -134,8 +135,9 @@ function bindActionCreator(actionCreator, dispatch, subject) {
       delete action.extend
       delete action.withMeta
       subject.next(action)
+    } else {
+      dispatch(action)
     }
-    dispatch(action)
   }
   return attachBuilder(out, actionCreator, dispatch, subject)
 }
