@@ -6,7 +6,7 @@ import rjListUpdate from '../listUpdate/index'
 import rjListDelete from '../listDelete/index'
 
 // Data reducer for a list paginated
-export const makeListDataReducer = (
+const makeListDataReducer = (
   paginationAdapter,
   customListReducer,
   customPaginationReducer
@@ -49,12 +49,7 @@ export const makeListDataReducer = (
 }
 
 // Selectors for a list
-export const makeListSelectors = (getData, pageSizeSelector) => {
-
-  const getPageSize =
-    typeof pageSizeSelector === 'function'
-      ? pageSizeSelector
-      : () => pageSizeSelector
+const makeListSelectors = (getData, pageSize) => {
 
   const getList = state => {
     const data = getData(state)
@@ -68,7 +63,6 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
 
   const getNumPages = state => {
     const count = getCount(state)
-    const pageSize = getPageSize(state)
     return count === null ? null : Math.ceil(count / pageSize)
   }
 
@@ -113,7 +107,7 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
 const rjList = (config = {}) => {
   if (!config.pagination) throw new Error('[reactRj - rjList] Please define a pagination adapter (config.pagination)');
   if (!config.pageSize) throw new Error('[reactRj - rjList] Please define the page size (config.pageSize)')
-  const dataReducer = makeListDataReducer(config.pagination)
+  const dataReducer = makeListDataReducer(config.pagination, config.customListReducer, config.customPaginationReducer)
   return rj(
     rjListInsert({ path: 'data.list' }),
     rjListUpdate({ path: 'data.list' }),
