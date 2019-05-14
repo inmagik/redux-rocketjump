@@ -5,95 +5,81 @@ import { PENDING, SUCCESS, FAILURE, CLEAN } from '../../actionTypes';
 const defaultKeyMaker = action => (action.meta ? action.meta.id : null)
 const defaultDataTransform = arg => arg
 
-const defaultState = {
-  pending: false,
+const handlePendingItem = (prevState, action) => ({
+  ...prevState,
   error: null,
-  data: null,
-}
+  pending: true,
+  data: (prevState && prevState.data) || null
+})
 
-const makeItemReducer = dataTransform => (prevState, action) => {
-  const { type } = action
-  switch (type) {
-    case PENDING:
-      return {
-        ...prevState,
-        error: null,
-        pending: true,
-      }
-    case FAILURE:
-      return {
-        ...prevState,
-        pending: false,
-        error: action.payload,
-      }
-    case SUCCESS:
-      return {
-        ...prevState,
-        pending: false,
-        data: dataTransform(action.payload.data),
-      }
-    case CLEAN:
-      // So easy if someone add some shit to state
-      // simply preserve that keys!
-      return { ...prevState, ...defaultState }
-    default:
-      return prevState
-  }
-}
+const handleSuccessItem = (prevState, action, dataTransform) => ({
+  ...prevState,
+  pending: false,
+  data: dataTransform(action.payload.data),
+})
+
+const handleFailureItem = (prevState, action) => ({
+  ...prevState,
+  pending: false,
+  error: action.payload,
+})
 
 const makeMapReducer = (
   keyMaker = defaultKeyMaker,
   dataTransform,
   keepCompleted = true,
-  fallbackReducer = null,
+  fallbackReducer,
 ) => {
-  const itemReducer = makeItemReducer(dataTransform || defaultDataTransform)
+  return (prevState, action) => {
+    const key = keyMaker(action)
 
-  return (prevState = {}, action) => {
+    prevState = prevState || {}
+
     switch (action.type) {
-      case PENDING:
-      case FAILURE: {
-        const key = keyMaker(action)
+      case PENDING: {
         return {
           ...prevState,
-          [key]: itemReducer(prevState[key], action),
+          [key]: handlePendingItem(prevState[key], action),
+        }
+      }
+      case FAILURE: {
+        return {
+          ...prevState,
+          [key]: handleFailureItem(prevState[key], action),
         }
       }
       case SUCCESS: {
-        const key = keyMaker(action)
         if (keepCompleted) {
           return {
             ...prevState,
-            [key]: itemReducer(prevState[key], action),
+            [key]: handleSuccessItem(prevState[key], action, dataTransform || defaultDataTransform),
           }
         } else {
-          return omit(prevState, key)
+          return omit(prevState, [key])
         }
       }
       case CLEAN: {
-        const key = keyMaker(action)
         // Clear key state
         if (key) {
-          return omit(prevState, key)
+          return omit(prevState, [key])
         }
         // Clear all the state
         return {}
       }
       default:
-        if (fallbackReducer) return fallbackReducer(prevState, action)
-        else return prevState
+        return fallbackReducer(prevState, action)
     }
   }
 }
 
 const makeMapSelectors = () => {
+
   const getMapPendings =
-    state => {
+    state =>
       Object.keys(state).reduce(
         (r, key) => (state[key].pending ? { ...r, [key]: true } : r),
         {}
       )
-    }
 
   const getMapLoadings = getMapPendings
 
@@ -123,7 +109,7 @@ const rjMap = (mapConfig = {}) =>
   rj({
     actions: ({ run, clean }) => ({
       runKey: (id, ...params) => run(id, ...params).withMeta({ id }),
-      cleanKey: id => clean({ id }).withMeta({ id }),
+      cleanKey: id => clean(id).withMeta({ id }),
     }),
     reducer: oldReducer =>
       makeMapReducer(
