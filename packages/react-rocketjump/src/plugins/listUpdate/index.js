@@ -17,8 +17,10 @@ const rjListUpdate = (config = {}) => {
     }),
     reducer: oldReducer => (state, action) => {
       if (action.type === TYPE) {
-        const newState = { ...state }
-        set(newState, path, get(newState, path).map(listItem => identity(action, listItem) ? updater(action, listItem) : listItem))
+        const newState = {...state}
+        let list = get(newState, path)
+        if (list) list = list.map(listItem => identity(action, listItem) ? updater(action, listItem) : listItem)
+        set(newState, path, list)
         return newState
       }
       return oldReducer(state, action)

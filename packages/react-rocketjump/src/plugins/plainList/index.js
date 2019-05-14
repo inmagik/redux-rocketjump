@@ -10,11 +10,11 @@ export const makeListDataReducer = (
 ) => {
   const defaultListReducer = (prevState, { payload: { data }, meta }) => {
     const newList = data
-    if (meta && meta.append && Array.isArray(prevState)) {
-      return prevState.concat(newList)
+    if (meta && meta.append) {
+      return (prevState || []).concat(newList)
     }
-    if (meta && meta.prepend && Array.isArray(prevState)) {
-      return newList.concat(prevState)
+    if (meta && meta.prepend) {
+      return newList.concat(prevState || [])
     }
     return newList
   }

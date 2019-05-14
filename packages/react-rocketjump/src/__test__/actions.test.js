@@ -2,7 +2,7 @@ import React from 'react'
 import { rj as reactRj, connectRj } from '..'
 import Enzyme, { shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { RUN, CLEAN, SUCCESS, FAILURE } from '../actionTypes'
+import { RUN, CLEAN, SUCCESS } from '../actionTypes'
 
 Enzyme.configure({ adapter: new Adapter() });
 

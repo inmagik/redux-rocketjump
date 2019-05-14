@@ -28,7 +28,7 @@ export const nextPreviousPaginationAdapter = {
 
 const pickLimitOffset = ({ limit, offset }) => ({
   offset: +(offset || 0),
-  limit,
+  limit: +limit,
 })
 
 export const limitOffsetPaginationAdapter = {
