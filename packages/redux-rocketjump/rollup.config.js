@@ -1,5 +1,5 @@
-import babel from 'rollup-plugin-babel';
-import fs from 'fs';
+import babel from 'rollup-plugin-babel'
+import fs from 'fs'
 import pkg from './package.json'
 
 const plugins = fs
