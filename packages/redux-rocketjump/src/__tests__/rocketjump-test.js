@@ -23,7 +23,7 @@ describe('Rocketjump', () => {
       })
     ).not.toThrow()
   })
-  it('should handle the configuration of rocketjump in the config field', () => {
+  it('should handle the configuration of rocketjump in the __rjconfig field', () => {
     expect(
       rj(
         {
@@ -36,7 +36,7 @@ describe('Rocketjump', () => {
         {
           rateLimit: 99,
         }
-      ).config
+      ).__rjconfig
     ).toEqual({
       coolestGuyInDaWorld: 'Gio Va aka Fu Mello',
       type: 'GET_SOCI',

@@ -24,17 +24,17 @@ export default function combineRjs(combine, config) {
       const givenRj = combine[key]
 
       const stateSelector =
-        typeof givenRj.config.state === 'undefined'
+        typeof givenRj.__rjconfig.state === 'undefined'
           ? mergeStateKey(config.state, key)
-          : givenRj.config.state
+          : givenRj.__rjconfig.state
 
       const reducerKey =
-        typeof givenRj.config.state === 'undefined' ? key : givenRj.config.state
+        typeof givenRj.__rjconfig.state === 'undefined' ? key : givenRj.__rjconfig.state
 
       const { reducer, saga, actions, selectors } = givenRj({
         __rjtype: $TYPE_RJ_COMBINE_CONFIG,
         state: stateSelector,
-        callApi: givenRj.config.callApi || config.callApi,
+        callApi: givenRj.__rjconfig.callApi || config.callApi,
         // apiExtraParams: config.apiExtraParams,
         // successEffect: config.successEffect,
         // failureEffect: config.failureEffect,
