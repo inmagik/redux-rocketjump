@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Quick Start · Redux-RocketJump</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Let&#x27;s start from a simple case, just to get familiar with RocketJump. Basically, RocketJump provides just a function able to generate actions, reducers, selectors and sagas for a given API.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Quick Start · Redux-RocketJump"/><meta property="og:type" content="website"/><meta property="og:url" content="https://inmagik.github.io/redux-rocketjump/"/><meta property="og:description" content="&lt;p&gt;Let&#x27;s start from a simple case, just to get familiar with RocketJump. Basically, RocketJump provides just a function able to generate actions, reducers, selectors and sagas for a given API.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-rocketjump/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-rocketjump/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-rocketjump/css/main.css"/><script src="/redux-rocketjump/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-rocketjump/"><h2 class="headerTitle">Redux-RocketJump</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/installation" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/api/rocketpartial" target="_self">API</a></li><li class=""><a href="https://github.com/inmagik/redux-rocketjump" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Getting started</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">About<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/intro">Motivation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Getting started<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/installation">Installation</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/redux-rocketjump/docs/quickstart">Quick Start</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">API<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketpartial">RocketPartial</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketjump">RocketJump</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/composition">Composition</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins-intro">Introduction</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_cache">Cache Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_combine">Combine Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_delete">Delete Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_hor">Hor Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_list">List Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_map">Map Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_promise">Promise Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_update">Update Plugin</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Quick Start</h1></header><article><div><span><p>Let's start from a simple case, just to get familiar with RocketJump. Basically, RocketJump provides just a function able to generate actions, reducers, selectors and sagas for a given API.</p>
+<p>Now we are going to apply this function on a real case. Suppose we are developing a simple Todo app, and we want to fetch some ToDos from an asynchronous REST API. This requires just a plain GET request, which is, unsurprisigly, asynchronous! We can code the API call with a simple asynchronous function returning a Promise:</p>
+<pre><code class="hljs css language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadTodosFromApi</span>(<span class="hljs-params">params</span>) </span>{
+  <span class="hljs-keyword">let</span> myHeaders = <span class="hljs-keyword">new</span> Headers();
+
+  <span class="hljs-keyword">let</span> config = { 
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,
+    <span class="hljs-attr">headers</span>: <span class="hljs-keyword">new</span> Headers(),
+    <span class="hljs-attr">body</span>: params
+  };
+
+  <span class="hljs-keyword">return</span> fetch(<span class="hljs-string">'https://myawesomehost/api/posts'</span>, config)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+}
+</code></pre>
+<p>Ok, now we are ready to integrate our <code>loadTodosFromApi</code> asynchronous operation with Redux data flow. In order to do this, we need to generate</p>
+<ul>
+<li>some actions to handle the following events
+<ul>
+<li>make the request</li>
+<li>request completes with success</li>
+<li>request completes with error</li>
+</ul></li>
+<li>a reducer to manage these actions and update the state in a consisten way</li>
+<li>some selectors to extract data from the state</li>
+<li>a saga to wire all it up</li>
+</ul>
+<p>Redux-RocketJump can provide all these elements out of the box!
+This is all we need</p>
+<ul>
+<li>a name for the asynchronous task (it <strong>must</strong> be unique throughout your application)</li>
+<li>a path that describes where to store data in the redux store</li>
+<li>the asynchronous task we created before</li>
+</ul>
+<p>This parameters must be passed in to RocketJump as a plain JavaScript object, like</p>
+<pre><code class="hljs css language-js">{
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'GET_TODOS'</span>,                        <span class="hljs-comment">// The name of the task</span>
+  state: <span class="hljs-string">'todos'</span>,                           <span class="hljs-comment">// The path to store data at</span>
+  api: <span class="hljs-function"><span class="hljs-params">params</span> =&gt;</span> loadTodosFromApi(params)   <span class="hljs-comment">// The asynchrous task</span>
+}
+</code></pre>
+<p>What we get is an object containing action dispatchers, reducer, selectors and saga. The keys of this object are the following</p>
+<ul>
+<li><strong>actions</strong>: contains the actions dispatchers
+<ul>
+<li><strong>load</strong>: dispatches the action that starts the asynchronous task</li>
+<li><strong>unload</strong>: dispatches an action to stop the asychronous task before it completes and to clear the state</li>
+</ul></li>
+<li><strong>reducer</strong>: contains the reducer that manages data related to this task, i.e. the output, the errors and the state of our request</li>
+<li><strong>saga</strong>: contains the saga that manages the side effects of the call</li>
+<li><strong>selectors</strong>: contains selectors to access data regarding this task
+<ul>
+<li><strong>isLoading</strong>: retrieves the loading state of the application (<code>true</code> if the task is pending, <code>false</code> otherwise)</li>
+<li><strong>getData</strong>: retrieves the data returned from the call when it completes with success</li>
+<li><strong>getError</strong>: retrieves the error returned from the call when it completes, if any</li>
+</ul></li>
+</ul>
+<p>Now, let's put all these things together</p>
+<p>This is our state/todos.js file</p>
+<pre><code class="hljs css language-jsx"><span class="hljs-comment">// Import rocketjump (rj for friends) </span>
+<span class="hljs-keyword">import</span> { rj } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-rocketjump'</span>
+<span class="hljs-comment">// Main export</span>
+<span class="hljs-comment">// Here we deal with actions, reducers, selectors and sagas that have been created for us</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {
+  <span class="hljs-comment">// Actions generated by rj</span>
+  actions: {
+    <span class="hljs-comment">// This is the function that triggers the side effect</span>
+    load: loadTodos,
+    <span class="hljs-comment">// This function stops the asynchronous task started with `load` and clears the state</span>
+    unload: unloadTods,
+  },
+  <span class="hljs-comment">// Selectors generated by rj</span>
+  selectors: {
+    <span class="hljs-comment">// Selector used to get the value returned by the asynchronous task, when ready</span>
+    getData: getTodos,
+    <span class="hljs-comment">// Selector used to detect if the asynchronous task is running (i.e. the API call is loading)</span>
+    isLoading: isLoading,
+    <span class="hljs-comment">// Selector used to get the error with which the last API call failed (if available)</span>
+    getError: getTodsError,
+  },
+  <span class="hljs-comment">// The generated reducer</span>
+  reducer,
+  <span class="hljs-comment">// The generated saga</span>
+  saga,
+} = rj({
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'GET_TODOS'</span>,
+  state <span class="hljs-string">'todos'</span>,
+  <span class="hljs-attr">api</span>: <span class="hljs-function"><span class="hljs-params">params</span> =&gt;</span> loadTodosFromApi(params),
+})()
+</code></pre>
+<blockquote>
+<p>Please note that the rj function returns another function! We have to invoke this second function to get the actual generated items.
+The reasons of this necessity will be clarified in the API chapter</p>
+</blockquote>
+<p>And this is our root state file (state/index.js)</p>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> { createStore, compose, applyMiddleware, combineReducers } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux'</span>
+<span class="hljs-keyword">import</span> createSagaMiddleware <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-saga'</span>
+<span class="hljs-keyword">import</span> { makeAppsReducers, makeAppsSaga } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-rocketjump'</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> todos <span class="hljs-keyword">from</span> <span class="hljs-string">'./todos'</span>
+
+<span class="hljs-comment">// Merge all our application parts</span>
+<span class="hljs-keyword">const</span> APPS = {
+  todos
+}
+
+<span class="hljs-comment">// Create root reducer</span>
+<span class="hljs-keyword">const</span> rootReducer = combineReducers({
+  ...makeAppsReducers(APPS),
+})
+
+<span class="hljs-comment">// Create main saga</span>
+<span class="hljs-keyword">const</span> mainSaga = makeAppsSaga(APPS)
+
+<span class="hljs-comment">// Initialize redux store</span>
+<span class="hljs-keyword">const</span> preloadedState = <span class="hljs-literal">undefined</span>
+<span class="hljs-keyword">const</span> sagaMiddleware = createSagaMiddleware()
+<span class="hljs-keyword">const</span> store = createStore(
+  rootReducer,
+  preloadedState,
+  compose(
+    applyMiddleware(sagaMiddleware),
+  )
+)
+
+<span class="hljs-comment">// Start main saga</span>
+sagaMiddleware.run(mainSaga)
+
+<span class="hljs-comment">// Export the created store</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store
+</code></pre>
+<p>Congratulations, you have set up your first RocketJump with success!</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/installation"><span class="arrow-prev">← </span><span>Installation</span></a><a class="docs-next button" href="/redux-rocketjump/docs/api/rocketpartial"><span class="function-name-prevnext">RocketPartial</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Plugins · Redux-RocketJump</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Redux-RocketJump ships with a set of plugins that can be used as out of the box solutions for common tasks. The creation and usage of plugins is heavily based on the &lt;a href=&quot;/redux-rocketjump/docs/api/composition&quot;&gt;composition features&lt;/a&gt; embedded in Redux-RocketJump.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Plugins · Redux-RocketJump"/><meta property="og:type" content="website"/><meta property="og:url" content="https://inmagik.github.io/redux-rocketjump/"/><meta property="og:description" content="&lt;p&gt;Redux-RocketJump ships with a set of plugins that can be used as out of the box solutions for common tasks. The creation and usage of plugins is heavily based on the &lt;a href=&quot;/redux-rocketjump/docs/api/composition&quot;&gt;composition features&lt;/a&gt; embedded in Redux-RocketJump.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-rocketjump/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-rocketjump/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-rocketjump/css/main.css"/><script src="/redux-rocketjump/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-rocketjump/"><h2 class="headerTitle">Redux-RocketJump</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/installation" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/api/rocketpartial" target="_self">API</a></li><li class=""><a href="https://github.com/inmagik/redux-rocketjump" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">About<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/intro">Motivation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Getting started<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/quickstart">Quick Start</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">API<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketpartial">RocketPartial</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketjump">RocketJump</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/composition">Composition</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem navListItemActive"><a class="navItem" href="/redux-rocketjump/docs/plugins-intro">Introduction</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_cache">Cache Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_combine">Combine Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_delete">Delete Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_hor">Hor Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_list">List Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_map">Map Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_promise">Promise Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_update">Update Plugin</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Plugins</h1></header><article><div><span><p>Redux-RocketJump ships with a set of plugins that can be used as out of the box solutions for common tasks. The creation and usage of plugins is heavily based on the <a href="/redux-rocketjump/docs/api/composition">composition features</a> embedded in Redux-RocketJump.</p>
+<p>Plugins are usually implemented as <a href="/redux-rocketjump/docs/api/rocketpartial">RocketJump Partials</a> that you use by composing them like you do with regular RocketJumps. This makes extremely easy to create new plugins: indeed, every RocketJump Partial is a plugin.</p>
+<p>Some plugins, like the <code>Combine Plugin</code> are instead implemented to work on evaluated <code>RocketJump</code>s.</p>
+<p>We recommend you to read the documentation of the plugin(s) you are interested in to know more about the services it can offer and how to use it.</p>
+<p>The following plugins are available out of the box:</p>
+<table>
+<thead>
+<tr><th>Plugin</th><th>Features</th></tr>
+</thead>
+<tbody>
+<tr><td>Cache Plugin</td><td>Provides caching of results from asynchronous calls: the task is invoked just one time, the following times the result is served from cache</td></tr>
+<tr><td>Combine Plugin</td><td>Combines several <code>RocketJump</code>s in an object-like fashion, much like <em>Redux</em>'s <em>combineReducers</em></td></tr>
+<tr><td>Delete Plugin</td><td>Provides common logic to sync state with deleting apis, for both hard and soft deletes. It is based on the map plugin</td></tr>
+<tr><td>Hor Plugin</td><td>Provides some handy functions to craft reducers for common tasks</td></tr>
+<tr><td>List Plugin</td><td>Provides common logic to deal with paginated lists</td></tr>
+<tr><td>Map Plugin</td><td>Provides key-based state management: data returned by asynchronous task are indexed by key and managed in the same piece of state</td></tr>
+<tr><td>PositionalArgs Plugin</td><td>Provides positional arguments for load function instead of object based arguments</td></tr>
+<tr><td>Promise Plugin</td><td>This plugin adds <code>Promise</code>s to action dispatchers</td></tr>
+<tr><td>Update Plugin</td><td>Provides common logic to sync state with updating apis. It is based on the map plugin</td></tr>
+</tbody>
+</table>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/api/composition"><span class="arrow-prev">← </span><span>Composition</span></a><a class="docs-next button" href="/redux-rocketjump/docs/plugins/plugin_cache"><span>Cache Plugin</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Hor Plugin · Redux-RocketJump</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Higher Order Reducer Plugin (hor for friends) contains some useful functions that create reducers. This is provided in order to easily create reducers for common tasks, like adding elements to a list, removing elements from a list or updating complex structures.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Hor Plugin · Redux-RocketJump"/><meta property="og:type" content="website"/><meta property="og:url" content="https://inmagik.github.io/redux-rocketjump/"/><meta property="og:description" content="&lt;p&gt;Higher Order Reducer Plugin (hor for friends) contains some useful functions that create reducers. This is provided in order to easily create reducers for common tasks, like adding elements to a list, removing elements from a list or updating complex structures.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-rocketjump/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-rocketjump/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-rocketjump/css/main.css"/><script src="/redux-rocketjump/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-rocketjump/"><h2 class="headerTitle">Redux-RocketJump</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/installation" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/api/rocketpartial" target="_self">API</a></li><li class=""><a href="https://github.com/inmagik/redux-rocketjump" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">About<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/intro">Motivation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Getting started<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/quickstart">Quick Start</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">API<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketpartial">RocketPartial</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketjump">RocketJump</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/composition">Composition</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins-intro">Introduction</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_cache">Cache Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_combine">Combine Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_delete">Delete Plugin</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_hor">Hor Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_list">List Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_map">Map Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_promise">Promise Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_update">Update Plugin</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Hor Plugin</h1></header><article><div><span><p>Higher Order Reducer Plugin (hor for friends) contains some useful functions that create reducers. This is provided in order to easily create reducers for common tasks, like adding elements to a list, removing elements from a list or updating complex structures.</p>
+<h2><a class="anchor" aria-hidden="true" id="update-reducer"></a><a href="#update-reducer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Update reducer</h2>
+<p>Helper name: <code>makeUpdateReducer</code></p>
+<p>This helper generates a reducer that is suitable to manage update actions. It can be applied to states that have either a scalar or an array structure, like in the following examples</p>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-attr">span:</span> <span class="hljs-number">3</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">//</span> <span class="hljs-string">Scalar</span> <span class="hljs-string">structured</span> <span class="hljs-string">state</span>
+<span class="hljs-string">{</span>
+<span class="hljs-attr">    loading:</span> <span class="hljs-literal">false</span><span class="hljs-string">,</span>
+<span class="hljs-attr">    error:</span> <span class="hljs-literal">null</span><span class="hljs-string">,</span>
+<span class="hljs-attr">    data:</span> <span class="hljs-string">{</span>
+<span class="hljs-attr">        id:</span> <span class="hljs-number">23</span><span class="hljs-string">,</span>
+<span class="hljs-attr">        name:</span> <span class="hljs-string">'@theReal'</span><span class="hljs-string">,</span>
+<span class="hljs-attr">        work:</span> <span class="hljs-string">'Pick Up Girlz'</span><span class="hljs-string">,</span>
+    <span class="hljs-string">}</span>
+<span class="hljs-string">}</span>
+</code></pre>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-attr">span:</span> <span class="hljs-number">3</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">//</span> <span class="hljs-string">Vector</span> <span class="hljs-string">structured</span> <span class="hljs-string">state</span>
+<span class="hljs-string">{</span>
+<span class="hljs-attr">    loading:</span> <span class="hljs-literal">false</span><span class="hljs-string">,</span>
+<span class="hljs-attr">    error:</span> <span class="hljs-literal">null</span><span class="hljs-string">,</span>
+<span class="hljs-attr">    data:</span> <span class="hljs-string">[</span>
+        <span class="hljs-string">{</span>
+<span class="hljs-attr">            id:</span> <span class="hljs-number">23</span><span class="hljs-string">,</span>
+<span class="hljs-attr">            name:</span> <span class="hljs-string">'@theReal'</span><span class="hljs-string">,</span>
+<span class="hljs-attr">            work:</span> <span class="hljs-string">'Pick Up Girlz'</span><span class="hljs-string">,</span>
+        <span class="hljs-string">},</span> <span class="hljs-string">{</span>
+<span class="hljs-attr">            id:</span> <span class="hljs-number">23</span><span class="hljs-string">,</span>
+<span class="hljs-attr">            name:</span> <span class="hljs-string">'@theReal'</span><span class="hljs-string">,</span>
+<span class="hljs-attr">            work:</span> <span class="hljs-string">'Pick Up Girlz'</span><span class="hljs-string">,</span>
+        <span class="hljs-string">}</span>
+    <span class="hljs-string">]</span>
+<span class="hljs-string">}</span>
+</code></pre>
+<p>Moreover, the update can be set to happen at any depth</p>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">{</span>
+<span class="hljs-attr">    loading:</span> <span class="hljs-literal">false</span><span class="hljs-string">,</span>
+<span class="hljs-attr">    log:</span> <span class="hljs-string">['~'],</span>
+<span class="hljs-attr">    data:</span> <span class="hljs-string">{</span>
+<span class="hljs-attr">        id:</span> <span class="hljs-number">23</span><span class="hljs-string">,</span>
+<span class="hljs-attr">        name:</span> <span class="hljs-string">'Gio Va'</span><span class="hljs-string">,</span>
+<span class="hljs-attr">        friends:</span> <span class="hljs-string">{</span>
+<span class="hljs-attr">            other:</span> <span class="hljs-string">{},</span>
+<span class="hljs-attr">            best:</span> <span class="hljs-string">{</span>
+<span class="hljs-attr">                withMoney:</span> <span class="hljs-string">{</span>
+                    <span class="hljs-string">//</span> <span class="hljs-string">Update</span> <span class="hljs-string">might</span> <span class="hljs-string">be</span> <span class="hljs-string">specified</span> <span class="hljs-string">to</span> <span class="hljs-string">happen</span> <span class="hljs-string">here</span>
+<span class="hljs-attr">                    id:</span> <span class="hljs-number">10</span><span class="hljs-string">,</span>
+<span class="hljs-attr">                    name:</span> <span class="hljs-string">'MR M$X'</span><span class="hljs-string">,</span>
+                <span class="hljs-string">}</span>
+            <span class="hljs-string">}</span>
+        <span class="hljs-string">}</span>
+    <span class="hljs-string">}</span>
+<span class="hljs-string">}</span>
+</code></pre>
+<p>The reducer creation takes several parameters</p>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">makeUpdateReducer(type,</span> <span class="hljs-string">path,</span> <span class="hljs-string">identity,</span> <span class="hljs-string">updater)</span>
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="type"></a><a href="#type" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>type</h4>
+<p>Type: string | string[]</p>
+<p>This attribute specifies the base type for actions managed by this reducer. It is similar to the <code>type</code> attribute of a RocketJump configuration. In case it is an array, the reducer will respond to actions derived from all the types contained in the array</p>
+<h4><a class="anchor" aria-hidden="true" id="path"></a><a href="#path" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>path</h4>
+<p>Type: string
+Default value: <code>'data'</code></p>
+<p>This attribute specifies the path to write data at</p>
+<h4><a class="anchor" aria-hidden="true" id="identity"></a><a href="#identity" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>identity</h4>
+<p>Type: function
+Default value: <code>(action, object) =&gt; action.meta.id === object.id</code></p>
+<p>This function is used to determine if an action targets a specific object or not, that is, whether the update carried out by <code>action</code> is to be applied to the <code>object</code></p>
+<h4><a class="anchor" aria-hidden="true" id="updater"></a><a href="#updater" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updater</h4>
+<p>Type: function
+Default value: <code>(action, object) =&gt; action.payload.data</code></p>
+<p>This function is used to apply the update carried out by <code>action</code> to the object <code>object</code>. By default, content is overridden by the action payload.</p>
+<h2><a class="anchor" aria-hidden="true" id="listremove-reducer"></a><a href="#listremove-reducer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ListRemove reducer</h2>
+<p>Helper name: <code>makeRemoveListReducer</code></p>
+<p>This helper generates a reducer that is suitable to manage deletion of elements contained in a list. It is usually used to handle deletion of data organized in a <a href="/redux-rocketjump/docs/plugins/plugin_list">list</a> structure</p>
+<p>Syntax</p>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">makeRemoveListReducer(type,</span> <span class="hljs-string">listPath,</span> <span class="hljs-string">paginationPath,</span> <span class="hljs-string">identity)</span>
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="type-1"></a><a href="#type-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>type</h4>
+<p>Type: string | string[]</p>
+<p>This attribute specifies the base type for actions managed by this reducer. It is similar to the <code>type</code> attribute of a RocketJump configuration. In case it is an array, the reducer will respond to actions derived from all the types contained in the array</p>
+<h4><a class="anchor" aria-hidden="true" id="listpath"></a><a href="#listpath" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>listPath</h4>
+<p>Type: string
+Default value: <code>'data.list'</code></p>
+<p>This attribute specifies the path where the list stores its elements</p>
+<h4><a class="anchor" aria-hidden="true" id="paginationpath"></a><a href="#paginationpath" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>paginationPath</h4>
+<p>Type: string
+Default value: <code>'data.list'</code></p>
+<p>This attribute specifies the path where the list stores information about pagination</p>
+<h4><a class="anchor" aria-hidden="true" id="identity-1"></a><a href="#identity-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>identity</h4>
+<p>Type: function
+Default value: <code>(action, object) =&gt; action.meta.id === object.id</code></p>
+<p>This function is used to determine if an action targets a specific object or not, that is, whether the update carried out by <code>action</code> is to be applied to the <code>object</code></p>
+<h2><a class="anchor" aria-hidden="true" id="listadd-reducer"></a><a href="#listadd-reducer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ListAdd reducer</h2>
+<p>Helper name: <code>makeAddListReducer</code></p>
+<p>This helper generates a reducer that is suitable to manage insertion of elements in a list. It is usually used to handle insertion of data a <a href="/redux-rocketjump/docs/plugins/plugin_list">list</a> based structure</p>
+<p>Syntax</p>
+<pre><code class="hljs css language-code"><span class="hljs-attr">lang:</span> <span class="hljs-string">js</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">makeAddListReducer(type,</span> <span class="hljs-string">listPath,</span> <span class="hljs-string">paginationPath,</span> <span class="hljs-string">addToList)</span>
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="type-2"></a><a href="#type-2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>type</h4>
+<p>Type: string | string[]</p>
+<p>This attribute specifies the base type for actions managed by this reducer. It is similar to the <code>type</code> attribute of a RocketJump configuration. In case it is an array, the reducer will respond to actions derived from all the types contained in the array</p>
+<h4><a class="anchor" aria-hidden="true" id="listpath-1"></a><a href="#listpath-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>listPath</h4>
+<p>Type: string
+Default value: <code>'data.list'</code></p>
+<p>This attribute specifies the path where the list stores its elements</p>
+<h4><a class="anchor" aria-hidden="true" id="paginationpath-1"></a><a href="#paginationpath-1" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>paginationPath</h4>
+<p>Type: string
+Default value: <code>'data.list'</code></p>
+<p>This attribute specifies the path where the list stores information about pagination</p>
+<h4><a class="anchor" aria-hidden="true" id="addtolist"></a><a href="#addtolist" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>addToList</h4>
+<p>Type: function
+Default value: <code>(list, action) =&gt; list.concat(action.payload.data)</code></p>
+<p>This function is used to actually insert the element in the array that implements the list, and can be used to set a customary insertion logic (append, prepend, in order insert, ...)</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/plugins/plugin_delete"><span class="arrow-prev">← </span><span>Delete Plugin</span></a><a class="docs-next button" href="/redux-rocketjump/docs/plugins/plugin_list"><span>List Plugin</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#update-reducer">Update reducer</a></li><li><a href="#listremove-reducer">ListRemove reducer</a></li><li><a href="#listadd-reducer">ListAdd reducer</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>

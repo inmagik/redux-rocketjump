@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Combine Plugin · Redux-RocketJump</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;The combine plugin is used to merge several rocketjumps in a dictionary-like fashion: this plugin accepts a dictionary containing &lt;a href=&quot;/redux-rocketjump/docs/api/rocketpartial&quot;&gt;RocketJump Partials&lt;/a&gt; and returns a complete RocketJump instance (already evaluated) that manages a state with the same structure of the original dictionary, but containing actual data in place of RocketJump Partials.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Combine Plugin · Redux-RocketJump"/><meta property="og:type" content="website"/><meta property="og:url" content="https://inmagik.github.io/redux-rocketjump/"/><meta property="og:description" content="&lt;p&gt;The combine plugin is used to merge several rocketjumps in a dictionary-like fashion: this plugin accepts a dictionary containing &lt;a href=&quot;/redux-rocketjump/docs/api/rocketpartial&quot;&gt;RocketJump Partials&lt;/a&gt; and returns a complete RocketJump instance (already evaluated) that manages a state with the same structure of the original dictionary, but containing actual data in place of RocketJump Partials.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-rocketjump/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-rocketjump/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-rocketjump/css/main.css"/><script src="/redux-rocketjump/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-rocketjump/"><h2 class="headerTitle">Redux-RocketJump</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/installation" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/redux-rocketjump/docs/api/rocketpartial" target="_self">API</a></li><li class=""><a href="https://github.com/inmagik/redux-rocketjump" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">About<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/intro">Motivation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Getting started<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/quickstart">Quick Start</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">API<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketpartial">RocketPartial</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/rocketjump">RocketJump</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/api/composition">Composition</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins-intro">Introduction</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_cache">Cache Plugin</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_combine">Combine Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_delete">Delete Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_hor">Hor Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_list">List Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_map">Map Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_promise">Promise Plugin</a></li><li class="navListItem"><a class="navItem" href="/redux-rocketjump/docs/plugins/plugin_update">Update Plugin</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Combine Plugin</h1></header><article><div><span><p>The combine plugin is used to merge several rocketjumps in a dictionary-like fashion: this plugin accepts a dictionary containing <a href="/redux-rocketjump/docs/api/rocketpartial">RocketJump Partials</a> and returns a complete RocketJump instance (already evaluated) that manages a state with the same structure of the original dictionary, but containing actual data in place of RocketJump Partials.</p>
+<p>RocketJump partials to be combined <strong>must</strong> meet the following criteria</p>
+<ul>
+<li>each partial must have a configuration object at the last level of composition, which is called <code>combineConfig</code></li>
+<li>the <code>combineConfig</code> object can contain any attribute that is valid in the context of a <code>RocketJump Partial</code></li>
+<li>the <code>combineConfig</code> object <strong>must</strong> contain two special attributes
+<ul>
+<li><strong>combineType</strong>: will be used like the <code>type</code> attribute when completing the build of the partial</li>
+<li><strong>combineApi</strong>: will be used like the <code>api</code> attribute when completing the build of the partial</li>
+</ul></li>
+</ul>
+<p>Combine plugin invocation takes two parameters</p>
+<pre><code class="hljs css language-js">combineRjs(dict, config);
+</code></pre>
+<p><code>dict</code> is the aformentioned dictionary of composable partial rocketJumps, while <code>config</code> is a simple object containing only one key: <code>state</code>. This key can contain either a string or a selector, and plays the same role as the <code>state</code> parameter of a <a href="/redux-rocketjump/docs/api/rocketjump">final RocketJump configuration</a></p>
+<p>Example</p>
+<pre><code class="hljs css language-js">
+<span class="hljs-comment">// This is a list plugin instance</span>
+<span class="hljs-keyword">const</span> rjBaseList = rjList({
+    <span class="hljs-attr">pagination</span>: nextPreviousPaginationAdapter,
+    <span class="hljs-attr">pageSize</span>: <span class="hljs-number">20</span>,
+})
+
+<span class="hljs-keyword">const</span> { reducer } = combineRjs({
+    <span class="hljs-attr">list</span>: rj(rjBaseList, {
+        <span class="hljs-attr">combineType</span>: GET_BROS,
+        <span class="hljs-attr">composeReducer</span>: [
+            makeUpdateReducer(
+                SET_BRO_STARRED,
+                <span class="hljs-string">'data.list'</span>,
+                <span class="hljs-literal">undefined</span>,
+                ({ <span class="hljs-attr">payload</span>: { <span class="hljs-attr">data</span>: { starred } } }, obj) =&gt; ({ ...obj, starred }),
+            ),
+            makeRemoveListReducer(DELETE_BRO),
+            makeUpdateReducer(UPDATE_BRO, <span class="hljs-string">'data.list'</span>),
+        ],
+        <span class="hljs-attr">combineApi</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> BROS,
+    }),
+
+    <span class="hljs-attr">starring</span>: rj(rjUpdate(), {
+        <span class="hljs-attr">proxyActions</span>: {
+            <span class="hljs-attr">load</span>: <span class="hljs-function">(<span class="hljs-params">{ load }</span>) =&gt;</span> <span class="hljs-function">(<span class="hljs-params">id, starred</span>) =&gt;</span>
+                load({ id, starred }, { id }),
+        },
+        <span class="hljs-attr">combineType</span>: SET_BRO_STARRED,
+        <span class="hljs-comment">// Return new "starred" state</span>
+        combineApi: <span class="hljs-function">(<span class="hljs-params">{ id, starred }</span>) =&gt;</span> ({ id, starred }),
+    }),
+
+    <span class="hljs-attr">deleting</span>: rj(rjDelete(), {
+        <span class="hljs-attr">combineType</span>: DELETE_BRO,
+        <span class="hljs-comment">// Such as 204 No Content</span>
+        combineApi: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-literal">null</span>,
+    }),
+
+    <span class="hljs-attr">updating</span>: rj(rjUpdate(), {
+        <span class="hljs-attr">combineType</span>: UPDATE_BRO,
+        <span class="hljs-comment">// Such as 204 No Content</span>
+        combineApi: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-literal">null</span>,
+    })
+}, { <span class="hljs-attr">state</span>: <span class="hljs-string">'bros'</span> })
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/plugins/plugin_cache"><span class="arrow-prev">← </span><span>Cache Plugin</span></a><a class="docs-next button" href="/redux-rocketjump/docs/plugins/plugin_delete"><span>Delete Plugin</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>

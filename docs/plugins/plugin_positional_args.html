@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>PositionalArgs Plugin · Redux-RocketJump</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;This plugins allows the load function to use positional arguments instead of objects. It operates by converting the signature of the &lt;code&gt;load&lt;/code&gt; function&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="PositionalArgs Plugin · Redux-RocketJump"/><meta property="og:type" content="website"/><meta property="og:url" content="https://inmagik.github.io/redux-rocketjump/"/><meta property="og:description" content="&lt;p&gt;This plugins allows the load function to use positional arguments instead of objects. It operates by converting the signature of the &lt;code&gt;load&lt;/code&gt; function&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/redux-rocketjump/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/redux-rocketjump/js/scrollSpy.js"></script><link rel="stylesheet" href="/redux-rocketjump/css/main.css"/><script src="/redux-rocketjump/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/redux-rocketjump/"><h2 class="headerTitle">Redux-RocketJump</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/redux-rocketjump/docs/installation" target="_self">Docs</a></li><li class=""><a href="/redux-rocketjump/docs/api/rocketpartial" target="_self">API</a></li><li class=""><a href="https://github.com/inmagik/redux-rocketjump" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">PositionalArgs Plugin</h1></header><article><div><span><p>This plugins allows the load function to use positional arguments instead of objects. It operates by converting the signature of the <code>load</code> function</p>
+<pre><code class="hljs css language-js"><span class="hljs-comment">// standard signature</span>
+load: <span class="hljs-function">(<span class="hljs-params">params, meta</span>) =&gt;</span> <span class="hljs-keyword">void</span>
+
+<span class="hljs-comment">// new signature</span>
+load: <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> <span class="hljs-keyword">void</span>
+</code></pre>
+<p>The plugin maps positional arguments either to params and to meta, but in different ways.</p>
+<p>The params mapping is easy, since <code>params</code> is assigned the array <code>[...args]</code></p>
+<p>The meta mapping is instead more flexible, and allows to select which arguments from the list import in the meta object and under which key. This is done by specifing parameters in the plugin configuration object: each parameter can be either a string or a falsy value, where a string means that the argument passed to the load function in the same position must be imported in meta using that string as key, and a falsy value means not to import the argument in the same position. Refer to the example for more details</p>
+<h2><a class="anchor" aria-hidden="true" id="example"></a><a href="#example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example</h2>
+<pre><code class="hljs css language-js"><span class="hljs-keyword">import</span> rjPosArgs <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-rocketjump/plugins/positionalArgs'</span>
+
+<span class="hljs-keyword">const</span> {
+    <span class="hljs-attr">actions</span>: { <span class="hljs-attr">load</span>: variadicLoad }
+} = rj(
+        rjPosArgs(
+            <span class="hljs-string">'id'</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, <span class="hljs-string">'tek'</span>, <span class="hljs-string">'isCool'</span>
+        ),
+        {
+            <span class="hljs-attr">type</span>: <span class="hljs-string">'EXAMPLE'</span>,
+            <span class="hljs-attr">state</span>: <span class="hljs-string">'example'</span>,
+            <span class="hljs-attr">api</span>: exampleApiDefinition,
+        }
+    )()
+
+<span class="hljs-comment">// Then, invoke action like</span>
+variadicLoad(<span class="hljs-number">777</span>, <span class="hljs-string">'rocket'</span>, <span class="hljs-string">'jump'</span>, <span class="hljs-number">23</span>);
+
+<span class="hljs-comment">/*
+    The standard load action corresponding to this is
+    load([777, 'rocket', 'jump', 23], { id: 777, tek: 23 })
+
+    The meta object is constructed by mapping keys and values positionally
+    PluginDefinition    CallValue       Result (keys and values of meta object)
+    'id'                777             id: 777
+    null                'rocket'        -
+    false               'jump'          -
+    'tek',              23              tek: 23
+    'isCool'            undefined       -
+*/</span>
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#example">Example</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>
