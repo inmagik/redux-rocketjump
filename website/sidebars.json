@@ -1,0 +1,28 @@
+{
+  "docs": {
+    "About": [
+      "intro"
+    ],
+    "Getting started": [
+      "installation",
+      "quickstart"
+    ],
+    "API": [
+      "api/rocketpartial",
+      "api/rocketjump",
+      "api/composition"
+    ],
+    "Plugins": [
+      "plugins-intro",
+      "plugins/plugin_cache",
+      "plugins/plugin_combine",
+      "plugins/plugin_delete",
+      "plugins/plugin_hor",
+      "plugins/plugin_list",
+      "plugins/plugin_map",
+      "plugins/plugin_positionalArgs",
+      "plugins/plugin_promise",
+      "plugins/plugin_update"
+    ]
+  }
+}
