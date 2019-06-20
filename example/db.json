@@ -1,29 +1,19 @@
 {
   "todos": [
     {
-      "title": "Ciao",
+      "id": 1,
       "done": true,
-      "id": 1
+      "title": "Learn React"
     },
     {
-      "title": "XD",
+      "id": 2,
       "done": true,
-      "id": 2
+      "title": "Prepare dinner"
     },
     {
-      "title": "oooo",
-      "done": true,
-      "id": 3
-    },
-    {
-      "title": "?",
-      "done": true,
-      "id": 4
-    },
-    {
-      "title": "~",
-      "done": true,
-      "id": 6
+      "id": 3,
+      "done": false,
+      "title": "Learn RocketJump"
     }
   ]
 }

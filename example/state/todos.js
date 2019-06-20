@@ -7,39 +7,9 @@ import {
   composeReducers,
   takeEveryAndCancel,
 } from 'redux-rocketjump'
-import { rj as reactRj } from 'react-rocketjump'
-import { fork, put } from 'redux-saga/effects'
+import { fork } from 'redux-saga/effects'
 
-const callMaMen = (apiFn, ...params) => {
-  return apiFn(...params, 'GIOVA THE KING @@@23')
-}
-
-const todosState0 = reactRj({
-  actions: ({ run }) => ({
-    run: id => run(id).withMeta({ id, z: 1 })
-  })
-})
-
-const todosState1 = reactRj(todosState0, {
-  actions: ({ run }) => ({
-    run: id => run(id * 2)
-  })
-})
-
-export const todosState = reactRj(todosState1, {
-  callEffect: callMaMen,
-  effect: (gang = '', ns = '') => Promise.resolve([{
-    id: 23,
-    title: `Kill Humans ~${gang} - ${ns}`,
-  }]),
-  actions: ({ run }) => ({
-    run: id => run(id).withMeta(meta => ({ ...meta, w: 3, k: meta.z }))
-  }),
-  // () => request.get(`${API_URL}/todos`).then(({ body }) => body),
-})()
-
-
-const API_URL = `http://${window.location.hostname}:3000`
+const API_URL = `http://${window.location.hostname}:9001`
 
 const ADD_TODO = 'ADD_TODO'
 export const {
@@ -161,7 +131,6 @@ export const {
       default:
         return prevState
     }
-    return prevState
   })
 })()
 

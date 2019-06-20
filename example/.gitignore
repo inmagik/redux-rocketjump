@@ -1,0 +1,4 @@
+/node_modules
+
+# json-server live data
+db.json

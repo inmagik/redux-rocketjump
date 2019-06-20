@@ -12,10 +12,8 @@ module.exports = {
         })
       },
     ],
-    '@babel/preset-react',
   ],
   plugins: [
-    '@babel/plugin-proposal-class-properties',
     process.env.NODE_ENV === 'test' &&
       '@babel/plugin-transform-modules-commonjs',
   ].filter(Boolean),

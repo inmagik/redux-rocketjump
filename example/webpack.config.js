@@ -1,15 +1,14 @@
 const path = require('path')
 
 module.exports = {
-  entry: './example/index.js',
+  entry: './index.js',
   mode: 'development',
   output: {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: './example',
     historyApiFallback: true,
-    port: 3000,
+    port: 9000,
   },
   module: {
     rules: [
@@ -26,8 +25,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'redux-rocketjump': path.resolve(__dirname, 'packages/redux-rocketjump/src'),
-      'react-rocketjump': path.resolve(__dirname, 'packages/react-rocketjump/src'),
+      'redux-rocketjump': path.resolve(__dirname, '../src'),
     }
   }
 };
