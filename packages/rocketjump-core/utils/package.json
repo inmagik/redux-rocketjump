@@ -1,6 +1,0 @@
-{
-  "name": "rocketjump-core/utils",
-  "private": true,
-  "main": "../lib/utils.cjs.js",
-  "module": "../lib/utils.esm.js"
-}
