@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const DB_PATH = './db.json';
+const DB_PATH = './example/db.json';
 
 if (!fs.existsSync(DB_PATH)) {
   fs.writeFileSync(DB_PATH, JSON.stringify({

@@ -26,7 +26,9 @@
     "test": "jest",
     "test-coverage": "jest --coverage",
     "codecov": "jest --coverage && codecov",
-    "dev": "webpack-dev-server"
+    "fake-server": "node scripts/initExampleDB.js && json-server --watch ./example/db.json --port 9001 --delay 300",
+    "dev-example": "webpack-dev-server",
+    "run-example": "npm-run-all --parallel fake-server dev-example"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,9 +51,15 @@
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "babel-eslint": "9.x",
     "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "classnames": "^2.2.6",
+    "core-js": "^3.1.4",
+    "css-loader": "^3.0.0",
     "eslint": "5.x",
     "eslint-config-react-app": "^4.0.1",
     "eslint-plugin-flowtype": "2.x",
@@ -60,12 +68,23 @@
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.5.0",
     "jest": "^24.8.0",
+    "json-server": "^0.15.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
     "redux": "^4.0.1",
     "redux-mock-store": "^1.5.3",
     "redux-saga": "^1.0.3",
     "redux-saga-thunk": "^0.7.3",
+    "regenerator-runtime": "^0.13.2",
     "reselect": "^4.0.0",
     "rollup": "^1.15.6",
-    "rollup-plugin-babel": "^4.3.2"
+    "rollup-plugin-babel": "^4.3.2",
+    "style-loader": "^0.23.1",
+    "superagent": "^5.1.0",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.2"
   }
 }
