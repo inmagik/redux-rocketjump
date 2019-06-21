@@ -105,7 +105,7 @@ const {
         {
             type: 'GET_USER',
             state: 'users',
-            api: fetchUsers
+            effect: fetchUsers
         }
     )()
 ```

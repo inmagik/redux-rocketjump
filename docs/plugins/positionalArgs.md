@@ -32,7 +32,7 @@ const {
         {
             type: 'EXAMPLE',
             state: 'example',
-            api: exampleApiDefinition,
+            effect: exampleApiDefinition,
         }
     )()
 

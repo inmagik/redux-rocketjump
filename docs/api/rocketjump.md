@@ -24,7 +24,7 @@ const myRocketJumpPartial = rj(
 
         /* ----- THIS IS THE IMPORTANT PART ----- */
         type: 'COOL_API_TYPE',
-        api: myAsyncFunction,
+        effect: myAsyncFunction,
         state: 'soCool'
     }
 )
