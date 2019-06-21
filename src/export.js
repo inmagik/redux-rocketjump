@@ -47,7 +47,15 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     actions = extendExport.actions
   }
   // Proxy actions
-  actions = proxyObject(actions, jumpConfig.proxyActions)
+  if (jumpConfig.actions) {
+    actions = proxyObject(actions, jumpConfig.actions)
+  } else if (jumpConfig.proxyActions) {
+    console.warn(
+      '[redux-rocketjump] DeprecationWarning: ' +
+        'proxyActions options is deprecated use actions instead.'
+    )
+    actions = proxyObject(actions, jumpConfig.proxyActions)
+  }
 
   // Make selectors
   let selectors

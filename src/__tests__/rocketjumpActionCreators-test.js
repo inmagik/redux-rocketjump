@@ -1,5 +1,7 @@
 import { rj } from '../rocketjump'
 
+const spyWarn = jest.spyOn(global.console, 'warn')
+
 describe('Rocketjump action creators', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
@@ -32,7 +34,7 @@ describe('Rocketjump action creators', () => {
     const { actions } = rj({
       type,
       state,
-      proxyActions: {
+      actions: {
         load: ({ load }) => name => load({ name }),
       },
     })()
@@ -52,7 +54,7 @@ describe('Rocketjump action creators', () => {
     const { actions } = rj({
       type,
       state,
-      proxyActions: {
+      actions: {
         destoryTheWorld: () => () => ({
           type: 'DESTROY_THE_WORLD',
         }),
@@ -72,13 +74,13 @@ describe('Rocketjump action creators', () => {
 
   it('should be composable', () => {
     const rjUn = rj({
-      proxyActions: {
+      actions: {
         load: ({ load }) => (un, params, meta) => load({ un, ...params }, meta),
       },
     })
 
     const rjDos = rj({
-      proxyActions: {
+      actions: {
         load: ({ load }) => (un, dos, params, meta) =>
           load(un, { dos, ...params }, meta),
       },
@@ -87,7 +89,7 @@ describe('Rocketjump action creators', () => {
     const { actions } = rj(rjUn, rjDos, {
       type,
       state,
-      proxyActions: {
+      actions: {
         load: ({ load }) => (un, dos, tres, params, meta) =>
           load(
             un,
@@ -100,7 +102,7 @@ describe('Rocketjump action creators', () => {
           ),
       },
     })({
-      proxyActions: {
+      actions: {
         load: ({ load }) => a =>
           load(
             'Un',
@@ -127,5 +129,27 @@ describe('Rocketjump action creators', () => {
         ammaccabanane: 'JD',
       },
     })
+  })
+
+  it('should still use the old api but with warnings', () => {
+    spyWarn.mockReset()
+    const { actions } = rj({
+      type,
+      state,
+      proxyActions: {
+        load: ({ load }) => name => load({ name }),
+      },
+    })()
+
+    expect(actions.load('Giova')).toEqual({
+      type,
+      payload: {
+        params: {
+          name: 'Giova',
+        },
+      },
+      meta: {},
+    })
+    expect(spyWarn).toHaveBeenCalled()
   })
 })
