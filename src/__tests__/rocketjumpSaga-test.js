@@ -173,7 +173,26 @@ describe('Rocketjump saga', () => {
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 666, rinne: 22 })
   })
 
-  it('can provide extra params to api function', () => {
+  it('can provide extra params to effect function', () => {
+    const mockApi = jest.fn()
+    const {
+      actions: { load },
+      saga,
+    } = rj({
+      type,
+      state,
+      /* eslint-disable require-yield */
+      effectExtraParams: function*() {
+        return { giova: 99, maik: 23 }
+      },
+      effect: mockApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load({ giova: 666, rinne: 22 }))
+    expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
+  })
+
+  it('still use apiExtraParams but print warning', () => {
     const mockApi = jest.fn()
     const {
       actions: { load },
@@ -190,6 +209,7 @@ describe('Rocketjump saga', () => {
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
+    expect(spyWarn).toHaveBeenCalled()
   })
 
   it('can map actions dispatched', done => {
@@ -323,16 +343,22 @@ describe('Rocketjump saga', () => {
   })
 
   it('should be use the provided effect caller function', done => {
-    const effectCaller = function *(apiFn) {
+    const effectCaller = function*(apiFn) {
       const data = yield call(apiFn(1312))
       return data
     }
     const myApi = t => mockApi(t)
-    const mockApi = jest.fn(token => new Promise(resolve => {
-      resolve('Maik~' + token)
-    }))
+    const mockApi = jest.fn(
+      token =>
+        new Promise(resolve => {
+          resolve('Maik~' + token)
+        })
+    )
 
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       effectCaller,
@@ -347,16 +373,22 @@ describe('Rocketjump saga', () => {
   })
 
   it('should be still use callApi but print a warning', done => {
-    const callApi = function *(apiFn) {
+    const callApi = function*(apiFn) {
       const data = yield call(apiFn(1312))
       return data
     }
     const myApi = t => mockApi(t)
-    const mockApi = jest.fn(token => new Promise(resolve => {
-      resolve('Maik~' + token)
-    }))
+    const mockApi = jest.fn(
+      token =>
+        new Promise(resolve => {
+          resolve('Maik~' + token)
+        })
+    )
 
-    const { actions: { load }, saga } = rj({
+    const {
+      actions: { load },
+      saga,
+    } = rj({
       type,
       state,
       callApi,

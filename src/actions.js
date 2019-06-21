@@ -25,5 +25,11 @@ export const makeActions = type => {
   return {
     load,
     unload,
+    // NOTE
+    // react-rocketjump alias, in next major all the apis name will
+    // be the same, and comptabilty with old api dropped ...
+    // but for now simpy add some alias ...
+    run: load,
+    clean: unload,
   }
 }

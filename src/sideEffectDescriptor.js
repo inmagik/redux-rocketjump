@@ -3,7 +3,7 @@ import pick from 'lodash.pick'
 import { arrayze } from 'rocketjump-core/utils'
 
 export const makeSideEffectDescriptor = () => ({
-  apiExtraParams: [],
+  effectExtraParams: [],
   successEffect: [],
   failureEffect: [],
   unloadBy: [],
@@ -16,10 +16,6 @@ export const addConfigToSideEffectDescritor = (sideEffect, config) => {
   const nextSideEffectDescriptor = {
     ...sideEffect,
     ...pick(config, 'takeEffect', 'takeEffectArgs', 'needEffect'),
-    apiExtraParams: [
-      ...sideEffect.apiExtraParams,
-      ...arrayze(get(config, 'apiExtraParams', [])),
-    ],
     successEffect: [
       ...sideEffect.successEffect,
       ...arrayze(get(config, 'successEffect', [])),
@@ -50,6 +46,22 @@ export const addConfigToSideEffectDescritor = (sideEffect, config) => {
     console.warn(
       '[redux-rocketjump] DeprecationWarning: ' +
         'callApi options is deprecated use effectCaller instead.'
+    )
+  }
+
+  if (config.effectExtraParams) {
+    nextSideEffectDescriptor.effectExtraParams = [
+      ...sideEffect.effectExtraParams,
+      ...arrayze(get(config, 'effectExtraParams', [])),
+    ]
+  } else if (config.apiExtraParams) {
+    nextSideEffectDescriptor.effectExtraParams = [
+      ...sideEffect.effectExtraParams,
+      ...arrayze(get(config, 'apiExtraParams', [])),
+    ]
+    console.warn(
+      '[redux-rocketjump] DeprecationWarning: ' +
+        'apiExtraParams options is deprecated use effectExtraParams instead.'
     )
   }
 

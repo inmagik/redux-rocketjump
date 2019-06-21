@@ -18,18 +18,15 @@ describe('Positional args plugin', () => {
     const {
       actions: { load },
       saga,
-    } = rj(
-      rjPosArgs(),
-      {
-        type: 'SOOCIO~',
-        state: 'ocio',
-        effect: api,
-        /* eslint-disable require-yield */
-        apiExtraParams: function* (params, meta) {
-          return [...params, 'King Redeem / Queen serene']
-        },
-      }
-    )()
+    } = rj(rjPosArgs(), {
+      type: 'SOOCIO~',
+      state: 'ocio',
+      effect: api,
+      /* eslint-disable require-yield */
+      effectExtraParams: function*(params, meta) {
+        return [...params, 'King Redeem / Queen serene']
+      },
+    })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(23, 777))
     expect(api.mock.calls[0][0]).toBe(23)
@@ -42,14 +39,11 @@ describe('Positional args plugin', () => {
     const type = 'SOOCIO~'
     const {
       actions: { load },
-    } = rj(
-      rjPosArgs('id'),
-      {
-        type,
-        state: 'ocio',
-        effect: api,
-      }
-    )()
+    } = rj(rjPosArgs('id'), {
+      type,
+      state: 'ocio',
+      effect: api,
+    })()
 
     expect(load(23)).toEqual({
       type,
@@ -59,14 +53,11 @@ describe('Positional args plugin', () => {
 
     const {
       actions: { load: load2 },
-    } = rj(
-      rjPosArgs('id', null, false, 'tek', 'isCool'),
-      {
-        type,
-        state: 'ocio',
-        effect: api,
-      }
-    )()
+    } = rj(rjPosArgs('id', null, false, 'tek', 'isCool'), {
+      type,
+      state: 'ocio',
+      effect: api,
+    })()
 
     expect(load2(777, 'maik', 'giova', 23)).toEqual({
       type,
