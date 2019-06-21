@@ -1,3 +1,38 @@
+## 2.0.0
+###### *June 21, 2019*
+
+#### :warning: Deprecation
+
+- The config in second invocation of `rj` is deprecated, don't do this:
+```js
+rj({ /* config */ })({ /* config */ })
+```
+- The `combineRjs` plugin now is a part of the core.
+
+You can still import this from plugins but is deprecated, instead do this:
+```
+import { combineRjs } from 'redux-rocketjump` 
+```
+
+- `api` rj config option was renamed to `effect`
+- `proxyActions` rj config option was renamed to `actions`
+- `proxyReducer` rj config option was renamed to `reducer`
+- `proxySelectors` rj config option was renamed to `selectors`
+- `callApi` rj config option was renamed to `effectCaller` 
+- `apiExtraParams` rj config option was renamed to `effectExtraParams`
+
+#### :zap: New Features
+ - redux rocketjump 2 use the [rocketjump-core](https://github.com/inmagik/rocketjump-core) a complete rewrite version of the original rj recursion algorithm.
+ - Now the `reducer` rj config option accept a second parameter:
+ the current run configuration (`effect`, `state`, `type`)
+```js
+const rjImproveReducer = rj({
+  reducer: (oldReducer, { type, state, type }) => /* improve reducer with type */,
+})
+```
+
+
+
 ## 1.7.2
 ###### *February 11, 2019*
 - Fixed a bug with `unloadBy` and `state` options setted to `false`
