@@ -1,5 +1,7 @@
 import { rj } from '../rocketjump'
 
+const spyWarn = jest.spyOn(global.console, 'warn')
+
 describe('Rocketjump reducer', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
@@ -109,6 +111,36 @@ describe('Rocketjump reducer', () => {
     const { reducer } = rj({
       type,
       state,
+      reducer: givenReducer => {
+        return (prevState, action) => {
+          const nextState = givenReducer(prevState, action)
+          if (action.type === `${type}_SUCCESS`) {
+            return { ...nextState, cool: nextState.data + ' is cool' }
+          }
+          return nextState
+        }
+      },
+    })()
+    const prevState = {
+      loading: true,
+      data: null,
+      error: null,
+    }
+    expect(
+      reducer(prevState, { type: `${type}_SUCCESS`, payload: { data: 'Maik' } })
+    ).toEqual({
+      loading: false,
+      data: 'Maik',
+      cool: 'Maik is cool',
+      error: null,
+    })
+  })
+
+  it('should accept the old proxyReducer config key but print a warn', () => {
+    spyWarn.mockReset()
+    const { reducer } = rj({
+      type,
+      state,
       proxyReducer: givenReducer => {
         return (prevState, action) => {
           const nextState = givenReducer(prevState, action)
@@ -132,6 +164,7 @@ describe('Rocketjump reducer', () => {
       cool: 'Maik is cool',
       error: null,
     })
+    expect(spyWarn).toHaveBeenCalled()
   })
 
   it('should be composable', () => {

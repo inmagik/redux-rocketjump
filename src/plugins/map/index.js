@@ -86,24 +86,24 @@ export const makeMapSelectors = getBaseState => {
   }
 }
 
-export default (mapConfig = {}) => (config, ...args) =>
-  rj({
-    proxyActions: {
-      loadKey: ({ load }) => (id, params = {}, meta = {}) =>
-        load({ id, ...params }, { id, ...meta }),
-      unloadKey: ({ unload }) => id => unload({ id }),
-    },
-    // SWAP reducer \w new map reducer
-    proxyReducer: () =>
-      makeMapReducer(
-        config.type,
-        mapConfig.key,
-        mapConfig.dataReducer,
-        mapConfig.keepSucceded
-      ),
-    proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
-    takeEffect: takeLatestAndCancelGroupBy,
-    takeEffectArgs: [
-      typeof mapConfig.key === 'function' ? mapConfig.key : defaultKeyMaker,
-    ],
-  })(config, ...args)
+export default (mapConfig = {}) => rj({
+  proxyActions: {
+    loadKey: ({ load }) => (id, params = {}, meta = {}) =>
+      load({ id, ...params }, { id, ...meta }),
+    unloadKey: ({ unload }) => id => unload({ id }),
+  },
+  // SWAP reducer \w new map reducer
+  proxyReducer: (oldReducer, { type }) => (
+    makeMapReducer(
+      type,
+      mapConfig.key,
+      mapConfig.dataReducer,
+      mapConfig.keepSucceded
+    )
+  ),
+  proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
+  takeEffect: takeLatestAndCancelGroupBy,
+  takeEffectArgs: [
+    typeof mapConfig.key === 'function' ? mapConfig.key : defaultKeyMaker,
+  ],
+})

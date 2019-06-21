@@ -32,10 +32,10 @@ function checkWarns(rjsOrConfigs, extraConfig) {
     cfgToCheck = cfgToCheck.slice(0, cfgToCheck.length - 1)
   }
   cfgToCheck.forEach(config => {
-    if (config.type || config.api || config.state) {
+    if (config.type || config.api || config.state || config.effect) {
       console.warn(
         '[redux-rocketjump] DeprecationWarning: ' +
-          'type, api and state should be defined only once, in the last object'
+          'type, effect and state should be defined only once, in the last object'
       )
     }
   })
@@ -44,7 +44,7 @@ function checkWarns(rjsOrConfigs, extraConfig) {
 function makeRunConfig(finalConfig) {
   // Detected the run config from partial rjs + configs
   // pick only: state, type and api
-  const runConfig = pick(finalConfig, ['state', 'api', 'type'])
+  const runConfig = pick(finalConfig, ['state', 'api', 'type', 'effect'])
   // Mark as a run config
   Object.defineProperty(runConfig, '__rjtype', {
     value: $TYPE_RJ_RUN_CONFIG,
@@ -93,6 +93,7 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
         'type',
         'state',
         'api',
+        'effect',
         'apiExtraParams',
         'takeEffect',
         'callApi',
@@ -102,10 +103,21 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
       ])
     )
   } else {
+    let effectCall
+    if (runConfig.effect) {
+      effectCall = runConfig.effect
+    } else if (runConfig.api) {
+      effectCall = runConfig.api
+      console.warn(
+        '[redux-rocketjump] DeprecationWarning: ' +
+          'api options is deprecated use effect instead.'
+      )
+    }
+
     // Make saga using api and merged side effect descriptor!
     saga = makeApiSaga(
       runConfig.type,
-      runConfig.api,
+      effectCall,
       sideEffect.apiExtraParams,
       sideEffect.takeEffect,
       sideEffect.callApi,

@@ -1,12 +1,13 @@
 const path = require('path')
 
 module.exports = {
-  entry: './index.js',
+  entry: './example/index.js',
   mode: 'development',
   output: {
     filename: 'bundle.js'
   },
   devServer: {
+    contentBase: './example',
     historyApiFallback: true,
     port: 9000,
   },
@@ -15,7 +16,18 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',
+            ]
+          }
+        }
       },
       {
         test: /\.css$/,
@@ -25,7 +37,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'redux-rocketjump': path.resolve(__dirname, '../src'),
+      'redux-rocketjump': path.resolve(__dirname, './src'),
     }
   }
 };

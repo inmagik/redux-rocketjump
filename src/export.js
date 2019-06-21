@@ -31,7 +31,15 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     reducer = extendExport.reducer
   }
   if (reducer) {
-    reducer = proxyReducer(reducer, jumpConfig.proxyReducer)
+    if (jumpConfig.reducer) {
+      reducer = proxyReducer(reducer, jumpConfig.reducer, runConfig)
+    } else if (jumpConfig.proxyReducer) {
+      reducer = proxyReducer(reducer, jumpConfig.proxyReducer, runConfig)
+      console.warn(
+        '[redux-rocketjump] DeprecationWarning: ' +
+          'proxyReducer options is deprecated use reducer instead.'
+      )
+    }
     if (Array.isArray(jumpConfig.composeReducer)) {
       reducer = composeReducers(...[reducer].concat(jumpConfig.composeReducer))
     }
@@ -67,7 +75,15 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     selectors = extendExport.selectors
   }
   if (selectors) {
-    selectors = proxyObject(selectors, jumpConfig.proxySelectors)
+    if (jumpConfig.selectors) {
+      selectors = proxyObject(selectors, jumpConfig.selectors)
+    } else if (jumpConfig.proxySelectors) {
+      selectors = proxyObject(selectors, jumpConfig.proxySelectors)
+      console.warn(
+        '[redux-rocketjump] DeprecationWarning: ' +
+          'proxySelectors options is deprecated use selectors instead.'
+      )
+    }
   }
 
   const newExport = {
@@ -77,11 +93,6 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     actions,
     selectors,
   }
-
-  Object.defineProperty(newExport, '__rjtype', {
-    // RAVER FOLLE 23
-    value: extendExport.__rjtype,
-  })
 
   return newExport
 }

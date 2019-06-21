@@ -6,6 +6,12 @@ import omit from 'lodash/omit'
 import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
 
+const spyWarn = jest.spyOn(global.console, 'warn')
+
+beforeEach(() => {
+  spyWarn.mockReset()
+})
+
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
   const sagaMiddleware = createSagaMiddleware()
   const middlewares = [sagaMiddleware]
@@ -48,8 +54,45 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
+      effect: mockApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    mockApi.mock.results[0].value.then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type,
+          payload: { params: {} },
+          meta: {},
+        },
+        {
+          type: `${type}_LOADING`,
+          meta: {},
+        },
+        {
+          type: `${type}_SUCCESS`,
+          meta: {},
+          payload: {
+            params: {},
+            data: mockApiResults,
+          },
+        },
+      ])
+      done()
+    })
+  })
+
+  it('should accept old api config but print warning', done => {
+    const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
+    const {
+      actions: { load },
+      saga,
+    } = rj({
+      type,
+      state,
       api: mockApi,
     })()
+    expect(spyWarn).toHaveBeenCalled()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
@@ -89,7 +132,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockBadApi,
+      effect: mockBadApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
@@ -123,7 +166,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load({ giova: 666, rinne: 22 }))
@@ -142,7 +185,7 @@ describe('Rocketjump saga', () => {
       apiExtraParams: function*() {
         return { giova: 99, maik: 23 }
       },
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load({ giova: 666, rinne: 22 }))
@@ -168,7 +211,7 @@ describe('Rocketjump saga', () => {
         ...a,
         meta: omit(a.meta, 'maik'),
       }),
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 11.5 }))
@@ -208,7 +251,7 @@ describe('Rocketjump saga', () => {
       state,
       successEffect,
       failureEffect,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
@@ -233,7 +276,7 @@ describe('Rocketjump saga', () => {
       type,
       state,
       needEffect,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = createRealStoreWithSagaAndReducer(
       saga,
@@ -268,7 +311,7 @@ describe('Rocketjump saga', () => {
       state,
       successEffect,
       failureEffect,
-      api: mockBadApi,
+      effect: mockBadApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
@@ -292,7 +335,7 @@ describe('Rocketjump saga', () => {
   //     type,
   //     state,
   //     callApi,
-  //     api: mockApi,
+  //     effect: mockApi,
   //   })()
   //   const store = mockStoreWithSaga(saga, {})
   //   store.dispatch(load())
@@ -311,7 +354,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 23 }))
@@ -352,7 +395,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockBadApi,
+      effect: mockBadApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load(undefined, { maik: 23 }))
@@ -386,7 +429,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
@@ -419,7 +462,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
       unloadBy: 'LOGOUT',
     })()
     const store = mockStoreWithSaga(saga, {})
@@ -457,7 +500,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
     })()
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load())
@@ -506,7 +549,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
       takeEffect: takeEveryAndCancel,
     })()
     const store = mockStoreWithSaga(saga, {})
@@ -568,7 +611,7 @@ describe('Rocketjump saga', () => {
     } = rj({
       type,
       state,
-      api: mockApi,
+      effect: mockApi,
       takeEffect: takeLatestAndCancelGroupBy,
       takeEffectArgs: [({ meta }) => meta.name],
       proxyActions: {
