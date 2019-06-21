@@ -2,6 +2,8 @@ import { rj } from '../rocketjump'
 import { createSelector } from 'reselect'
 import { orderBy } from 'lodash'
 
+const spyWarn = jest.spyOn(global.console, 'warn')
+
 describe('Rocketjump selectors', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
@@ -34,6 +36,50 @@ describe('Rocketjump selectors', () => {
   })
 
   it('should be proxable and extendible', () => {
+    const { selectors } = rj({
+      type,
+      state,
+      selectors: {
+        getData: ({ getData }) =>
+          createSelector(
+            getData,
+            soci =>
+              soci.map(s => ({
+                ...s,
+                name: s.name.toUpperCase(),
+                fresh: true,
+              }))
+          ),
+        getOldest: ({ getData }) =>
+          createSelector(
+            getData,
+            soci => {
+              return orderBy(soci, 'age', 'desc')[0]
+            }
+          ),
+      },
+    })()
+
+    expect(selectors.getData(fakeState)).toEqual([
+      {
+        name: 'GIOVA',
+        fresh: true,
+        age: 24,
+      },
+      {
+        name: 'MAIK',
+        fresh: true,
+        age: 29,
+      },
+    ])
+    expect(selectors.getOldest(fakeState)).toEqual({
+      name: 'Maik',
+      age: 29,
+    })
+  })
+
+  it('should still allow using proxySelectors but print warning', () => {
+    spyWarn.mockReset()
     const { selectors } = rj({
       type,
       state,
@@ -74,11 +120,12 @@ describe('Rocketjump selectors', () => {
       name: 'Maik',
       age: 29,
     })
+    expect(spyWarn).toHaveBeenCalled()
   })
 
   it('should be composable', () => {
     const rjIsAlive = rj({
-      proxySelectors: {
+      selectors: {
         getData: ({ getData }) =>
           createSelector(
             getData,
@@ -93,7 +140,7 @@ describe('Rocketjump selectors', () => {
     const capitalize = s =>
       s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase()
     const rjRangerName = rj({
-      proxySelectors: {
+      selectors: {
         getData: ({ getData }) =>
           createSelector(
             getData,
@@ -110,7 +157,7 @@ describe('Rocketjump selectors', () => {
     const { selectors } = rj(rjIsAlive, rjRangerName, {
       type,
       state,
-      proxySelectors: {
+      selectors: {
         getData: ({ getData }) =>
           createSelector(
             getData,
@@ -122,7 +169,7 @@ describe('Rocketjump selectors', () => {
           ),
       },
     })({
-      proxySelectors: {
+      selectors: {
         getData: ({ getData }) =>
           createSelector(
             getData,

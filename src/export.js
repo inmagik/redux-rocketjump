@@ -75,7 +75,15 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     selectors = extendExport.selectors
   }
   if (selectors) {
-    selectors = proxyObject(selectors, jumpConfig.proxySelectors)
+    if (jumpConfig.selectors) {
+      selectors = proxyObject(selectors, jumpConfig.selectors)
+    } else if (jumpConfig.proxySelectors) {
+      selectors = proxyObject(selectors, jumpConfig.proxySelectors)
+      console.warn(
+        '[redux-rocketjump] DeprecationWarning: ' +
+          'proxySelectors options is deprecated use selectors instead.'
+      )
+    }
   }
 
   const newExport = {
