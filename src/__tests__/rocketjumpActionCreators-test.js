@@ -30,6 +30,30 @@ describe('Rocketjump action creators', () => {
     })
   })
 
+  it('should be has run and clean alias', () => {
+    const { actions } = rj({
+      type,
+      state,
+    })()
+    expect(actions.run({ name: 'Giova' }, { killEnemies: true })).toEqual({
+      type,
+      payload: {
+        params: {
+          name: 'Giova',
+        },
+      },
+      meta: {
+        killEnemies: true,
+      },
+    })
+    expect(actions.clean({ tek: 23 })).toEqual({
+      type: `${type}_UNLOAD`,
+      meta: {
+        tek: 23,
+      },
+    })
+  })
+
   it('should be proxable', () => {
     const { actions } = rj({
       type,
