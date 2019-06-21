@@ -33,7 +33,7 @@ export const {
     .then(({ body }) => body)
 })()
 
-const multiloadingRj = (config, ...args) => rj({
+const multiloadingRj = rj({
   takeEffect: takeEveryAndCancel,
   reducer: (odlReducer, { type: confType }) => (prevState = {}, { type, meta }) => {
     const types = makeActionTypes(confType)
@@ -50,7 +50,7 @@ const multiloadingRj = (config, ...args) => rj({
         return prevState
     }
   },
-})(config, ...args)
+})
 
 const UPDATE_TODO = 'UPDATE_TODO'
 export const {
