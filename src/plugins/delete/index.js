@@ -15,13 +15,13 @@ export default (c = {}) => {
       dataReducer: () => true,
     }),
     {
-      proxySelectors: ({ getMapLoadings, getMapFailures, getMapData }) => ({
+      selectors: ({ getMapLoadings, getMapFailures, getMapData }) => ({
         // Simply "export" a more consistent names...
         getDeleting: getMapLoadings,
         getDeleted: getMapData,
         getFailures: getMapFailures,
       }),
-      proxyActions: {
+      actions: {
         performDelete: ({ load }) => (id, params = {}, meta = {}) =>
           load({ id, ...params }, { id, ...meta }),
       },

@@ -9,7 +9,7 @@ export default rj({
     ...a,
     meta: omit(a.meta, 'thunk'),
   }),
-  proxyActions: {
+  actions: {
     load: ({ load }) => (params = {}, meta = {}) =>
       load(params, { ...meta, thunk: isReactNative ? {} : true }),
   },

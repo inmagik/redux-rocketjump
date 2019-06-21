@@ -13,12 +13,12 @@ export default (c = {}) => {
       keepSucceded: config.keepUpdated,
     }),
     {
-      proxySelectors: ({ getMapLoadings, getMapFailures }) => ({
+      selectors: ({ getMapLoadings, getMapFailures }) => ({
         // Simply "export" a more consistent names...
         getUpdating: getMapLoadings,
         getFailures: getMapFailures,
       }),
-      proxyActions: {
+      actions: {
         update: ({ load }) => (obj, meta = {}) =>
           load(obj, { id: obj.id, ...meta }),
       },

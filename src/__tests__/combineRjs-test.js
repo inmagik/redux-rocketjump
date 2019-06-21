@@ -71,28 +71,28 @@ describe('Combine plugin', () => {
             makeRemoveListReducer(DELETE_BRO),
             makeUpdateReducer(UPDATE_BRO, 'data.list'),
           ],
-          api: () => BROS,
+          effect: () => BROS,
         }),
 
         starring: rj(rjUpdate(), {
-          proxyActions: {
+          actions: {
             load: ({ load }) => (id, starred) => load({ id, starred }, { id }),
           },
           type: SET_BRO_STARRED,
           // Return new "starred" state
-          api: ({ id, starred }) => ({ id, starred }),
+          effect: ({ id, starred }) => ({ id, starred }),
         }),
 
         deleting: rj(rjDelete(), {
           type: DELETE_BRO,
           // Such as 204 No Content
-          api: () => null,
+          effect: () => null,
         }),
 
         updating: rj(rjUpdate(), {
           type: UPDATE_BRO,
           // Such as 204 No Content
-          api: () => null,
+          effect: () => null,
         }),
       },
       { state: 'bros' }
@@ -269,7 +269,7 @@ describe('Combine plugin', () => {
     // console.log(JSON.stringify(state, null, 2))
   })
 
-  it('should combine state and proxySelectors', () => {
+  it('should combine state and selectors', () => {
     const getCoolGuyName = state => state.coolGuyName
 
     const {
@@ -282,7 +282,7 @@ describe('Combine plugin', () => {
       {
         list: rj({
           type: 'GET_GUYS',
-          proxySelectors: {
+          selectors: {
             getCoolGuys: ({ getData }) =>
               createSelector(
                 getData,

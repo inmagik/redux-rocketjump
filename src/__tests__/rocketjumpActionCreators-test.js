@@ -86,9 +86,7 @@ describe('Rocketjump action creators', () => {
       },
     })
 
-    const { actions } = rj(rjUn, rjDos, {
-      type,
-      state,
+    const rjTres = rj(rjUn, rjDos, {
       actions: {
         load: ({ load }) => (un, dos, tres, params, meta) =>
           load(
@@ -101,7 +99,11 @@ describe('Rocketjump action creators', () => {
             meta
           ),
       },
-    })({
+    })
+
+    const { actions } = rj(rjTres, {
+      type,
+      state,
       actions: {
         load: ({ load }) => a =>
           load(
@@ -114,7 +116,7 @@ describe('Rocketjump action creators', () => {
             }
           ),
       },
-    })
+    })()
 
     expect(actions.load('JD')).toEqual({
       type,

@@ -24,7 +24,7 @@ describe('Cache plugin', () => {
     } = rj(rjCache(), {
       type: 'GET_SOCI',
       state: 'soci',
-      api: mockApi,
+      effect: mockApi,
     })()
 
     const store = createRealStoreWithSagaAndReducer(
@@ -52,7 +52,7 @@ describe('Cache plugin', () => {
     } = rj(rjCache(), {
       type: 'GET_SOCI',
       state: 'soci',
-      api: mockApi,
+      effect: mockApi,
     })()
 
     const store = createRealStoreWithSagaAndReducer(
@@ -82,7 +82,7 @@ describe('Cache plugin', () => {
       {
         type: 'GET_SOCI',
         state: 'soci',
-        api: mockApi,
+        effect: mockApi,
       }
     )()
 

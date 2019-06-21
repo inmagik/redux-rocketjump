@@ -49,7 +49,7 @@ describe('Rocketjump', () => {
       rj({
         type: 'HARMLESS_TYPE',
         state: 'HARMLESS_STATE',
-        api: () => {},
+        effect: () => {},
       })(undefined, {
         reducer: () => 'KILL ALL HUMANS',
       }).reducer(

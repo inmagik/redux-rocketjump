@@ -87,13 +87,13 @@ export const makeMapSelectors = getBaseState => {
 }
 
 export default (mapConfig = {}) => rj({
-  proxyActions: {
+  actions: {
     loadKey: ({ load }) => (id, params = {}, meta = {}) =>
       load({ id, ...params }, { id, ...meta }),
     unloadKey: ({ unload }) => id => unload({ id }),
   },
   // SWAP reducer \w new map reducer
-  proxyReducer: (oldReducer, { type }) => (
+  reducer: (oldReducer, { type }) => (
     makeMapReducer(
       type,
       mapConfig.key,
@@ -101,7 +101,7 @@ export default (mapConfig = {}) => rj({
       mapConfig.keepSucceded
     )
   ),
-  proxySelectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
+  selectors: ({ getBaseState }) => makeMapSelectors(getBaseState),
   takeEffect: takeLatestAndCancelGroupBy,
   takeEffectArgs: [
     typeof mapConfig.key === 'function' ? mapConfig.key : defaultKeyMaker,

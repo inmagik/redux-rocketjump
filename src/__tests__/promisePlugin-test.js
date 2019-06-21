@@ -18,20 +18,21 @@ describe('Promise catalog', () => {
     const {
       actions: { load },
       saga,
-    } = rj(rjWithPromise)({
-      type: 'OCIO',
-      state: 'X',
-      api: ({ maik }) =>
-        new Promise((resolve, reject) => {
-          if (maik === 23) {
-            resolve({
-              message: 'Time 2 Rave on!',
-            })
-          } else {
-            reject('Invalid Maik try again')
-          }
-        }),
-    })
+    } = rj(rjWithPromise,
+      {
+        type: 'OCIO',
+        state: 'X',
+        effect: ({ maik }) =>
+          new Promise((resolve, reject) => {
+            if (maik === 23) {
+              resolve({
+                message: 'Time 2 Rave on!',
+              })
+            } else {
+              reject('Invalid Maik try again')
+            }
+          }),
+      })()
 
     const store = mockStoreWithSaga(saga, {})
     store.dispatch(load({ maik: 777 })).catch(error => {

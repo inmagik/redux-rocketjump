@@ -223,7 +223,7 @@ describe('Map plugin', () => {
     } = rj(rjMap(), {
       type: 'GET_USER',
       state: 'users',
-      api: mockApi,
+      effect: mockApi,
     })()
 
     const store = mockStoreWithSaga(saga, {})

@@ -5,14 +5,14 @@ import { select } from 'redux-saga/effects'
 
 export default (cacheConfig = {}) => (config, ...args) =>
   rj({
-    proxyActions: {
+    actions: {
       load: ({ load }) => (params = {}, meta = {}) =>
         load(params, { ...meta, cache: true }),
 
       // Skip cache
       loadForce: ({ load }) => load,
     },
-    proxyReducer: reducer => {
+    reducer: reducer => {
       if (cacheConfig.purge) {
         return resetReducerOn(cacheConfig.purge, reducer)
       }

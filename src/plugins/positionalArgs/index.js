@@ -10,7 +10,7 @@ const makeMeta = (toMeta, args) =>
 
 export default (...toMeta) =>
   rj({
-    proxyActions: {
+    actions: {
       load: ({ load }) => (...args) => {
         const meta = toMeta ? makeMeta(toMeta, args) : {}
         return load(args, meta)

@@ -110,7 +110,7 @@ export const makeListSelectors = (getData, pageSizeSelector) => {
 export default (config = {}) =>
   rj({
     dataReducer: makeListDataReducer(config.pagination),
-    proxySelectors: ({ getData }) =>
+    selectors: ({ getData }) =>
       makeListSelectors(getData, config.pageSize),
   })
 
