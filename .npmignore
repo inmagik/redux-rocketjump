@@ -1,6 +1,11 @@
+/docs
+/example
+/website
+/scripts
 /src
 .babel*
 rollup.config.js
+.prettierrc
 
 # dependencies
 /node_modules
