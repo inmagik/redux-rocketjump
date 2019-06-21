@@ -48,7 +48,10 @@ If it is a function, it will be called with the redux store as its first argumen
 
 If it is `false`, both selectors and reducer creation is skipped. This is useful when you need only to run action driven side effect in rocketjump environment.
 
-### api *(function)*
+### effect *(function)*
+
+> This configuration option was called `api` in version 1.*
+
 This is the side effect, the asynchronous task incapsulated in this rocketjump instance. The function passed to this key must conform the following signature
 
 ```js
