@@ -1,6 +1,7 @@
 # redux-rocketjump
 [![Build Status](https://travis-ci.org/inmagik/redux-rocketjump.svg?branch=master)](https://travis-ci.org/inmagik/redux-rocketjump)
 [![npm version](https://badge.fury.io/js/redux-rocketjump.svg)](https://badge.fury.io/js/redux-rocketjump)
+[![codecov](https://codecov.io/gh/inmagik/redux-rocketjump/branch/master/graph/badge.svg)](https://codecov.io/gh/inmagik/redux-rocketjump)
 
 Rocketjump your redux! Speed up redux-app development.
 
@@ -24,7 +25,7 @@ yarn add redux redux-saga reselect redux-rocketjump
 function loadTodosFromApi(params) {
   let myHeaders = new Headers();
 
-  let config = { 
+  let config = {
     method: 'GET',
     headers: new Headers(),
     body: params
@@ -34,7 +35,7 @@ function loadTodosFromApi(params) {
     .then(response => response.json())
 }
 
-// (2) Import rocketjump (rj for friends) 
+// (2) Import rocketjump (rj for friends)
 import { rj } from 'redux-rocketjump'
 // Main export
 // Here we deal with actions, reducers, selectors and sagas that have been created for us
