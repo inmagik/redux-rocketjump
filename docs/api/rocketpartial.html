@@ -63,7 +63,10 @@
 rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="configuration-options"></a><a href="#configuration-options" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration options</h2>
-<h3><a class="anchor" aria-hidden="true" id="proxyaction-object-function"></a><a href="#proxyaction-object-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>proxyAction <em>(object|function)</em></h3>
+<h3><a class="anchor" aria-hidden="true" id="actions-object-function"></a><a href="#actions-object-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>actions <em>(object|function)</em></h3>
+<blockquote>
+<p>This configuration option was called <code>proxyActions</code> in version 1.*</p>
+</blockquote>
 <p>This property can be used to customize the generated actions by adding more ones.</p>
 <p>This property can be used in two ways</p>
 <ul>
@@ -73,21 +76,24 @@ rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
 <p>Examples: implement complex behaviours</p>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    proxyActions: {
+    actions: {
         <span class="hljs-attr">loadMore</span>: <span class="hljs-function">(<span class="hljs-params">{ load }</span>) =&gt;</span> <span class="hljs-function">(<span class="hljs-params">params = {}, meta = {}</span>) =&gt;</span> load(params, { ...meta, <span class="hljs-attr">more</span>: <span class="hljs-literal">true</span> })
     }
 }
 </code></pre>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    proxyActions: <span class="hljs-function">(<span class="hljs-params">{ load }</span>) =&gt;</span> {
+    actions: <span class="hljs-function">(<span class="hljs-params">{ load }</span>) =&gt;</span> {
         <span class="hljs-keyword">return</span> {
             <span class="hljs-attr">loadMore</span>: <span class="hljs-function">(<span class="hljs-params">params = {}, meta = {}</span>) =&gt;</span> load(params, { ...meta, <span class="hljs-attr">more</span>: <span class="hljs-literal">true</span> })
         }
     }
 }
 </code></pre>
-<h3><a class="anchor" aria-hidden="true" id="proxyselectors-object-function"></a><a href="#proxyselectors-object-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>proxySelectors <em>(object|function)</em></h3>
+<h3><a class="anchor" aria-hidden="true" id="selectors-object-function"></a><a href="#selectors-object-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>selectors <em>(object|function)</em></h3>
+<blockquote>
+<p>This configuration options was called <code>proxySelectors</code> in version 1.*</p>
+</blockquote>
 <p>This property can be used to customize the generated selectors by adding more ones.</p>
 <p>This property can be used in two ways</p>
 <ul>
@@ -97,7 +103,7 @@ rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
 <p>Examples: add a custom property</p>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    proxySelectors: {
+    selectors: {
         <span class="hljs-attr">getData</span>: <span class="hljs-function">(<span class="hljs-params">{ getData }</span>) =&gt;</span> createSelector(getData, todos =&gt;
             todos === <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : todos.map(<span class="hljs-function"><span class="hljs-params">todo</span> =&gt;</span> ({
                 ...todo,
@@ -109,7 +115,7 @@ rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
 </code></pre>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    proxySelectors: <span class="hljs-function">(<span class="hljs-params">{ getData }</span>) =&gt;</span> ({
+    selectors: <span class="hljs-function">(<span class="hljs-params">{ getData }</span>) =&gt;</span> ({
         <span class="hljs-attr">getData</span>: createSelector(getData, todos =&gt;
             todos === <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : todos.map(<span class="hljs-function"><span class="hljs-params">todo</span> =&gt;</span> ({
                 ...todo,
@@ -119,7 +125,10 @@ rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
     })
 }
 </code></pre>
-<h3><a class="anchor" aria-hidden="true" id="proxyreducer-function"></a><a href="#proxyreducer-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>proxyReducer <em>(function)</em></h3>
+<h3><a class="anchor" aria-hidden="true" id="reducer-function"></a><a href="#reducer-function" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>reducer <em>(function)</em></h3>
+<blockquote>
+<p>This configuration option was called <code>proxyReducer</code> in version 1.*</p>
+</blockquote>
 <p>This property can be used to customize the generated reducer.</p>
 <p>If given, this property is expected to contain a function that is called with the automatically generated reducer and that <strong>must</strong> return the reducer to be used in place of the default one</p>
 <p>Example: translate error messages</p>
@@ -153,25 +162,31 @@ rj({ <span class="hljs-comment">/* put yout configuration here */</span> })
     }
 }
 </code></pre>
-<h3><a class="anchor" aria-hidden="true" id="callapi-effect"></a><a href="#callapi-effect" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>callApi <em>(effect)</em></h3>
+<h3><a class="anchor" aria-hidden="true" id="effectcaller-effect"></a><a href="#effectcaller-effect" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>effectCaller <em>(effect)</em></h3>
+<blockquote>
+<p>This configuration option was called <code>callEffect</code> in version 1.*</p>
+</blockquote>
 <p>If this property is given then its value is used instead of the <code>call</code> function from redux-saga to call the api function. As such, this property <strong>must</strong> contain a generator.</p>
 <p>Example: manage authentication tokens</p>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    callApi: <span class="hljs-function"><span class="hljs-keyword">function</span> *(<span class="hljs-params">apiFn, ...args</span>) </span>{
+    effectCaller: <span class="hljs-function"><span class="hljs-keyword">function</span> *(<span class="hljs-params">apiFn, ...args</span>) </span>{
         <span class="hljs-keyword">const</span> token = <span class="hljs-keyword">yield</span> select(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> state.auth.accessToken)
         <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">yield</span> call(apiFn, ...args, token)
         <span class="hljs-keyword">return</span> result
     }
 }
 </code></pre>
-<h3><a class="anchor" aria-hidden="true" id="apiextraparams-generator-generator"></a><a href="#apiextraparams-generator-generator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>apiExtraParams <em>(generator|generator[])</em></h3>
+<h3><a class="anchor" aria-hidden="true" id="effectextraparams-generator-generator"></a><a href="#effectextraparams-generator-generator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>effectExtraParams <em>(generator|generator[])</em></h3>
+<blockquote>
+<p>This configuration option was called <code>apiExtraParams</code> in version 1.*</p>
+</blockquote>
 <p>If this property is given, it is expected to be a generator or an array of generators. These are used sequentially to compute additional parameters to be passed to the <code>api</code> function in the <code>params</code> argument.
 The first generator is invoked with the <code>params</code> and <code>meta</code> objects as its arguments, and its output is merged into the <code>params</code> object itself. Each of following generators is invoked with the <code>params</code> object obtained after the last run and the <code>meta</code> object, and the output is merged again in the same way of the first run. In order to achieve this, each generator <strong>must</strong> return an object. The <code>params</code> object obtained after the last generator has been invoked and its result has been blended is used to run the asynchronous task.</p>
 <p>Example: manage pagination data</p>
 <pre><code class="hljs css language-js">{
     <span class="hljs-comment">// ... other config options ...</span>
-    apiExtraParams: <span class="hljs-function"><span class="hljs-keyword">function</span> *(<span class="hljs-params">params, meta</span>) </span>{
+    effectExtraParams: <span class="hljs-function"><span class="hljs-keyword">function</span> *(<span class="hljs-params">params, meta</span>) </span>{
         <span class="hljs-keyword">if</span> (meta.loadMore) {
             <span class="hljs-keyword">const</span> next = <span class="hljs-keyword">yield</span> select(state.pagination.next)
             <span class="hljs-keyword">return</span> { next }
@@ -248,4 +263,4 @@ The first generator is invoked with the <code>params</code> and <code>meta</code
     ]
 }
 </code></pre>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/quickstart"><span class="arrow-prev">← </span><span>Quick Start</span></a><a class="docs-next button" href="/redux-rocketjump/docs/api/rocketjump"><span class="function-name-prevnext">RocketJump</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-a-rocketpartial">What is a RocketPartial?</a></li><li><a href="#configuration-options">Configuration options</a><ul class="toc-headings"><li><a href="#proxyaction-object-function">proxyAction <em>(object|function)</em></a></li><li><a href="#proxyselectors-object-function">proxySelectors <em>(object|function)</em></a></li><li><a href="#proxyreducer-function">proxyReducer <em>(function)</em></a></li><li><a href="#datareducer-function">dataReducer <em>(function)</em></a></li><li><a href="#callapi-effect">callApi <em>(effect)</em></a></li><li><a href="#apiextraparams-generator-generator">apiExtraParams <em>(generator|generator[])</em></a></li><li><a href="#needeffect-generator">needEffect <em>(generator)</em></a></li><li><a href="#successeffect-generator-generator">successEffect <em>(generator|generator[])</em></a></li><li><a href="#failureeffect-generator-generator">failureEffect <em>(generator|generator[])</em></a></li><li><a href="#takeeffect-effect">takeEffect <em>(effect)</em></a></li><li><a href="#takeeffectargs-any">takeEffectArgs <em>(any[])</em></a></li><li><a href="#maploadingaction-function">mapLoadingAction <em>(function)</em></a></li><li><a href="#mapsuccessaction-function">mapSuccessAction <em>(function)</em></a></li><li><a href="#mapfailureaction-function">mapFailureAction <em>(function)</em></a></li><li><a href="#composereducer-function">composeReducer <em>(function[])</em></a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/redux-rocketjump/docs/quickstart"><span class="arrow-prev">← </span><span>Quick Start</span></a><a class="docs-next button" href="/redux-rocketjump/docs/api/rocketjump"><span class="function-name-prevnext">RocketJump</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-a-rocketpartial">What is a RocketPartial?</a></li><li><a href="#configuration-options">Configuration options</a><ul class="toc-headings"><li><a href="#actions-object-function">actions <em>(object|function)</em></a></li><li><a href="#selectors-object-function">selectors <em>(object|function)</em></a></li><li><a href="#reducer-function">reducer <em>(function)</em></a></li><li><a href="#datareducer-function">dataReducer <em>(function)</em></a></li><li><a href="#effectcaller-effect">effectCaller <em>(effect)</em></a></li><li><a href="#effectextraparams-generator-generator">effectExtraParams <em>(generator|generator[])</em></a></li><li><a href="#needeffect-generator">needEffect <em>(generator)</em></a></li><li><a href="#successeffect-generator-generator">successEffect <em>(generator|generator[])</em></a></li><li><a href="#failureeffect-generator-generator">failureEffect <em>(generator|generator[])</em></a></li><li><a href="#takeeffect-effect">takeEffect <em>(effect)</em></a></li><li><a href="#takeeffectargs-any">takeEffectArgs <em>(any[])</em></a></li><li><a href="#maploadingaction-function">mapLoadingAction <em>(function)</em></a></li><li><a href="#mapsuccessaction-function">mapSuccessAction <em>(function)</em></a></li><li><a href="#mapfailureaction-function">mapFailureAction <em>(function)</em></a></li><li><a href="#composereducer-function">composeReducer <em>(function[])</em></a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/redux-rocketjump/" class="nav-home"></a><div><h5>Docs</h5><a href="/redux-rocketjump/docs/en/installation">Getting Started</a><a href="/redux-rocketjump/docs/en/api/rocketpartial">API reference</a><a href="/redux-rocketjump/docs/en/plugins-intro">Plugins reference</a></div><div><h5>More</h5><a href="https://github.com/inmagik/redux-rocketjump">GitHub</a><a class="github-button" href="https://github.com/inmagik/redux-rocketjump" data-icon="octicon-star" data-count-href="/inmagik/react-rocketjump/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://inmagik.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource inmagikOpenSource"><img src="/redux-rocketjump/img/inmagik_logo_circle1.png" alt="InMagik Logo" width="70" height="70"/></a><section class="copyright">Copyright © 2019 InMagik s.r.l.</section></footer></div></body></html>
