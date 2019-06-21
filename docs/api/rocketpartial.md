@@ -14,7 +14,10 @@ rj({ /* put yout configuration here */ })
 ```
 
 ## Configuration options
-### proxyAction *(object|function)*
+### actions *(object|function)*
+
+> This configuration option was called `proxyActions` in version 1.*
+
 This property can be used to customize the generated actions by adding more ones.
 
 This property can be used in two ways
@@ -26,7 +29,7 @@ Examples: implement complex behaviours
 ```js
 {
     // ... other config options ...
-    proxyActions: {
+    actions: {
         loadMore: ({ load }) => (params = {}, meta = {}) => load(params, { ...meta, more: true })
     }
 }
@@ -35,7 +38,7 @@ Examples: implement complex behaviours
 ```js
 {
     // ... other config options ...
-    proxyActions: ({ load }) => {
+    actions: ({ load }) => {
         return {
             loadMore: (params = {}, meta = {}) => load(params, { ...meta, more: true })
         }
@@ -43,7 +46,10 @@ Examples: implement complex behaviours
 }
 ```
 
-### proxySelectors *(object|function)*
+### selectors *(object|function)*
+
+> This configuration options was called `proxySelectors` in version 1.*
+
 This property can be used to customize the generated selectors by adding more ones.
 
 This property can be used in two ways
@@ -55,7 +61,7 @@ Examples: add a custom property
 ```js
 {
     // ... other config options ...
-    proxySelectors: {
+    selectors: {
         getData: ({ getData }) => createSelector(getData, todos =>
             todos === null ? null : todos.map(todo => ({
                 ...todo,
@@ -69,7 +75,7 @@ Examples: add a custom property
 ```js
 {
     // ... other config options ...
-    proxySelectors: ({ getData }) => ({
+    selectors: ({ getData }) => ({
         getData: createSelector(getData, todos =>
             todos === null ? null : todos.map(todo => ({
                 ...todo,
@@ -80,7 +86,10 @@ Examples: add a custom property
 }
 ```
 
-### proxyReducer *(function)*
+### reducer *(function)*
+
+> This configuration option was called `proxyReducer` in version 1.*
+
 This property can be used to customize the generated reducer.
 
 If given, this property is expected to contain a function that is called with the automatically generated reducer and that **must** return the reducer to be used in place of the default one
@@ -123,14 +132,17 @@ Example: deserialize date objects
 }
 ```
 
-### callApi *(effect)*
+### effectCaller *(effect)*
+
+> This configuration option was called `callEffect` in version 1.*
+
 If this property is given then its value is used instead of the `call` function from redux-saga to call the api function. As such, this property **must** contain a generator. 
 
 Example: manage authentication tokens
 ```js
 {
     // ... other config options ...
-    callApi: function *(apiFn, ...args) {
+    effectCaller: function *(apiFn, ...args) {
         const token = yield select(state => state.auth.accessToken)
         const result = yield call(apiFn, ...args, token)
         return result
@@ -138,7 +150,10 @@ Example: manage authentication tokens
 }
 ```
 
-### apiExtraParams *(generator|generator[])*
+### effectExtraParams *(generator|generator[])*
+
+> This configuration option was called `apiExtraParams` in version 1.*
+
 If this property is given, it is expected to be a generator or an array of generators. These are used sequentially to compute additional parameters to be passed to the `api` function in the `params` argument.
 The first generator is invoked with the `params` and `meta` objects as its arguments, and its output is merged into the `params` object itself. Each of following generators is invoked with the `params` object obtained after the last run and the `meta` object, and the output is merged again in the same way of the first run. In order to achieve this, each generator **must** return an object. The `params` object obtained after the last generator has been invoked and its result has been blended is used to run the asynchronous task. 
 
@@ -146,7 +161,7 @@ Example: manage pagination data
 ```js
 {
     // ... other config options ...
-    apiExtraParams: function *(params, meta) {
+    effectExtraParams: function *(params, meta) {
         if (meta.loadMore) {
             const next = yield select(state.pagination.next)
             return { next }
