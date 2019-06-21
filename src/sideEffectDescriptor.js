@@ -12,32 +12,46 @@ export const makeSideEffectDescriptor = () => ({
   mapLoadingAction: a => a,
 })
 
-export const addConfigToSideEffectDescritor = (sideEffect, config) => ({
-  ...sideEffect,
-  ...pick(config, 'callApi', 'takeEffect', 'takeEffectArgs', 'needEffect'),
-  apiExtraParams: [
-    ...sideEffect.apiExtraParams,
-    ...arrayze(get(config, 'apiExtraParams', [])),
-  ],
-  successEffect: [
-    ...sideEffect.successEffect,
-    ...arrayze(get(config, 'successEffect', [])),
-  ],
-  failureEffect: [
-    ...sideEffect.failureEffect,
-    ...arrayze(get(config, 'failureEffect', [])),
-  ],
-  unloadBy: [...sideEffect.unloadBy, ...arrayze(get(config, 'unloadBy', []))],
-  mapLoadingAction:
-    typeof config.mapLoadingAction === 'function'
-      ? a => config.mapLoadingAction(sideEffect.mapLoadingAction(a))
-      : sideEffect.mapLoadingAction,
-  mapSuccessAction:
-    typeof config.mapSuccessAction === 'function'
-      ? a => config.mapSuccessAction(sideEffect.mapSuccessAction(a))
-      : sideEffect.mapSuccessAction,
-  mapFailureAction:
-    typeof config.mapFailureAction === 'function'
-      ? a => config.mapFailureAction(sideEffect.mapFailureAction(a))
-      : sideEffect.mapFailureAction,
-})
+export const addConfigToSideEffectDescritor = (sideEffect, config) => {
+  const nextSideEffectDescriptor = {
+    ...sideEffect,
+    ...pick(config, 'takeEffect', 'takeEffectArgs', 'needEffect'),
+    apiExtraParams: [
+      ...sideEffect.apiExtraParams,
+      ...arrayze(get(config, 'apiExtraParams', [])),
+    ],
+    successEffect: [
+      ...sideEffect.successEffect,
+      ...arrayze(get(config, 'successEffect', [])),
+    ],
+    failureEffect: [
+      ...sideEffect.failureEffect,
+      ...arrayze(get(config, 'failureEffect', [])),
+    ],
+    unloadBy: [...sideEffect.unloadBy, ...arrayze(get(config, 'unloadBy', []))],
+    mapLoadingAction:
+      typeof config.mapLoadingAction === 'function'
+        ? a => config.mapLoadingAction(sideEffect.mapLoadingAction(a))
+        : sideEffect.mapLoadingAction,
+    mapSuccessAction:
+      typeof config.mapSuccessAction === 'function'
+        ? a => config.mapSuccessAction(sideEffect.mapSuccessAction(a))
+        : sideEffect.mapSuccessAction,
+    mapFailureAction:
+      typeof config.mapFailureAction === 'function'
+        ? a => config.mapFailureAction(sideEffect.mapFailureAction(a))
+        : sideEffect.mapFailureAction,
+  }
+
+  if (config.effectCaller) {
+    nextSideEffectDescriptor.effectCaller = config.effectCaller
+  } else if (config.callApi) {
+    nextSideEffectDescriptor.effectCaller = config.callApi
+    console.warn(
+      '[redux-rocketjump] DeprecationWarning: ' +
+        'callApi options is deprecated use effectCaller instead.'
+    )
+  }
+
+  return nextSideEffectDescriptor
+}
