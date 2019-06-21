@@ -65,7 +65,7 @@ export const {
   // Piece of state to put data in
   state 'todos',
   // And our fetching logic
-  api: params => loadTodosFromApi(params),
+  effect: params => loadTodosFromApi(params),
 })()
 
 // (3) And then use it in your main file
@@ -124,5 +124,5 @@ git clone git@github.com:inmagik/redux-rocketjump.git
 Then run:
 ```shell
 yarn install
-yarn start
+yarn run-example
 ```
