@@ -9,7 +9,7 @@ describe('rj bad warnings', () => {
     rj()({
       type: 'CIAO',
       state: 'ciao',
-      api: () => {},
+      effect: () => {},
     })
 
     expect(spy).toHaveBeenCalled()
@@ -24,7 +24,7 @@ describe('rj bad warnings', () => {
     const rj2 = rj(rj1, {
       type: 'y',
       state: 'y',
-      api: () => {},
+      effect: () => {},
     })
 
     // eslint-disable-next-line no-unused-vars
@@ -42,7 +42,7 @@ describe('rj bad warnings', () => {
     const rj2 = rj(rj1, {
       type: 'y',
       state: 'y',
-      api: () => {},
+      effect: () => {},
     })
 
     // eslint-disable-next-line no-unused-vars
@@ -54,13 +54,13 @@ describe('rj bad warnings', () => {
     spy.mockReset()
 
     const rj1 = rj({
-      api: () => {},
+      effect: () => {},
     })
 
     const rj2 = rj(rj1, {
       type: 'y',
       state: 'y',
-      api: () => {},
+      effect: () => {},
     })
 
     // eslint-disable-next-line no-unused-vars
@@ -77,7 +77,7 @@ describe('rj bad warnings', () => {
         type: 'x',
       },
       {
-        api: () => {},
+        effect: () => {},
         state: 'x',
       }
     )()
@@ -93,7 +93,7 @@ describe('rj bad warnings', () => {
         state: 'x',
       },
       {
-        api: () => {},
+        effect: () => {},
         type: 'x',
       }
     )()
@@ -106,7 +106,7 @@ describe('rj bad warnings', () => {
     // eslint-disable-next-line no-unused-vars
     const result = rj(
       {
-        api: () => {},
+        effect: () => {},
       },
       {
         type: 'x',
@@ -128,7 +128,7 @@ describe('rj bad warnings', () => {
     // eslint-disable-next-line no-unused-vars
     const rj4 = rj(rj3, {
       type: 'r',
-      api: () => {},
+      effect: () => {},
       state: 'aa',
     })()
 
@@ -150,7 +150,7 @@ describe('rj bad warnings', () => {
       rj3,
       {
         type: 'r',
-        api: () => {},
+        effect: () => {},
         state: 'aa',
       },
       rj5
@@ -174,7 +174,7 @@ describe('rj bad warnings', () => {
       {},
       {
         type: 'r',
-        api: () => {},
+        effect: () => {},
         state: 'aa',
       }
     )()
