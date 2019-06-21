@@ -50,12 +50,12 @@ class Footer extends React.Component {
           
           <div>
             <h5>More</h5>
-            <a href="https://github.com/">GitHub</a>
+            <a href="https://github.com/inmagik/redux-rocketjump">GitHub</a>
             <a
               className="github-button"
               href={this.props.config.repoUrl}
               data-icon="octicon-star"
-              data-count-href="/facebook/docusaurus/stargazers"
+              data-count-href="/inmagik/react-rocketjump/stargazers"
               data-show-count="true"
               data-count-aria-label="# stargazers on GitHub"
               aria-label="Star this project on GitHub">
@@ -70,7 +70,7 @@ class Footer extends React.Component {
           rel="noreferrer noopener"
           className="fbOpenSource inmagikOpenSource">
           <img
-            src={`${this.props.config.baseUrl}img/inmagik_logo.png`}
+            src={`${this.props.config.baseUrl}img/inmagik_logo_circle1.png`}
             alt="InMagik Logo"
             width="70"
             height="70"
