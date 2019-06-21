@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
-import { select } from 'redux-saga/effects'
+import { select, call } from 'redux-saga/effects'
 import omit from 'lodash/omit'
 import { rj } from '../rocketjump'
 import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
@@ -322,29 +322,54 @@ describe('Rocketjump saga', () => {
     })
   })
 
-  // it('should be use custom call api function', done => {
-  //   const callApi = function *(apiFn) {
-  //     const data = yield call(apiFn('supersecret'))
-  //     return data
-  //   }
-  //   const mockApi = token => () => new Promise(resolve => {
-  //     resolve('maik ' + token)
-  //   })
-  //
-  //   const { actions: { load }, saga } = rj({
-  //     type,
-  //     state,
-  //     callApi,
-  //     effect: mockApi,
-  //   })()
-  //   const store = mockStoreWithSaga(saga, {})
-  //   store.dispatch(load())
-  //   mockApi.mock.results[0].value.then(apiResult => {
-  //     expect(mockApi.mock.calls[0][0]).tobe('supersecret')
-  //     console.log('~~~', apiResult)
-  //     done()
-  //   })
-  // })
+  it('should be use the provided effect caller function', done => {
+    const effectCaller = function *(apiFn) {
+      const data = yield call(apiFn(1312))
+      return data
+    }
+    const myApi = t => mockApi(t)
+    const mockApi = jest.fn(token => new Promise(resolve => {
+      resolve('Maik~' + token)
+    }))
+
+    const { actions: { load }, saga } = rj({
+      type,
+      state,
+      effectCaller,
+      effect: myApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    mockApi.mock.results[0].value.then(apiResult => {
+      expect(apiResult).toBe('Maik~1312')
+      done()
+    })
+  })
+
+  it('should be still use callApi but print a warning', done => {
+    const callApi = function *(apiFn) {
+      const data = yield call(apiFn(1312))
+      return data
+    }
+    const myApi = t => mockApi(t)
+    const mockApi = jest.fn(token => new Promise(resolve => {
+      resolve('Maik~' + token)
+    }))
+
+    const { actions: { load }, saga } = rj({
+      type,
+      state,
+      callApi,
+      effect: myApi,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    mockApi.mock.results[0].value.then(apiResult => {
+      expect(apiResult).toBe('Maik~1312')
+      done()
+    })
+    expect(spyWarn).toHaveBeenCalled()
+  })
 
   it('should dispatch meta along with actions', done => {
     const mockApi = jest.fn().mockResolvedValueOnce(mockApiResults)
