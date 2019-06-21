@@ -29,15 +29,14 @@ export default function combineRjs(combine, config) {
           : givenRj.__rjconfig.state
 
       const reducerKey =
-        typeof givenRj.__rjconfig.state === 'undefined' ? key : givenRj.__rjconfig.state
+        typeof givenRj.__rjconfig.state === 'undefined'
+          ? key
+          : givenRj.__rjconfig.state
 
       const { reducer, saga, actions, selectors } = givenRj({
         __rjtype: $TYPE_RJ_COMBINE_CONFIG,
         state: stateSelector,
         callApi: givenRj.__rjconfig.callApi || config.callApi,
-        // apiExtraParams: config.apiExtraParams,
-        // successEffect: config.successEffect,
-        // failureEffect: config.failureEffect,
       })
 
       let reducers = result.reducers

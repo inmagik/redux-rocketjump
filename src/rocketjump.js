@@ -19,10 +19,9 @@ function checkWarns(rjsOrConfigs, extraConfig) {
         'the last evalutation should invoke without parameters'
     )
   }
-  let cfgToCheck = rjsOrConfigs.filter(item => (
-    typeof item === 'object' &&
-    item !== null
-  ))
+  let cfgToCheck = rjsOrConfigs.filter(
+    item => typeof item === 'object' && item !== null
+  )
   if (
     extraConfig === undefined ||
     // Only combineRjs can inject the last config :P
@@ -94,6 +93,7 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
         'state',
         'api',
         'effect',
+        'effectExtraParams',
         'apiExtraParams',
         'takeEffect',
         'effectCaller',
@@ -119,7 +119,7 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
     saga = makeApiSaga(
       runConfig.type,
       effectCall,
-      sideEffect.apiExtraParams,
+      sideEffect.effectExtraParams,
       sideEffect.takeEffect,
       sideEffect.effectCaller,
       sideEffect.needEffect,
