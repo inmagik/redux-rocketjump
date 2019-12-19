@@ -37,6 +37,7 @@ export default function combineRjs(combine, config) {
         __rjtype: $TYPE_RJ_COMBINE_CONFIG,
         state: stateSelector,
         callApi: givenRj.__rjconfig.callApi || config.callApi,
+        effectCaller: givenRj.__rjconfig.effectCaller || config.effectCaller,
       })
 
       let reducers = result.reducers
