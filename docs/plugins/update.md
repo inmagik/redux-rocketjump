@@ -30,7 +30,7 @@ const {
         {
             type: 'UPDATE_HUMAN',
             state: 'humans',
-            api: putHuman
+            effect: putHuman
         }
     )()
 ```

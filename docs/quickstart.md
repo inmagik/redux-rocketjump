@@ -43,7 +43,7 @@ This parameters must be passed in to RocketJump as a plain JavaScript object, li
 {
   type: 'GET_TODOS',                        // The name of the task
   state: 'todos',                           // The path to store data at
-  api: params => loadTodosFromApi(params)   // The asynchrous task
+  effect: params => loadTodosFromApi(params)   // The asynchrous task
 }
 ```
 
@@ -91,7 +91,7 @@ export const {
 } = rj({
   type: 'GET_TODOS',
   state 'todos',
-  api: params => loadTodosFromApi(params),
+  effect: params => loadTodosFromApi(params),
 })()
 ```
 

@@ -35,7 +35,7 @@ const {
         {
             type: 'MY_DATA',
             state: 'myData',
-            api: fetchMyDataApi,
+            effect: fetchMyDataApi,
         }
     )()
 ```

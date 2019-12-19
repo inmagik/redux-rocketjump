@@ -19,7 +19,7 @@ const {
       {
           type: 'GET_TODOS',
           state: 'todos',
-          api: loadTodosFromApi,
+          effect: loadTodosFromApi,
       }
     )()
 

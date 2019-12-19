@@ -45,7 +45,7 @@ const { reducer } = combineRjs({
     }),
 
     starring: rj(rjUpdate(), {
-        proxyActions: {
+        actions: {
             load: ({ load }) => (id, starred) =>
                 load({ id, starred }, { id }),
         },

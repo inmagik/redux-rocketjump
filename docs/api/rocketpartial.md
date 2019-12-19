@@ -98,7 +98,7 @@ Example: translate error messages
 ```js
 {
     // ... other config options ...
-    proxyReducer: oldReducer => (state, action) => {
+    reducer: oldReducer => (state, action) => {
         switch(action.type) {
             case 'MY_COOL_ACTION_ERROR':
                 return {
@@ -177,7 +177,7 @@ Example: skip some calls to an API because we are caching the value
 ```js
 rj({
     // ... other config options ...
-    proxyActions: {
+    actions: {
         load: ({ load }) => 
                 (params = {}, meta = {}) =>
                   load(params, { ...meta, cache: true }),
