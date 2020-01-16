@@ -35,19 +35,24 @@ describe('Rocketjump action creators', () => {
       type,
       state,
     })()
-    expect(actions.run({ name: 'Giova' }, { killEnemies: true })).toEqual({
+    expect(actions.run([{ name: 'Giova' }], { killEnemies: true })).toEqual({
       type,
       payload: {
-        params: {
-          name: 'Giova',
-        },
+        params: [
+          {
+            name: 'Giova',
+          },
+        ],
       },
       meta: {
         killEnemies: true,
       },
     })
-    expect(actions.clean({ tek: 23 })).toEqual({
+    expect(actions.clean([], { tek: 23 })).toEqual({
       type: `${type}_UNLOAD`,
+      payload: {
+        params: [],
+      },
       meta: {
         tek: 23,
       },

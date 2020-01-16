@@ -3,7 +3,6 @@ const callbacksMap = {}
 
 export const registerCallbacks = callbacks => {
   const nextId = ++callbacksId
-  console.log('M', callbacksMap)
   callbacksMap[nextId] = callbacks
   return [
     nextId,

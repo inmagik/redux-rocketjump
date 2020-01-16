@@ -37,7 +37,7 @@ export default function useRj(rjObject, mapState) {
     []
   )
 
-  const { actions, selectors } = rjObject
+  const { buildableActions: actions, selectors } = rjObject
 
   const boundActions = useMemo(
     () => bindActionCreators(actions, dispatchWithCallbacks),

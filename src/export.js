@@ -2,7 +2,7 @@ import {
   makeSideEffectDescriptor,
   addConfigToSideEffectDescritor,
 } from './sideEffectDescriptor'
-import { makeActions } from './actions'
+import { makeActions, makeBuildableActions } from './actions'
 import { proxyObject, proxyReducer } from 'rocketjump-core/utils'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
@@ -54,15 +54,26 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     // Use actions to extended export
     actions = extendExport.actions
   }
+  // Make buildable actions
+  let buildableActions
+  if (!extendExport.buildableActions) {
+    // Make fresh buildableActions from config type
+    buildableActions = makeBuildableActions(runConfig.type)
+  } else {
+    // Use buildableActions to extended export
+    buildableActions = extendExport.buildableActions
+  }
   // Proxy actions
   if (jumpConfig.actions) {
     actions = proxyObject(actions, jumpConfig.actions)
+    buildableActions = proxyObject(buildableActions, jumpConfig.actions)
   } else if (jumpConfig.proxyActions) {
     console.warn(
       '[redux-rocketjump] DeprecationWarning: ' +
         'proxyActions options is deprecated use actions instead.'
     )
     actions = proxyObject(actions, jumpConfig.proxyActions)
+    buildableActions = proxyObject(buildableActions, jumpConfig.proxyActions)
   }
 
   // Make selectors
@@ -91,6 +102,7 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     sideEffect,
     reducer,
     actions,
+    buildableActions,
     selectors,
   }
 
