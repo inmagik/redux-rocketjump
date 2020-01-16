@@ -4,6 +4,7 @@ import { registerCallbacks } from './rjMiddleware'
 import bindActionCreators from './bindActionCreators'
 
 export default function useRj(rjObject, mapState) {
+  console.log('R Obj', rjObject)
   const dispatch = useDispatch()
 
   const callbacksIds = useRef({})
