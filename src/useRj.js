@@ -29,7 +29,6 @@ export default function useRj(rjObject, mapState) {
     },
     [dispatch]
   )
-  console.log(callbacksIds.current)
 
   // Unregister pending / unresolved callbacks
   useEffect(
