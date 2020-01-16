@@ -10,53 +10,76 @@ import {
   getUpdatingTodos,
   getDeletingTodos,
   deleteTodo,
+  TodosState,
 } from '../state/todos'
 import Todo from './Todo'
 import NewTodo from './NewTodo'
+import { useRj } from 'redux-rocketjump'
 
-class Todos extends PureComponent {
-  componentDidMount() {
-    this.props.loadTodos()
-  }
+export default function Todos() {
+  const [{ todos }, { run }] = useRj(TodosState, (state, { getData }) => ({
+    todos: getData(state),
+  }))
 
-  onToggle = todo => this.props.updateTodo({
-    ...todo,
-    done: !todo.done,
-  })
-
-  onRemove = todo => this.props.deleteTodo(todo.id)
-
-  render() {
-    const { todos, addTodo, loading, adding, updating, deleting } = this.props
-    return (
-      <div className='todos'>
-        {loading && <div>Loading <b>Y</b> todos...</div>}
-        {todos && <NewTodo onSubmit={addTodo} adding={adding} />}
-        <div className='todo-list'>
-          {todos && todos.map(todo => (
-            <Todo
-              saving={updating[todo.id] || deleting[todo.id]}
-              onToggle={this.onToggle}
-              onRemove={this.onRemove}
-              key={todo.id}
-              todo={todo}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  return (
+    <div>
+      Todos
+      <button
+        onClick={() =>
+          run
+            .onSuccess(() => alert('FUCK!'))
+            .withMeta({ giova: 23 })
+            .run('BaBu', 'Is', 'Cool')
+        }
+      >
+        RUN
+      </button>
+    </div>
+  )
 }
-
-export default connect(state => ({
-  todos: getTodos(state),
-  loading: areTodosLoading(state),
-  adding: isAddingTodo(state),
-  updating: getUpdatingTodos(state),
-  deleting: getDeletingTodos(state)
-}), {
-  loadTodos,
-  addTodo,
-  updateTodo,
-  deleteTodo,
-})(Todos)
+// class Todos extends PureComponent {
+//   componentDidMount() {
+//     this.props.loadTodos()
+//   }
+//
+//   onToggle = todo => this.props.updateTodo({
+//     ...todo,
+//     done: !todo.done,
+//   })
+//
+//   onRemove = todo => this.props.deleteTodo(todo.id)
+//
+//   render() {
+//     const { todos, addTodo, loading, adding, updating, deleting } = this.props
+//     return (
+//       <div className='todos'>
+//         {loading && <div>Loading <b>Y</b> todos...</div>}
+//         {todos && <NewTodo onSubmit={addTodo} adding={adding} />}
+//         <div className='todo-list'>
+//           {todos && todos.map(todo => (
+//             <Todo
+//               saving={updating[todo.id] || deleting[todo.id]}
+//               onToggle={this.onToggle}
+//               onRemove={this.onRemove}
+//               key={todo.id}
+//               todo={todo}
+//             />
+//           ))}
+//         </div>
+//       </div>
+//     )
+//   }
+// }
+//
+// export default connect(state => ({
+//   todos: getTodos(state),
+//   loading: areTodosLoading(state),
+//   adding: isAddingTodo(state),
+//   updating: getUpdatingTodos(state),
+//   deleting: getDeletingTodos(state)
+// }), {
+//   loadTodos,
+//   addTodo,
+//   updateTodo,
+//   deleteTodo,
+// })(Todos)
