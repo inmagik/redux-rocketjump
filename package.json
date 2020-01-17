@@ -34,9 +34,11 @@
     "extends": "react-app"
   },
   "peerDependencies": {
-    "redux": ">=^3.0.0",
-    "redux-saga": ">=0.15.0",
-    "reselect": ">=3.0.0"
+    "react": "^16.8.0",
+    "react-redux": "^7.1.0",
+    "redux-saga": "^1.0.0",
+    "reselect": ">=3.0.0",
+    "redux": "^2.0.0 || ^3.0.0 || ^4.0.0-0"
   },
   "dependencies": {
     "invariant": "^2.2.4",
