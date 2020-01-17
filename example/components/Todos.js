@@ -14,12 +14,17 @@ import {
 } from '../state/todos'
 import Todo from './Todo'
 import NewTodo from './NewTodo'
-import { useRj } from 'redux-rocketjump'
+import { useRj, useRunRj } from 'redux-rocketjump'
 
 export default function Todos() {
-  const [{ todos }, { run }] = useRj(TodosState, (state, { getData }) => ({
-    todos: getData(state),
-  }))
+  const [{ todos }, { run }] = useRunRj(
+    TodosState,
+    [],
+    true,
+    (state, { getData }) => ({
+      todos: getData(state),
+    })
+  )
 
   return (
     <div>
