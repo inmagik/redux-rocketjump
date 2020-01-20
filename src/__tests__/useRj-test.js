@@ -3,6 +3,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
+import rjMiddleware from '../rjMiddleware'
 import { rj } from '../rocketjump'
 import useRj from '../useRj'
 
@@ -16,7 +17,7 @@ const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
   const store = createStore(
     reducer,
     preloadedState,
-    applyMiddleware(sagaMiddleware, actionLogMiddleware)
+    applyMiddleware(sagaMiddleware, rjMiddleware, actionLogMiddleware)
   )
   sagaMiddleware.run(saga)
   return [store, actions]
@@ -525,6 +526,150 @@ describe('useRj', () => {
 
     expect(out).toBe(result.current)
   })
-  //
-  // test.todo('Test onSuccess onFailure')
+
+  it('should call onSuccess', async () => {
+    const mockEffect = jest.fn(() =>
+      Promise.resolve(['ALB1312', 'G10V4', 'Sk3ffy'])
+    )
+    const mockOnSuccess = jest.fn()
+    const mockOnFailure = jest.fn()
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      composeReducer: (prevState = { giova: 23 }) => prevState,
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getData }) => ({
+          friends: getData(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    await act(async () => {
+      result.current[1].run
+        .onSuccess(mockOnSuccess)
+        .onFailure(mockOnFailure)
+        .withMeta({ giova: 23 })
+        .run('Un', 'Dos', 'Tres')
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[1]).toEqual({
+      type: 'GET_FRIENDS_LOADING',
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[2]).toEqual({
+      type: 'GET_FRIENDS_SUCCESS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+        data: ['ALB1312', 'G10V4', 'Sk3ffy'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
+    expect(mockOnSuccess).nthCalledWith(1, ['ALB1312', 'G10V4', 'Sk3ffy'])
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1)
+    expect(mockOnFailure).toHaveBeenCalledTimes(0)
+  })
+
+  it('should call onFailure', async () => {
+    const mockEffect = jest.fn(() => Promise.reject('SYSTEM_ERROR'))
+    const mockOnSuccess = jest.fn()
+    const mockOnFailure = jest.fn()
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      composeReducer: (prevState = { giova: 23 }) => prevState,
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getData }) => ({
+          friends: getData(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    await act(async () => {
+      result.current[1].run
+        .onSuccess(mockOnSuccess)
+        .onFailure(mockOnFailure)
+        .withMeta({ giova: 23 })
+        .run('Un', 'Dos', 'Tres')
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[1]).toEqual({
+      type: 'GET_FRIENDS_LOADING',
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[2]).toEqual({
+      error: true,
+      type: 'GET_FRIENDS_FAILURE',
+      payload: 'SYSTEM_ERROR',
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
+    expect(mockOnFailure).nthCalledWith(1, 'SYSTEM_ERROR')
+    expect(mockOnSuccess).toHaveBeenCalledTimes(0)
+    expect(mockOnFailure).toHaveBeenCalledTimes(1)
+  })
 })
