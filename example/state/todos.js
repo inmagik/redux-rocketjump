@@ -8,7 +8,7 @@ import {
   takeEveryAndCancel,
 } from 'redux-rocketjump'
 // import rjPosArgs from 'redux-rocketjump/plugins/positionalArgs'
-import { fork } from 'redux-saga/effects'
+import { fork, delay } from 'redux-saga/effects'
 
 const API_URL = `http://${window.location.hostname}:9001`
 
@@ -89,8 +89,16 @@ export const {
   effect: ({ id }) => request.delete(`${API_URL}/todos/${id}`),
 })()
 
+const rjDebounce = rj({
+  needEffect: function*() {
+    console.log('DELA Y SHIT!')
+    yield delay(500)
+    return true
+  },
+})
+
 const GET_TODOS = 'GET_TODOS'
-export const TodosState = rj({
+export const TodosState = rj(rjDebounce, {
   type: GET_TODOS,
   state: 'todos.list',
   computed: {

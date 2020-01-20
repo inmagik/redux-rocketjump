@@ -340,315 +340,191 @@ describe('useRj', () => {
     })
   })
 
-  //
-  // it('should compute state and give them to select state as last args', () => {
-  //   const maRjState = rj(
-  //     rj({
-  //       computed: {
-  //         shitBro: 'getError',
-  //         giova: 'getData',
-  //         magik: 'getMagic',
-  //         budda: 'getBuddy',
-  //       },
-  //       selectors: () => ({
-  //         getBuddy: () => 23,
-  //         getMagic: () => 23,
-  //       }),
-  //     }),
-  //     rj({
-  //       computed: {
-  //         shitBro: 'getError',
-  //         giova: 'getData',
-  //       },
-  //     }),
-  //     {
-  //       effect: () => Promise.resolve(1312),
-  //       computed: {
-  //         babu: 'isLoading',
-  //         friends: 'getData',
-  //       },
-  //       selectors: ({ getBuddy }) => ({
-  //         getBuddy: () => getBuddy() * 2,
-  //       }),
-  //     }
-  //   )
-  //
-  //   const { result } = renderHook(() =>
-  //     useRj(maRjState, (state, selectors, computedState) => ({
-  //       buddaTek: computedState.magik,
-  //       waiting: selectors.isLoading(state),
-  //     }))
-  //   )
-  //
-  //   expect(result.current[0]).toEqual({
-  //     buddaTek: 23,
-  //     waiting: false,
-  //   })
-  // })
-  //
-  // it('should create a per-instance version of selectors to enable good memoization', () => {
-  //   const mySelector = jest
-  //     .fn()
-  //     .mockImplementation(n => (n === 0 ? 0 : n + 1300))
-  //
-  //   const maRjState = rj(
-  //     rj({
-  //       composeReducer: (prevState = { data: 0, beat: 0 }, action) => {
-  //         if (action.type === 'GANG') {
-  //           return {
-  //             ...prevState,
-  //             data: action.payload + prevState.data,
-  //           }
-  //         }
-  //         if (action.type === 'CHARLIE') {
-  //           return {
-  //             ...prevState,
-  //             beat: prevState.beat + 1,
-  //           }
-  //         }
-  //         return prevState
-  //       },
-  //       actions: () => ({
-  //         gang: n => ({ type: 'GANG', payload: n }),
-  //         charlie: () => ({ type: 'CHARLIE' }),
-  //       }),
-  //       selectors: ({ getData }) => {
-  //         const memoSelector = memoize(mySelector)
-  //         return { getMaik: state => memoSelector(getData(state)) }
-  //       },
-  //     }),
-  //     () => Promise.resolve(1312)
-  //   )
-  //
-  //   const { result: resultA } = renderHook(() =>
-  //     useRj(maRjState, (state, { getMaik }) => ({
-  //       friends: getMaik(state),
-  //       beat: state.beat,
-  //     }))
-  //   )
-  //   const { result: resultB } = renderHook(() =>
-  //     useRj(maRjState, (state, { getMaik }) => ({
-  //       friends: getMaik(state),
-  //       beat: state.beat,
-  //     }))
-  //   )
-  //
-  //   // No MEMO selectors called 2 Time
-  //   expect(mySelector).toHaveBeenCalledTimes(2)
-  //   expect(resultA.current[0]).toEqual({
-  //     friends: 0,
-  //     beat: 0,
-  //   })
-  //   expect(resultB.current[0]).toEqual({
-  //     friends: 0,
-  //     beat: 0,
-  //   })
-  //
-  //   // Break memo of A
-  //   act(() => resultA.current[1].gang(12))
-  //
-  //   expect(mySelector).toHaveBeenCalledTimes(3)
-  //   expect(resultA.current[0]).toEqual({
-  //     friends: 1312,
-  //     beat: 0,
-  //   })
-  //   expect(resultB.current[0]).toEqual({
-  //     friends: 0,
-  //     beat: 0,
-  //   })
-  //
-  //   // State change but...
-  //   act(() => resultA.current[1].charlie())
-  //
-  //   // Ma FUCKING A MEMO GANG!!!!
-  //   expect(mySelector).toHaveBeenCalledTimes(3)
-  //   expect(resultA.current[0]).toEqual({
-  //     friends: 1312,
-  //     beat: 1,
-  //   })
-  //
-  //   // Break memo B
-  //   act(() => resultB.current[1].gang(12))
-  //
-  //   // ... Ensure break memo
-  //   expect(mySelector).toHaveBeenCalledTimes(4)
-  //   expect(resultA.current[0]).toEqual({
-  //     friends: 1312,
-  //     beat: 1,
-  //   })
-  //   expect(resultB.current[0]).toEqual({
-  //     friends: 1312,
-  //     beat: 0,
-  //   })
-  //
-  //   // Trigger the change on A state ...
-  //   act(() => resultA.current[1].charlie())
-  //
-  //   // A still memo :D
-  //   expect(mySelector).toHaveBeenCalledTimes(4)
-  //   expect(resultA.current[0]).toEqual({
-  //     friends: 1312,
-  //     beat: 2,
-  //   })
-  // })
-  //
-  // it('should run rj sideEffects and react to succees', async () => {
-  //   const mockFn = jest.fn().mockResolvedValue(23)
-  //   const maRjState = rj(mockFn)
-  //
-  //   const { result } = renderHook(() =>
-  //     useRj(maRjState, (state, { getData }) => ({
-  //       friends: getData(state),
-  //     }))
-  //   )
-  //
-  //   expect(result.current[0]).toEqual({
-  //     friends: null,
-  //   })
-  //
-  //   await act(async () => {
-  //     result.current[1].run()
-  //   })
-  //   expect(result.current[0]).toEqual({
-  //     friends: 23,
-  //   })
-  // })
-  //
-  // it('should run rj sideEffects and react to failure', async () => {
-  //   const mockFn = jest.fn(() => Promise.reject('Bleah'))
-  //   const maRjState = rj(mockFn)
-  //
-  //   const { result } = renderHook(() =>
-  //     useRj(maRjState, (state, { getError }) => ({
-  //       error: getError(state),
-  //     }))
-  //   )
-  //
-  //   expect(result.current[0]).toEqual({
-  //     error: null,
-  //   })
-  //
-  //   await act(async () => {
-  //     result.current[1].run()
-  //   })
-  //   expect(result.current[0]).toEqual({
-  //     error: 'Bleah',
-  //   })
-  // })
-  //
-  // it('should get angry with a non rj object is passed as argument', () => {
-  //   expect(() => {
-  //     useRj(rj())
-  //   }).toThrowError(
-  //     /\[react-rocketjump\] You should provide a rj object to useRj/
-  //   )
-  //   expect(() => {
-  //     useRj({})
-  //   }).toThrowError(
-  //     /\[react-rocketjump\] You should provide a rj object to useRj/
-  //   )
-  //   expect(() => {
-  //     useRj(23)
-  //   }).toThrowError(
-  //     /\[react-rocketjump\] You should provide a rj object to useRj/
-  //   )
-  //   expect(() => {
-  //     useRj()
-  //   }).toThrowError(
-  //     /\[react-rocketjump\] You should provide a rj object to useRj/
-  //   )
-  // })
-  //
-  // it('should provide a good state observable', async () => {
-  //   let resolves = []
-  //   const mockFn = jest
-  //     .fn()
-  //     .mockImplementationOnce(
-  //       () =>
-  //         new Promise(resolve => {
-  //           resolves[0] = resolve
-  //         })
-  //     )
-  //     .mockImplementationOnce(
-  //       () =>
-  //         new Promise(resolve => {
-  //           resolves[1] = resolve
-  //         })
-  //     )
-  //     .mockImplementationOnce(
-  //       () =>
-  //         new Promise(resolve => {
-  //           resolves[2] = resolve
-  //         })
-  //     )
-  //
-  //   const testMaState = jest.fn()
-  //
-  //   const rjStateObserver = rj({
-  //     effectPipeline: (action$, state$) => {
-  //       return action$.pipe(
-  //         withLatestFrom(state$),
-  //         map(([action, state]) => {
-  //           testMaState(state)
-  //           return action
-  //         })
-  //       )
-  //     },
-  //   })
-  //   const maRjState = rj(rjStateObserver, mockFn)
-  //
-  //   const { result } = renderHook(() =>
-  //     useRj(maRjState, (state, { getData }) => ({
-  //       pending: state.pending,
-  //       friends: getData(state),
-  //     }))
-  //   )
-  //
-  //   await act(async () => {
-  //     result.current[1].run()
-  //   })
-  //   expect(mockFn).toHaveBeenCalledTimes(1)
-  //   expect(testMaState).nthCalledWith(1, {
-  //     pending: false,
-  //     data: null,
-  //     error: null,
-  //   })
-  //   await act(async () => {
-  //     result.current[1].run()
-  //   })
-  //   expect(mockFn).toHaveBeenCalledTimes(2)
-  //   expect(testMaState).nthCalledWith(2, {
-  //     pending: true,
-  //     data: null,
-  //     error: null,
-  //   })
-  //   await act(async () => {
-  //     resolves[0]('LuX')
-  //     resolves[1]('Albi1312')
-  //   })
-  //   await act(async () => {
-  //     result.current[1].run()
-  //   })
-  //   expect(testMaState).nthCalledWith(3, {
-  //     pending: false,
-  //     data: 'Albi1312',
-  //     error: null,
-  //   })
-  // })
-  //
-  // it('should mantein the same return instance while state remain the same', () => {
-  //   const MaRjState = rj(() => {})
-  //
-  //   const { result, rerender } = renderHook(() => useRj(MaRjState))
-  //
-  //   let out = result.current
-  //
-  //   rerender({ giova: 23 })
-  //
-  //   expect(out).toBe(result.current)
-  // })
+  it('should compute state and give them to select state as last args', () => {
+    const maRjState = rj(
+      rj({
+        computed: {
+          shitBro: 'getError',
+          giova: 'getData',
+          magik: 'getMagic',
+          budda: 'getBuddy',
+        },
+        selectors: () => ({
+          getBuddy: () => 23,
+          getMagic: () => 23,
+        }),
+      }),
+      rj({
+        computed: {
+          shitBro: 'getError',
+          giova: 'getData',
+        },
+      }),
+      {
+        effect: () => Promise.resolve(1312),
+        type: 'KILL_BABU',
+        state: 'babuland',
+        computed: {
+          babu: 'isLoading',
+          friends: 'getData',
+        },
+        selectors: ({ getBuddy }) => ({
+          getBuddy: () => getBuddy() * 2,
+        }),
+      }
+    )()
+
+    const store = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        babuland: maRjState.reducer,
+      })
+    )[0]
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, selectors, computedState) => ({
+          buddaTek: computedState.magik,
+          waiting: selectors.isLoading(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    expect(result.current[0]).toEqual({
+      buddaTek: 23,
+      waiting: false,
+    })
+  })
+
+  it('should run rj sideEffects and react to succees', async () => {
+    const mockFn = jest.fn().mockResolvedValue(23)
+    const maRjState = rj({
+      type: 'KILL_BABU',
+      state: 'babuland',
+      effect: mockFn,
+    })()
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const store = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        babuland: maRjState.reducer,
+      })
+    )[0]
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getData }) => ({
+          friends: getData(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    expect(result.current[0]).toEqual({
+      friends: null,
+    })
+
+    await act(async () => {
+      result.current[1].run()
+    })
+    expect(result.current[0]).toEqual({
+      friends: 23,
+    })
+  })
+
+  it('should run rj sideEffects and react to failure', async () => {
+    const mockFn = jest.fn(() => Promise.reject('Bleah'))
+    const maRjState = rj({
+      type: 'KILL_BABU',
+      state: 'babuland',
+      effect: mockFn,
+    })()
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const store = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        babuland: maRjState.reducer,
+      })
+    )[0]
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getError }) => ({
+          error: getError(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    expect(result.current[0]).toEqual({
+      error: null,
+    })
+
+    await act(async () => {
+      result.current[1].run()
+    })
+    expect(result.current[0]).toEqual({
+      error: 'Bleah',
+    })
+  })
+
+  it('should get angry with a non rj object is passed as argument', () => {
+    expect(() => {
+      useRj(rj())
+    }).toThrowError(
+      /\[redux-rocketjump\] You should provide a rj object to useRj/
+    )
+    expect(() => {
+      useRj(23)
+    }).toThrowError(
+      /\[redux-rocketjump\] You should provide a rj object to useRj/
+    )
+  })
+
+  it('should mantein the same return instance while state remain the same', () => {
+    const MaRjState = rj({
+      type: 'X',
+      state: 'X',
+      effect: () => {},
+    })()
+
+    const store = createRealStoreWithSagaAndReducer(
+      MaRjState.saga,
+      combineReducers({
+        babuland: MaRjState.reducer,
+      })
+    )[0]
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result, rerender } = renderHook(() => useRj(MaRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    let out = result.current
+
+    rerender({ giova: 23 })
+
+    expect(out).toBe(result.current)
+  })
   //
   // test.todo('Test onSuccess onFailure')
-  //
-  // test.todo('Test actions')
 })
