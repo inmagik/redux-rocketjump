@@ -1,5 +1,5 @@
 import invariant from 'invariant'
-import { forgeRocketJump } from 'rocketjump-core'
+import { forgeRocketJump, createComputeState } from 'rocketjump-core'
 import pick from 'lodash.pick'
 import { resetReducerOn } from './helpers'
 import makeExport from './export'
@@ -79,7 +79,7 @@ function makeRecursionRjs(
 
 function finalizeExport(finalExport, runConfig, finalConfig) {
   // ~~ END OF CHAIN RECURSION ~~
-  let { sideEffect, __rjtype, reducer, ...rjExport } = finalExport
+  let { sideEffect, computed, reducer, ...rjExport } = finalExport
 
   // Use the curried-combined-merged side effect descriptor
   // to create the really side effect the "saga" generator
@@ -141,10 +141,25 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
     reducer = resetReducerOn(sideEffect.unloadBy, reducer)
   }
 
+  // Create the compute state function by computed config,
+  // when no computed config is given return null is responsibility
+  // of useRj .. to check for null
+  const computeState = createComputeState(computed)
+
   // Finally the rocketjump is created!
-  // { actions: {}, selectors: {}, saga, reducer }
+  /*
+    {
+      actions: {},
+      buildableActions: {}, // Action with official 4LB1312 Builder
+      computeState: fn, // Compute Y shit \w endless love
+      selectors: {},
+      saga,
+      reducer
+  }
+  */
   return {
     ...rjExport,
+    computeState,
     reducer,
     saga,
   }

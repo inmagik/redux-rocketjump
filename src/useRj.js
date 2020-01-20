@@ -46,17 +46,34 @@ export default function useRj(rjObject, mapState) {
     []
   )
 
-  const { buildableActions: actions, selectors } = rjObject
+  const { buildableActions: actions, selectors, computeState } = rjObject
 
   const boundActions = useMemo(
     () => bindActionCreators(actions, dispatchWithCallbacks),
     [dispatchWithCallbacks, actions]
   )
 
-  const stateSelector =
-    typeof mapState === 'function'
-      ? state => mapState(state, selectors)
-      : state => selectors.getBaseState(state)
+  // Make the stale selector function
+  const stateSelector = useCallback(
+    state => {
+      if (
+        typeof computeState === 'function' ||
+        typeof mapState === 'function'
+      ) {
+        let derivedState = state
+        if (typeof computeState === 'function') {
+          derivedState = computeState(state, selectors)
+        }
+        if (typeof mapState === 'function') {
+          derivedState = mapState(state, selectors, derivedState)
+        }
+        return derivedState
+      }
+      // Return base state directly
+      return selectors.getBaseState(state)
+    },
+    [mapState, computeState, selectors]
+  )
 
   const selectedState = useSelector(stateSelector)
 

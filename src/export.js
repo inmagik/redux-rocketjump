@@ -3,7 +3,12 @@ import {
   addConfigToSideEffectDescritor,
 } from './sideEffectDescriptor'
 import { makeActions, makeBuildableActions } from './actions'
-import { proxyObject, proxyReducer, arrayze } from 'rocketjump-core/utils'
+import {
+  proxyObject,
+  proxyReducer,
+  arrayze,
+  invertKeys,
+} from 'rocketjump-core/utils'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
 import { composeReducers } from './helpers'
@@ -101,6 +106,17 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     }
   }
 
+  // Default no computed
+  let computed = null
+  if (extendExport.computed) {
+    // Continue the export
+    computed = extendExport.computed
+  }
+  if (jumpConfig.computed) {
+    // Merge given computed \w prev computed
+    computed = { ...computed, ...invertKeys(jumpConfig.computed) }
+  }
+
   const newExport = {
     ...extendExport,
     sideEffect,
@@ -108,6 +124,7 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     actions,
     buildableActions,
     selectors,
+    computed,
   }
 
   return newExport

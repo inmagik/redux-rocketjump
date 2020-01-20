@@ -20,10 +20,10 @@ export default function Todos() {
   const [{ todos }, { run }] = useRunRj(
     TodosState,
     [],
-    true,
-    (state, { getData }) => ({
-      todos: getData(state),
-    })
+    true
+    // (state, { getData }) => ({
+    //   todos: getData(state),
+    // })
   )
 
   return (

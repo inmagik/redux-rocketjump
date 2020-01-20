@@ -282,48 +282,64 @@ describe('useRj', () => {
     expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
   })
 
-  // it('should compute state using given computed config', () => {
-  //   const maRjState = rj(
-  //     rj({
-  //       computed: {
-  //         shitBro: 'getError',
-  //         giova: 'getData',
-  //         magik: 'getMagic',
-  //         budda: 'getBuddy',
-  //       },
-  //       selectors: () => ({
-  //         getBuddy: () => 23,
-  //         getMagic: () => 23,
-  //       }),
-  //     }),
-  //     rj({
-  //       computed: {
-  //         shitBro: 'getError',
-  //         giova: 'getData',
-  //       },
-  //     }),
-  //     {
-  //       effect: () => Promise.resolve(1312),
-  //       computed: {
-  //         babu: 'isLoading',
-  //         friends: 'getData',
-  //       },
-  //       selectors: ({ getBuddy }) => ({
-  //         getBuddy: () => getBuddy() * 2,
-  //       }),
-  //     }
-  //   )
-  //
-  //   const { result } = renderHook(() => useRj(maRjState))
-  //
-  //   expect(result.current[0]).toEqual({
-  //     budda: 46,
-  //     magik: 23,
-  //     shitBro: null,
-  //     babu: false,
-  //     friends: null,
-  //   })
-  // })
+  it('should compute state using given computed config', () => {
+    const maRjState = rj(
+      rj({
+        computed: {
+          shitBro: 'getError',
+          giova: 'getData',
+          magik: 'getMagic',
+          budda: 'getBuddy',
+        },
+        selectors: () => ({
+          getBuddy: () => 23,
+          getMagic: () => 23,
+        }),
+      }),
+      rj({
+        computed: {
+          shitBro: 'getError',
+          giova: 'getData',
+        },
+      }),
+      {
+        type: 'GET_BABU',
+        state: 'babuland',
+        effect: () => Promise.resolve(1312),
+        computed: {
+          babu: 'isLoading',
+          friends: 'getData',
+        },
+        selectors: ({ getBuddy }) => ({
+          getBuddy: () => getBuddy() * 2,
+        }),
+      }
+    )()
+
+    const store = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        babuland: maRjState.reducer,
+      })
+    )[0]
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(() => useRj(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    expect(result.current[0]).toEqual({
+      budda: 46,
+      magik: 23,
+      shitBro: null,
+      babu: false,
+      friends: null,
+    })
+  })
+
   //
   // it('should compute state and give them to select state as last args', () => {
   //   const maRjState = rj(

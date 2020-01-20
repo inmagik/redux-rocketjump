@@ -93,6 +93,9 @@ const GET_TODOS = 'GET_TODOS'
 export const TodosState = rj({
   type: GET_TODOS,
   state: 'todos.list',
+  computed: {
+    todos: 'getData',
+  },
   effect: (...args) => {
     console.log('O.o', args)
     return request.get(`${API_URL}/todos`).then(({ body }) => body)
