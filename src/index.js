@@ -1,6 +1,5 @@
-// MagIK DeBps for useRunRj hook
-import * as allDeps from './deps'
-
+// MagIK DeBps for useRunRj hook from rj core!
+export { deps } from 'rocketjump-core'
 export { rj } from './rocketjump'
 export * from './helpers'
 export * from './effects'
@@ -11,6 +10,3 @@ export { default as combineRjs } from './combineRjs'
 export { default as rjMiddleware } from './rjMiddleware'
 export { default as useRj } from './useRj'
 export { default as useRunRj } from './useRunRj'
-
-// Exports DeBps
-export const deps = { ...allDeps } // Remove es6 module shit

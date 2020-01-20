@@ -48,7 +48,7 @@
     "lodash.pick": "^4.4.0",
     "object-path-immutable": "^3.0.2",
     "query-string": "^6.7.0",
-    "rocketjump-core": "^2.1.0"
+    "rocketjump-core": "^3.0.0-rc1"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

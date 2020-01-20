@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useDebugValue } from 'react'
-import { isObjectRj } from 'rocketjump-core'
+import { isObjectRj, bindActionCreators } from 'rocketjump-core'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerCallbacks } from './rjMiddleware'
-import bindActionCreators from './bindActionCreators'
 
 export default function useRj(rjObject, mapState) {
   if (!isObjectRj(rjObject)) {
     throw new Error(
-      '[react-rocketjump] You should provide a rj object to useRj.'
+      '[redux-rocketjump] You should provide a rj object to useRj.'
     )
   }
   const dispatch = useDispatch()
