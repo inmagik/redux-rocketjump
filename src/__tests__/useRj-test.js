@@ -8,13 +8,18 @@ import useRj from '../useRj'
 
 const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
   const sagaMiddleware = createSagaMiddleware()
+  const actions = []
+  const actionLogMiddleware = store => next => action => {
+    actions.push(action)
+    return next(action)
+  }
   const store = createStore(
     reducer,
     preloadedState,
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(sagaMiddleware, actionLogMiddleware)
   )
   sagaMiddleware.run(saga)
-  return store
+  return [store, actions]
 }
 
 describe('useRj', () => {
@@ -30,7 +35,7 @@ describe('useRj', () => {
       combineReducers({
         friends: maRjState.reducer,
       })
-    )
+    )[0]
 
     const ReduxWrapper = ({ children }) => (
       <Provider store={store}>{children}</Provider>
@@ -69,7 +74,7 @@ describe('useRj', () => {
       combineReducers({
         friends: maRjState.reducer,
       })
-    )
+    )[0]
 
     const ReduxWrapper = ({ children }) => (
       <Provider store={store}>{children}</Provider>
@@ -104,7 +109,7 @@ describe('useRj', () => {
       combineReducers({
         friends: maRjState.reducer,
       })
-    )
+    )[0]
 
     const ReduxWrapper = ({ children }) => (
       <Provider store={store}>{children}</Provider>
@@ -148,7 +153,7 @@ describe('useRj', () => {
       combineReducers({
         friends: maRjState.reducer,
       })
-    )
+    )[0]
 
     const ReduxWrapper = ({ children }) => (
       <Provider store={store}>{children}</Provider>
@@ -190,7 +195,7 @@ describe('useRj', () => {
       combineReducers({
         friends: maRjState.reducer,
       })
-    )
+    )[0]
 
     const ReduxWrapper = ({ children }) => (
       <Provider store={store}>{children}</Provider>
@@ -209,6 +214,72 @@ describe('useRj', () => {
     expect(result.current[0]).toEqual({
       friends: null,
     })
+  })
+
+  it('should use buildable actions withMeta', async () => {
+    const mockEffect = jest.fn(() =>
+      Promise.resolve(['ALB1312', 'G10V4', 'Sk3ffy'])
+    )
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      composeReducer: (prevState = { giova: 23 }) => prevState,
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getData }) => ({
+          friends: getData(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    await act(async () => {
+      result.current[1].run.withMeta({ giova: 23 }).run('Un', 'Dos', 'Tres')
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[1]).toEqual({
+      type: 'GET_FRIENDS_LOADING',
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[2]).toEqual({
+      type: 'GET_FRIENDS_SUCCESS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+        data: ['ALB1312', 'G10V4', 'Sk3ffy'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
   })
 
   // it('should compute state using given computed config', () => {

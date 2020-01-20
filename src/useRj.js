@@ -41,7 +41,9 @@ export default function useRj(rjObject, mapState) {
   // Unregister pending / unresolved callbacks
   useEffect(
     () => () =>
-      Object.keys(callbacksIds.current).forEach(id => callbacksIds[id]()),
+      Object.keys(callbacksIds.current).forEach(id =>
+        callbacksIds.current[id]()
+      ),
     []
   )
 
