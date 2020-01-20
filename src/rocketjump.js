@@ -151,6 +151,7 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
 }
 
 export const rj = forgeRocketJump({
+  family: Symbol('rj~REDUX'),
   makeRunConfig,
   makeRecursionRjs,
   makeExport,

@@ -3,7 +3,7 @@ import {
   addConfigToSideEffectDescritor,
 } from './sideEffectDescriptor'
 import { makeActions, makeBuildableActions } from './actions'
-import { proxyObject, proxyReducer } from 'rocketjump-core/utils'
+import { proxyObject, proxyReducer, arrayze } from 'rocketjump-core/utils'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
 import { composeReducers } from './helpers'
@@ -40,8 +40,12 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
           'proxyReducer options is deprecated use reducer instead.'
       )
     }
-    if (Array.isArray(jumpConfig.composeReducer)) {
-      reducer = composeReducers(...[reducer].concat(jumpConfig.composeReducer))
+    if (
+      typeof jumpConfig.composeReducer === 'function' ||
+      Array.isArray(jumpConfig.composeReducer)
+    ) {
+      const composeReducer = arrayze(jumpConfig.composeReducer)
+      reducer = composeReducers(...[reducer].concat(composeReducer))
     }
   }
 
