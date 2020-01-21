@@ -8,7 +8,7 @@ import makeApiSaga from './apiSaga'
 import {
   enhanceMakeRunConfigWithMutations,
   enhanceFinalExportWithMutations,
-} from './mutations'
+} from './mutations/index'
 
 function checkWarns(rjsOrConfigs, extraConfig) {
   if (

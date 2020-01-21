@@ -1,4 +1,4 @@
-import * as standardMutations from './mutations/standard'
+import * as standardMutations from './mutations/standard/index'
 import { rj } from './rocketjump'
 
 // MagIK DeBps for useRunRj hook from rj core!
@@ -14,6 +14,6 @@ export * from './effects'
 export * from './reducer'
 export * from './selectors'
 export * from './actions'
-export * from './hooks'
+export * from './hooks/index'
 export { default as combineRjs } from './combineRjs'
 export { default as rjMiddleware } from './rjMiddleware'

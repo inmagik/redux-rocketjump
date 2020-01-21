@@ -12,7 +12,7 @@ import {
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
 import { composeReducers } from './helpers'
-import { makeSelectorsWithMutations } from './mutations'
+import { makeSelectorsWithMutations } from './mutations/index'
 
 // Make the exports
 // take a config and a extended export (the return of this function)
