@@ -98,18 +98,46 @@ const rjDebounce = rj({
   actions: {},
 })
 
+const trackPendingReducer = (state = { pending: false }, action) => {
+  switch (action.type) {
+    case 'LOADING':
+      return { pending: true }
+    case 'UNLOAD':
+    case 'SUCCESS':
+    case 'FAILURE':
+      return { pending: false }
+    default:
+      return state
+  }
+}
+
 const GET_TODOS = 'GET_TODOS'
 export const TodosState = rj(rjDebounce, {
   type: GET_TODOS,
   state: 'todos.list',
-  computed: {
-    todos: 'getData',
-  },
+  // selectors: ({ getMutationsState }) => ({
+  //   isAddingTodo: state => getMutationsState(state).addTodo.pending,
+  // }),
+  // computed: {
+  //   todos: 'getData',
+  //   addingTodo: 'isAddingTodo',
+  // },
   mutations: {
-    addTodo: {},
+    addTodo: {
+      // reducer: trackPendingReducer,
+      updater: (state, newTodo) => ({
+        ...state,
+        data: state.data.concat(newTodo),
+      }),
+      effect: todo =>
+        request
+          .post(`${API_URL}/todos`)
+          .send(todo)
+          .then(({ body }) => body),
+    },
   },
   effect: (...args) => {
-    console.log('O.o', args)
+    // console.log('O.o', args)
     return request.get(`${API_URL}/todos`).then(({ body }) => body)
   },
   reducer: reducer =>

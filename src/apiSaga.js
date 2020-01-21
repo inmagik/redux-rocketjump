@@ -5,7 +5,7 @@ import { takeLatestAndCancel } from './effects'
 const id = a => a
 
 export default (
-  actionType,
+  actionTypeOrTypes,
   apiFn,
   extraParamsEffects = [],
   takeEffect = takeLatestAndCancel,
@@ -19,7 +19,14 @@ export default (
   mapFailureAction = id,
   unloadTypes = []
 ) => {
-  const actionTypes = makeActionTypes(actionType)
+  let actionTypes
+  if (typeof actionTypeOrTypes === 'string') {
+    // When string is given build action types as usual
+    actionTypes = makeActionTypes(actionTypeOrTypes)
+  } else {
+    // Othrwise assumes that is alredy maked action types map
+    actionTypes = actionTypeOrTypes
+  }
   function* handleApi({ payload: { params }, meta }) {
     // Should perform the call?
     if (typeof needEffect === 'function') {

@@ -17,7 +17,7 @@ import NewTodo from './NewTodo'
 import { useRj, useRunRj } from 'redux-rocketjump'
 
 export default function Todos() {
-  const [{ todos }, { run }] = useRunRj(
+  const rjRunnable = useRunRj(
     TodosState,
     [],
     true
@@ -25,6 +25,8 @@ export default function Todos() {
     //   todos: getData(state),
     // })
   )
+  const [state, { run, addTodo }] = rjRunnable
+  console.log('RjRunnable', rjRunnable)
 
   return (
     <div>
@@ -38,6 +40,20 @@ export default function Todos() {
         }
       >
         RUN
+      </button>
+      <button
+        disabled={state.addingTodo}
+        onClick={() =>
+          addTodo
+            .onSuccess(() => alert('FUCK!'))
+            .withMeta({ giova: 23 })
+            .run({
+              done: false,
+              title: 'FUCK THE WORLD!',
+            })
+        }
+      >
+        Add TODO
       </button>
     </div>
   )

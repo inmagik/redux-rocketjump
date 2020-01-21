@@ -12,6 +12,7 @@ import {
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
 import { composeReducers } from './helpers'
+import { makeSelectorsWithMutations } from './mutations'
 
 // Make the exports
 // take a config and a extended export (the return of this function)
@@ -89,7 +90,14 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
   let selectors
   if (!extendExport.selectors && runConfig.state !== false) {
     // Make fresh selectors by type
-    selectors = makeSelectors(runConfig.state)
+    if (runConfig.mutations) {
+      selectors = makeSelectorsWithMutations(
+        runConfig.state,
+        runConfig.mutations
+      )
+    } else {
+      selectors = makeSelectors(runConfig.state)
+    }
   } else {
     // Use selectors from exports
     selectors = extendExport.selectors
