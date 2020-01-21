@@ -1,32 +1,9 @@
 import { combineReducers } from 'redux'
-import { makeSelectors } from '../selectors'
-import { getOrSelect } from '../helpers'
 import { enhanceReducer, makeMutationsReducer } from './reducer'
 import { enhancePlainActions, enhanceBuildableActions } from './actions'
 import { enhanceSaga } from './saga'
-import { hasMutationState } from './helpers'
-
-export function makeSelectorsWithMutations(stateSelector, mutations) {
-  if (hasMutationState(mutations)) {
-    let namespacedStateSelector
-    if (typeof stateSelector === 'function') {
-      namespacedStateSelector = state => stateSelector(state).root
-    } else {
-      namespacedStateSelector = `${stateSelector}.root`
-    }
-    const baseSelectors = makeSelectors(namespacedStateSelector)
-    const getParentBaseState = state => getOrSelect(state, stateSelector)
-    const getMutationsState = state =>
-      getOrSelect(state, stateSelector).mutations
-    return {
-      ...baseSelectors,
-      getParentBaseState,
-      getMutationsState,
-    }
-  } else {
-    return makeSelectors(stateSelector)
-  }
-}
+import { hasMutationsConfigSomeState } from './helpers'
+import { createComputeStateWithMutations } from './computed'
 
 export function enhanceMakeRunConfigWithMutations(runConfig, finalConfig) {
   // Set mutations in run config
@@ -54,15 +31,23 @@ export function enhanceFinalExportWithMutations(
     return rjObjectExport
   }
 
-  const { reducer, actions, buildableActions, saga } = rjObjectExport
+  const {
+    reducer,
+    actions,
+    buildableActions,
+    saga,
+    computeState,
+  } = rjObjectExport
 
-  const { sideEffect } = mergedExport
+  const { sideEffect, computed } = mergedExport
+
+  const hasMutationState = hasMutationsConfigSomeState(mutations)
 
   // Add mutations updaterZ to basic reducer
   const enhancedReducer = enhanceReducer(mutations, reducer, actions, runConfig)
 
   let withMutationsReducer
-  if (hasMutationState(mutations)) {
+  if (hasMutationState) {
     const mutationsReducer = makeMutationsReducer(
       mutations,
       runConfig,
@@ -76,9 +61,22 @@ export function enhanceFinalExportWithMutations(
     withMutationsReducer = enhancedReducer
   }
 
+  let withMutationsComputeState
+  if (!hasMutationState || !computeState) {
+    // Mutations don't have state at all or no computed
+    // are provided in conf so use the given computeState
+    withMutationsComputeState = computeState
+  } else {
+    withMutationsComputeState = createComputeStateWithMutations(
+      computed,
+      mutations
+    )
+  }
+
   return {
     ...rjObjectExport,
     reducer: withMutationsReducer,
+    computeState: withMutationsComputeState,
     actions: enhancePlainActions(mutations, actions, runConfig),
     buildableActions: enhanceBuildableActions(
       mutations,
@@ -88,3 +86,5 @@ export function enhanceFinalExportWithMutations(
     saga: enhanceSaga(mutations, saga, sideEffect, runConfig),
   }
 }
+
+export { makeSelectorsWithMutations } from './selectors'

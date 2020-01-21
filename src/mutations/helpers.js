@@ -2,7 +2,7 @@ import { makeActionTypes } from '../actions'
 import { arrayze } from 'rocketjump-core/utils'
 
 // At least one mutation config has a reducer that create a state
-export function hasMutationState(mutations) {
+export function hasMutationsConfigSomeState(mutations) {
   return Object.keys(mutations).some(
     name => typeof mutations[name].reducer === 'function'
   )

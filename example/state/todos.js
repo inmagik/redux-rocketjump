@@ -115,16 +115,13 @@ const GET_TODOS = 'GET_TODOS'
 export const TodosState = rj(rjDebounce, {
   type: GET_TODOS,
   state: 'todos.list',
-  // selectors: ({ getMutationsState }) => ({
-  //   isAddingTodo: state => getMutationsState(state).addTodo.pending,
-  // }),
-  // computed: {
-  //   todos: 'getData',
-  //   addingTodo: 'isAddingTodo',
-  // },
+  computed: {
+    todos: 'getData',
+    addingTodo: '@mutation.addTodo.pending',
+  },
   mutations: {
     addTodo: {
-      // reducer: trackPendingReducer,
+      reducer: trackPendingReducer,
       updater: (state, newTodo) => ({
         ...state,
         data: state.data.concat(newTodo),
