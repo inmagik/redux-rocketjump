@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
-import { rj } from '../rocketjump'
+import { rj } from '../../rocketjump'
 import useRunRj from '../useRunRj'
 
 const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {

@@ -13,88 +13,89 @@ import { fork, delay } from 'redux-saga/effects'
 const API_URL = `http://${window.location.hostname}:9001`
 
 const ADD_TODO = 'ADD_TODO'
-export const {
-  actions: { load: addTodo },
-  selectors: { isLoading: isAddingTodo, getError: getAddTodoError },
-  reducer: addTodoReducer,
-  saga: addTodoSaga,
-} = rj({
-  type: ADD_TODO,
-  takeEffect: takeEveryAndCancel,
-  // No need to save added todo
-  dataReducer: () => null,
-  state: 'todos.add',
-  effect: todo =>
-    request
-      .post(`${API_URL}/todos`)
-      .send(todo)
-      .then(({ body }) => body),
-})()
-
-const multiloadingRj = rj({
-  takeEffect: takeEveryAndCancel,
-  reducer: (odlReducer, { type: confType }) => (
-    prevState = {},
-    { type, meta }
-  ) => {
-    const types = makeActionTypes(confType)
-    switch (type) {
-      case types.loading:
-        return {
-          ...prevState,
-          [meta.id]: true,
-        }
-      case types.success:
-      case types.failure:
-        return omit(prevState, meta.id)
-      default:
-        return prevState
-    }
-  },
-})
+// export const {
+//   actions: { load: addTodo },
+//   selectors: { isLoading: isAddingTodo, getError: getAddTodoError },
+//   reducer: addTodoReducer,
+//   saga: addTodoSaga,
+// } = rj({
+//   type: ADD_TODO,
+//   takeEffect: takeEveryAndCancel,
+//   // No need to save added todo
+//   dataReducer: () => null,
+//   state: 'todos.add',
+//   effect: todo =>
+//     request
+//       .post(`${API_URL}/todos`)
+//       .send(todo)
+//       .then(({ body }) => body),
+// })()
+//
+// const multiloadingRj = rj({
+//   takeEffect: takeEveryAndCancel,
+//   reducer: (odlReducer, { type: confType }) => (
+//     prevState = {},
+//     { type, meta }
+//   ) => {
+//     const types = makeActionTypes(confType)
+//     switch (type) {
+//       case types.loading:
+//         return {
+//           ...prevState,
+//           [meta.id]: true,
+//         }
+//       case types.success:
+//       case types.failure:
+//         return omit(prevState, meta.id)
+//       default:
+//         return prevState
+//     }
+//   },
+// })
 
 const UPDATE_TODO = 'UPDATE_TODO'
-export const {
-  actions: { load: updateTodo },
-  selectors: { getBaseState: getUpdatingTodos },
-  reducer: updateTodoReducer,
-  saga: updateTodoSaga,
-} = rj(multiloadingRj, {
-  type: UPDATE_TODO,
-  state: 'todos.update',
-  actions: {
-    load: ({ load }) => todo => load({ todo }, { id: todo.id }),
-  },
-  // Keep trak only of updating todos....
-  effect: ({ todo }) =>
-    request
-      .put(`${API_URL}/todos/${todo.id}`)
-      .send(todo)
-      .then(({ body }) => body),
-})()
-
+// export const {
+//   actions: { load: updateTodo },
+//   selectors: { getBaseState: getUpdatingTodos },
+//   reducer: updateTodoReducer,
+//   saga: updateTodoSaga,
+// } = rj(multiloadingRj, {
+//   type: UPDATE_TODO,
+//   state: 'todos.update',
+//   actions: {
+//     load: ({ load }) => todo => load({ todo }, { id: todo.id }),
+//   },
+//   // Keep trak only of updating todos....
+//   effect: ({ todo }) =>
+//     request
+//       .put(`${API_URL}/todos/${todo.id}`)
+//       .send(todo)
+//       .then(({ body }) => body),
+// })()
+//
 const DELETE_TODO = 'DELETE_TODO'
-export const {
-  actions: { load: deleteTodo },
-  selectors: { getBaseState: getDeletingTodos },
-  reducer: deleteTodoReducer,
-  saga: deleteTodoSaga,
-} = rj(multiloadingRj, {
-  type: DELETE_TODO,
-  state: 'todos.delete',
-  actions: {
-    load: ({ load }) => id => load({ id }, { id }),
-  },
-  // Keep trak only of updating todos....
-  effect: ({ id }) => request.delete(`${API_URL}/todos/${id}`),
-})()
+// export const {
+//   actions: { load: deleteTodo },
+//   selectors: { getBaseState: getDeletingTodos },
+//   reducer: deleteTodoReducer,
+//   saga: deleteTodoSaga,
+// } = rj(multiloadingRj, {
+//   type: DELETE_TODO,
+//   state: 'todos.delete',
+//   actions: {
+//     load: ({ load }) => id => load({ id }, { id }),
+//   },
+//   // Keep trak only of updating todos....
+//   effect: ({ id }) => request.delete(`${API_URL}/todos/${id}`),
+// })()
 
 const rjDebounce = rj({
-  needEffect: function*() {
-    console.log('DELA Y SHIT!')
-    yield delay(500)
-    return true
-  },
+  // needEffect: function*() {
+  //   console.log('DELA Y SHIT!')
+  //   yield delay(500)
+  //   return true
+  // },
+  actions: {},
 })
 
 const GET_TODOS = 'GET_TODOS'
@@ -103,6 +104,9 @@ export const TodosState = rj(rjDebounce, {
   state: 'todos.list',
   computed: {
     todos: 'getData',
+  },
+  mutations: {
+    addTodo: {},
   },
   effect: (...args) => {
     console.log('O.o', args)
@@ -143,14 +147,14 @@ export const {
 
 export const saga = function*() {
   yield fork(todoListSaga)
-  yield fork(addTodoSaga)
-  yield fork(deleteTodoSaga)
-  yield fork(updateTodoSaga)
+  // yield fork(addTodoSaga)
+  // yield fork(deleteTodoSaga)
+  // yield fork(updateTodoSaga)
 }
 
 export const reducer = combineReducers({
   list: todoListReducer,
-  add: addTodoReducer,
-  update: updateTodoReducer,
-  delete: deleteTodoReducer,
+  // add: addTodoReducer,
+  // update: updateTodoReducer,
+  // delete: deleteTodoReducer,
 })
