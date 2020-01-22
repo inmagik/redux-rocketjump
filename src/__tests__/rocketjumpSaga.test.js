@@ -8,6 +8,7 @@ import {
   takeEveryAndCancel,
   takeLatestAndCancelGroupBy,
   takeExhaustAndCancel,
+  takeExhaustGroupByAndCancel,
 } from '../effects'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
@@ -780,6 +781,125 @@ describe('Rocketjump saga', () => {
           data: 'TEK',
           params: { name: 'Budda' },
         },
+        meta: {},
+      },
+    ])
+  })
+
+  it('take exhaust group by side effect when specified', async () => {
+    let resolves = []
+    const mockApi = jest.fn(
+      () =>
+        new Promise(_resolve => {
+          resolves.push(_resolve)
+        })
+    )
+
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: takeExhaustGroupByAndCancel,
+      takeEffectArgs: [action => action.meta.code || null],
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load({ name: 'Giova' }, { code: 23 }))
+    store.dispatch(load({ name: 'Rinne' }, { code: 51 }))
+    store.dispatch(load({ name: 'Babu' }, { code: 23 }))
+    expect(mockApi).toHaveBeenCalledTimes(2)
+    resolves[0]('YEAH')
+    await mockApi.mock.results[0].value
+    store.dispatch(load({ name: 'Pippo' }, { code: 777 }))
+    store.dispatch(load({ name: 'Pluto' }, { code: 51 }))
+    store.dispatch(load({ name: 'Jack' }, { code: 51 }))
+    store.dispatch(unload({ code: 51 }))
+    store.dispatch(unload())
+    expect(mockApi).toHaveBeenCalledTimes(3)
+    resolves[1]('X')
+    resolves[2]('ICE')
+    await mockApi.mock.results[2].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        payload: { params: { name: 'Giova' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Rinne' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Babu' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'YEAH',
+          params: { name: 'Giova' },
+        },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Pippo' } },
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Pluto' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Jack' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
         meta: {},
       },
     ])
