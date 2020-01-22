@@ -7,7 +7,7 @@ export const registerCallbacks = callbacks => {
   return [
     nextId,
     () => {
-      delete callbacks[nextId]
+      delete callbacksMap[nextId]
     },
   ]
 }
@@ -24,14 +24,14 @@ const rjMiddleware = store => next => action => {
         callbacks.onSuccess(action.payload.data)
       }
       callbacks.onComplete()
-      delete callbacks[rjCallId]
+      delete callbacksMap[rjCallId]
     } else if (action.type.indexOf('FAILURE') !== -1) {
       // On Failure
       if (typeof callbacks.onFailure === 'function') {
         callbacks.onFailure(action.payload)
       }
       callbacks.onComplete()
-      delete callbacks[rjCallId]
+      delete callbacksMap[rjCallId]
     }
   }
   next(action)

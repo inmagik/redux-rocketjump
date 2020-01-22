@@ -672,4 +672,84 @@ describe('useRj', () => {
     expect(mockOnSuccess).toHaveBeenCalledTimes(0)
     expect(mockOnFailure).toHaveBeenCalledTimes(1)
   })
+
+  it("should don't call onSuccess on unmoutend rj", async () => {
+    let resolve
+    const mockEffect = jest.fn(
+      () =>
+        new Promise(_resolve => {
+          resolve = _resolve
+        })
+    )
+    const mockOnSuccess = jest.fn()
+    const mockOnFailure = jest.fn()
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      composeReducer: (prevState = { giova: 23 }) => prevState,
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result, unmount } = renderHook(
+      () =>
+        useRj(maRjState, (state, { getData }) => ({
+          friends: getData(state),
+        })),
+      {
+        wrapper: ReduxWrapper,
+      }
+    )
+
+    await act(async () => {
+      result.current[1].run
+        .onSuccess(mockOnSuccess)
+        .onFailure(mockOnFailure)
+        .withMeta({ giova: 23 })
+        .run('Un', 'Dos', 'Tres')
+    })
+    await unmount()
+    await resolve(['ALB1312', 'G10V4', 'Sk3ffy'])
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[1]).toEqual({
+      type: 'GET_FRIENDS_LOADING',
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(actionsLog[2]).toEqual({
+      type: 'GET_FRIENDS_SUCCESS',
+      payload: {
+        params: ['Un', 'Dos', 'Tres'],
+        data: ['ALB1312', 'G10V4', 'Sk3ffy'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+        giova: 23,
+      },
+    })
+    expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
+    expect(mockOnSuccess).toHaveBeenCalledTimes(0)
+    expect(mockOnFailure).toHaveBeenCalledTimes(0)
+  })
 })
