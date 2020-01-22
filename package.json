@@ -1,6 +1,6 @@
 {
   "name": "redux-rocketjump",
-  "version": "3.0.0-rc4",
+  "version": "3.0.0-rc5",
   "description": "Rocketjump your redux! Speed up redux-app development",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
