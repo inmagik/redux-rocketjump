@@ -2,7 +2,7 @@ import {
   makeUpdateReducer,
   makeRemoveListReducer,
   makeAddListReducer,
-} from '../plugins/hor'
+} from '../index'
 
 describe('HOR makeUpdateReducer', () => {
   it('should immutable update an object', () => {

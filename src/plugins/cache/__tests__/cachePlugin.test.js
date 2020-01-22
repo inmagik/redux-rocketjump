@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import { rj } from '../rocketjump'
-import rjCache from '../plugins/cache'
+import { rj } from '../../../rocketjump'
+import rjCache from '../index'
 
 const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
   const sagaMiddleware = createSagaMiddleware()

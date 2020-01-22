@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store'
 import createSagaMiddleware from 'redux-saga'
-import { rj } from '../rocketjump'
-import rjPosArgs from '../plugins/positionalArgs'
+import { rj } from '../../../rocketjump'
+import rjPosArgs from '../index'
 
 const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
   const sagaMiddleware = createSagaMiddleware()

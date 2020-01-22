@@ -284,16 +284,12 @@ describe('Combine plugin', () => {
           type: 'GET_GUYS',
           selectors: {
             getCoolGuys: ({ getData }) =>
-              createSelector(
-                getData,
-                getCoolGuyName,
-                (guys, coolGuy) => {
-                  return guys.map(guy => ({
-                    ...guy,
-                    cool: guy.name === coolGuy,
-                  }))
-                }
-              ),
+              createSelector(getData, getCoolGuyName, (guys, coolGuy) => {
+                return guys.map(guy => ({
+                  ...guy,
+                  cool: guy.name === coolGuy,
+                }))
+              }),
           },
         }),
       },
