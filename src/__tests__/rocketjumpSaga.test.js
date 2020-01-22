@@ -4,7 +4,11 @@ import createSagaMiddleware from 'redux-saga'
 import { select, call } from 'redux-saga/effects'
 import omit from 'lodash/omit'
 import { rj } from '../rocketjump'
-import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
+import {
+  takeEveryAndCancel,
+  takeLatestAndCancelGroupBy,
+  takeExhaustAndCancel,
+} from '../effects'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
 
@@ -651,6 +655,134 @@ describe('Rocketjump saga', () => {
       ])
       done()
     })
+  })
+
+  it('take exhaust side effect when specified', async () => {
+    let resolves = []
+    const mockApi = jest.fn(
+      () =>
+        new Promise(_resolve => {
+          resolves.push(_resolve)
+        })
+    )
+
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: takeExhaustAndCancel,
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load({ name: 'Giova' }))
+    store.dispatch(load({ name: 'Rinne' }))
+    store.dispatch(load({ name: 'Babu' }))
+    expect(mockApi).toHaveBeenCalledTimes(1)
+    resolves[0]('YEAH')
+    await mockApi.mock.results[0].value
+    store.dispatch(load({ name: 'Drago' }))
+    store.dispatch(load({ name: 'Albi' }))
+    expect(mockApi).toHaveBeenCalledTimes(2)
+    resolves[1]('GANG')
+    await mockApi.mock.results[1].value
+    store.dispatch(load({ name: 'Maik' }))
+    store.dispatch(load({ name: 'Debs' }))
+    store.dispatch(unload())
+    expect(mockApi).toHaveBeenCalledTimes(3)
+    resolves[2]('Bubba')
+    await mockApi.mock.results[2].value
+    store.dispatch(load({ name: 'Budda' }))
+    expect(mockApi).toHaveBeenCalledTimes(4)
+    resolves[3]('TEK')
+    await mockApi.mock.results[3].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        meta: {},
+        payload: { params: { name: 'Giova' } },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Rinne' } },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Babu' } },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'YEAH',
+          params: { name: 'Giova' },
+        },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Drago' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Albi' } },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'GANG',
+          params: { name: 'Drago' },
+        },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Maik' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Debs' } },
+        meta: {},
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Budda' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'TEK',
+          params: { name: 'Budda' },
+        },
+        meta: {},
+      },
+    ])
   })
 
   it('take latest side effect group by when specified', done => {

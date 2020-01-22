@@ -44,6 +44,29 @@ export function* takeLatestAndCancel(pattern, cancelPattern, saga, ...args) {
   return task
 }
 
+export function* takeExhaustAndCancel(pattern, cancelPattern, saga, ...args) {
+  const task = yield fork(function*() {
+    let lastTask
+    while (true) {
+      const action = yield take(mergeActionPatterns(pattern, cancelPattern))
+
+      if (matchActionPattern(action, cancelPattern)) {
+        // Cancel previous task
+        if (lastTask) {
+          yield cancel(lastTask)
+        }
+      } else {
+        if (!lastTask || !lastTask.isRunning()) {
+          // No previous task or last task finish running
+          // Fork new task
+          lastTask = yield fork(saga, ...args.concat(action))
+        }
+      }
+    }
+  })
+  return task
+}
+
 // Difficult: Perfect Master
 export function* takeLatestAndCancelGroupBy(
   pattern,
