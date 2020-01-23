@@ -67,7 +67,7 @@ export function* takeExhaustAndCancel(pattern, cancelPattern, saga, ...args) {
   return task
 }
 
-export function* takeExhaustGroupByAndCancel(
+export function* takeExhaustAndCancelGroupBy(
   pattern,
   cancelPattern,
   saga,

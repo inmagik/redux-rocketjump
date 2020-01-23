@@ -1,6 +1,21 @@
 import { fork, call, put, all } from 'redux-saga/effects'
 import { makeActionTypes } from './actions'
-import { takeLatestAndCancel } from './effects'
+import {
+  takeLatestAndCancel,
+  takeEveryAndCancel,
+  takeExhaustAndCancel,
+  takeLatestAndCancelGroupBy,
+  takeExhaustAndCancelGroupBy,
+} from './effects'
+
+// React Rj Style Yeah!
+const RjFactoryEffects = {
+  latest: takeLatestAndCancel,
+  every: takeEveryAndCancel,
+  exhaust: takeExhaustAndCancel,
+  groupBy: takeLatestAndCancelGroupBy,
+  groupByExhaust: takeExhaustAndCancelGroupBy,
+}
 
 const id = a => a
 
@@ -8,7 +23,7 @@ export default (
   actionTypeOrTypes,
   apiFn,
   extraParamsEffects = [],
-  takeEffect = takeLatestAndCancel,
+  takeEffectGeneratorOrLiteral = takeLatestAndCancel,
   callApi = call,
   needEffect,
   successEffects = [],
@@ -19,6 +34,23 @@ export default (
   mapFailureAction = id,
   unloadTypes = []
 ) => {
+  let takeEffect
+  if (typeof takeEffectGeneratorOrLiteral === 'string') {
+    if (RjFactoryEffects[takeEffectGeneratorOrLiteral] === undefined) {
+      // Bad take effect name
+      throw new Error(
+        `[redux-rocketjump] bad takeEffect name '${takeEffectGeneratorOrLiteral}'` +
+          ` please use one of them: ${Object.keys(RjFactoryEffects).join(
+            ', '
+          )} or provide a custom generator.`
+      )
+    }
+    takeEffect = RjFactoryEffects[takeEffectGeneratorOrLiteral]
+  } else {
+    // Use as a custom generator
+    takeEffect = takeEffectGeneratorOrLiteral
+  }
+
   let actionTypes
   if (typeof actionTypeOrTypes === 'string') {
     // When string is given build action types as usual
@@ -27,6 +59,7 @@ export default (
     // Othrwise assumes that is alredy maked action types map
     actionTypes = actionTypeOrTypes
   }
+
   function* handleApi({ payload: { params }, meta }) {
     // Should perform the call?
     if (typeof needEffect === 'function') {

@@ -8,7 +8,7 @@ import {
   takeEveryAndCancel,
   takeLatestAndCancelGroupBy,
   takeExhaustAndCancel,
-  takeExhaustGroupByAndCancel,
+  takeExhaustAndCancelGroupBy,
 } from '../effects'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
@@ -802,7 +802,7 @@ describe('Rocketjump saga', () => {
       type,
       state,
       effect: mockApi,
-      takeEffect: takeExhaustGroupByAndCancel,
+      takeEffect: takeExhaustAndCancelGroupBy,
       takeEffectArgs: [action => action.meta.code || null],
     })()
     const store = mockStoreWithSaga(saga, {})
@@ -941,12 +941,6 @@ describe('Rocketjump saga', () => {
     resolves[3]('~IGNORE~')
     resolves[4]('~IGNORE~')
     await mockApi.mock.results[4].value
-
-    // store.dispatch(load({ name: 'Jack' }, { code: 51 }))
-    // expect(mockApi).toHaveBeenCalledTimes(3)
-    // resolves[1]('X')
-    // resolves[2]('ICE')
-    // await mockApi.mock.results[2].value
     expect(store.getActions()).toEqual([
       {
         type,
@@ -1035,6 +1029,73 @@ describe('Rocketjump saga', () => {
         meta: {},
       },
     ])
+  })
+
+  it('take effect can be express a literal with pre-defined take effects', async () => {
+    const mockApi = jest
+      .fn()
+      .mockResolvedValueOnce('bananasplit')
+      .mockResolvedValueOnce('splitbanana')
+    const {
+      actions: { load },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: 'every',
+    })()
+    const store = mockStoreWithSaga(saga, {})
+    store.dispatch(load())
+    store.dispatch(load())
+    await mockApi.mock.results[1].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        payload: { params: {} },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: {} },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          params: {},
+          data: 'bananasplit',
+        },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        meta: {},
+        payload: {
+          params: {},
+          data: 'splitbanana',
+        },
+      },
+    ])
+  })
+
+  it('should get andgry on bad takeEffect literal', async () => {
+    expect(() => {
+      rj({
+        type,
+        state,
+        effect: () => Promise.resolve(23),
+        takeEffect: 'every23',
+      })()
+    }).toThrowError(/\[redux-rocketjump\] bad takeEffect name/)
   })
 
   it('can be custom!', () => {
