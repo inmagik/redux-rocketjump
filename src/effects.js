@@ -141,9 +141,21 @@ export function* takeLatestAndCancelGroupBy(
         pendingTasks[key] = yield fork(saga, ...args.concat(action))
       } else if (key === null) {
         // Clear all pending tasks
-        for (let i = 0; i < pendingTasks.length; i++) {
-          const task = pendingTasks[i]
-          yield cancel(task)
+        const keys = Object.keys(pendingTasks)
+        for (let i = 0; i < keys.length; i++) {
+          const currentKey = keys[i]
+          yield cancel(pendingTasks[currentKey])
+          delete pendingTasks[currentKey]
+        }
+      }
+
+      // Garbage collect finish tasks
+      const keys = Object.keys(pendingTasks)
+      for (let i = 0; i < keys.length; i++) {
+        const currentKey = keys[i]
+        const currentTask = pendingTasks[currentKey]
+        if (!currentTask.isRunning()) {
+          delete pendingTasks[currentKey]
         }
       }
     }
