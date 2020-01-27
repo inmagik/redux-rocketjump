@@ -2,11 +2,18 @@ import { makeLibraryAction } from 'rocketjump-core'
 
 // Base action types from type
 export const makeActionTypes = type => ({
+  // TODO: in Rj 4 should become ${type}@RJ/RUN
   main: type,
   loading: `${type}_LOADING`,
   success: `${type}_SUCCESS`,
   failure: `${type}_FAILURE`,
   unload: `${type}_UNLOAD`,
+  updateData: `${type}_UPDATE_DATA`,
+})
+
+const makeUpdateData = type => data => ({
+  type: `${type}_UPDATE_DATA`,
+  payload: data,
 })
 
 // Compatible with official Albi 1312 Builder
@@ -14,6 +21,7 @@ export function makeBuildableActions(type) {
   return {
     run: (...params) => makeLibraryAction(type, ...params),
     clean: (...params) => makeLibraryAction(`${type}_UNLOAD`, ...params),
+    updateData: makeUpdateData(type),
   }
 }
 
@@ -61,5 +69,6 @@ export const makeActions = type => {
     // but for now simpy add some alias ...
     run,
     clean,
+    updateData: makeUpdateData(type),
   }
 }

@@ -3,6 +3,25 @@ import { rj } from 'redux-rocketjump'
 
 const API_URL = `http://${window.location.hostname}:9001`
 
+// export const NoopRedux = rj({
+//   composeReducer: (state, action) => {
+//     switch (action.type) {
+//       case [ReduxTodos.mutationsTypes.addTodo.success]:
+//         return {
+//           ...state,
+//           data: state.data.concat(action.payload.data)
+//         }
+//       case [ReduxTodos.mutationsTypes.updateTodo.success]:
+//         return {
+//           ...state,
+//           data: state.data.concat(action.payload.data)
+//         }
+//       default:
+//         return state
+//     }
+//   },
+// })
+
 const GET_TODOS = 'GET_TODOS'
 export const ReduxTodos = rj({
   type: GET_TODOS,

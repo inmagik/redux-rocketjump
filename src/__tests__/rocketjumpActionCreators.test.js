@@ -6,7 +6,7 @@ describe('Rocketjump action creators', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
 
-  it('should be load and unload', () => {
+  it('should be load, unload and updateData', () => {
     const { actions } = rj({
       type,
       state,
@@ -25,6 +25,12 @@ describe('Rocketjump action creators', () => {
     expect(actions.unload({ tek: 23 })).toEqual({
       type: `${type}_UNLOAD`,
       meta: {
+        tek: 23,
+      },
+    })
+    expect(actions.updateData({ tek: 23 })).toEqual({
+      type: `${type}_UPDATE_DATA`,
+      payload: {
         tek: 23,
       },
     })
