@@ -138,6 +138,58 @@ describe('useRj', () => {
     })
   })
 
+  it('should dispatch also non-effect action', async () => {
+    const mockEffect = jest.fn(() => Promise.resolve(true))
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(() => useRj(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+    expect(store.getState().friends).toEqual({
+      data: null,
+      loading: false,
+      error: null,
+    })
+    expect(result.current[0]).toEqual({
+      data: null,
+      loading: false,
+      error: null,
+    })
+
+    await act(async () => {
+      result.current[1].updateData('Big Ben Boss')
+    })
+    expect(result.current[0]).toEqual({
+      data: 'Big Ben Boss',
+      loading: false,
+      error: null,
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS_UPDATE_DATA',
+      payload: 'Big Ben Boss',
+    })
+    expect(store.getState().friends).toEqual({
+      data: 'Big Ben Boss',
+      loading: false,
+      error: null,
+    })
+  })
+
   it('should dervive the state if a function is provided', () => {
     const mockEffect = jest.fn(() =>
       Promise.resolve(['ALB1312', 'G10V4', 'Sk3ffy'])
