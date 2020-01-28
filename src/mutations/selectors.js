@@ -1,3 +1,4 @@
+import get from 'lodash.get'
 import { makeSelectors } from '../selectors'
 import { getOrSelect } from '../helpers'
 import { hasMutationsConfigSomeState } from './helpers'
@@ -14,10 +15,13 @@ export function makeSelectorsWithMutations(stateSelector, mutations) {
     const getParentBaseState = state => getOrSelect(state, stateSelector)
     const getMutationsState = state =>
       getOrSelect(state, stateSelector).mutations
+    const getMutation = (state, mutationName, path = '') =>
+      get(getOrSelect(state, stateSelector).mutations, `${mutationName}${path}`)
     return {
       ...baseSelectors,
       getParentBaseState,
       getMutationsState,
+      getMutation,
     }
   } else {
     return makeSelectors(stateSelector)
