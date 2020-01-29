@@ -1,7 +1,7 @@
 import get from 'lodash.get'
 import { makeSelectors } from '../selectors'
 import { getOrSelect } from '../helpers'
-import { hasMutationsConfigSomeState } from './helpers'
+import { hasMutationsConfigSomeState } from './utils'
 
 export function makeSelectorsWithMutations(stateSelector, mutations) {
   if (hasMutationsConfigSomeState(mutations)) {

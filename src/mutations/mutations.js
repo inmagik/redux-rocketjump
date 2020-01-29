@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { enhanceReducer, makeMutationsReducer } from './reducer'
 import { enhancePlainActions, enhanceBuildableActions } from './actions'
 import { enhanceSaga } from './saga'
-import { hasMutationsConfigSomeState } from './helpers'
+import { hasMutationsConfigSomeState } from './utils'
 import { createComputeStateWithMutations } from './computed'
 
 export function enhanceMakeRunConfigWithMutations(runConfig, finalConfig) {

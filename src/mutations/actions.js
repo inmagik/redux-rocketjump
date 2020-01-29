@@ -2,7 +2,7 @@ import { makeLibraryAction } from 'rocketjump-core'
 
 export const makeMutationActionTypeMain = (type, name, mutation) => {
   // NOTE: mutation type can override default mutation type
-  if (mutation.type) {
+  if (mutation && mutation.type) {
     return mutation.type
   }
   // Create a namespaced name from base rj.type

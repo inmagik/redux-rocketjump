@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { resetReducerOn } from '../helpers'
-import { mergeUnloadBy } from './helpers'
+import { mergeUnloadBy } from './utils'
 import {
   makeMutationActionTypeSuccess,
   makeMutationActionTypeMain,

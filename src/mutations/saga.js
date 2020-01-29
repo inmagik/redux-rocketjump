@@ -2,7 +2,7 @@ import { fork } from 'redux-saga/effects'
 import makeApiSaga from '../apiSaga'
 import { takeEveryAndCancel } from '../effects'
 import { makeMutationActionTypes } from './actions'
-import { mergeUnloadBy } from './helpers'
+import { mergeUnloadBy } from './utils'
 
 const makeMutationSaga = (mutation, name, sideEffect, runConfig) => {
   const { effect } = mutation
