@@ -8,7 +8,32 @@ import makeApiSaga from './apiSaga'
 import {
   enhanceMakeRunConfigWithMutations,
   enhanceFinalExportWithMutations,
+  checkMutationsConfig,
 } from './mutations/index'
+
+// NOTE: Why Here?
+// To avoid re-looping the rj config over and over
+// when re-implement makePartialConfig
+// the standard implement simply shallow merge non function parameters (config)
+// ... we simply add a check in this poin
+function makePartialConfig(partialRjsOrConfigs) {
+  return partialRjsOrConfigs.reduce((finalConfig, partialRjOrConfig) => {
+    if (typeof partialRjOrConfig === 'function') {
+      // ... Is a partial Rj
+      return finalConfig
+    }
+    // ... Is a config
+
+    // Check mutation config!
+    checkMutationsConfig(partialRjOrConfig)
+
+    // Merge the as a standard implementation
+    return {
+      ...finalConfig,
+      ...partialRjOrConfig,
+    }
+  }, {})
+}
 
 function checkWarns(rjsOrConfigs, extraConfig) {
   if (
@@ -181,6 +206,7 @@ function finalizeExport(mergedAlongExport, runConfig, finalConfig) {
 }
 
 export const rj = forgeRocketJump({
+  makePartialConfig,
   makeRunConfig,
   makeRecursionRjs,
   makeExport,

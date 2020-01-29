@@ -5,6 +5,19 @@ import { enhanceSaga } from './saga'
 import { hasMutationsConfigSomeState } from './utils'
 import { createComputeStateWithMutations } from './computed'
 
+export function checkMutationsConfig(rjConfig) {
+  if (
+    typeof rjConfig.mutations === 'object' &&
+    rjConfig.mutations !== null &&
+    typeof rjConfig.effect !== 'function'
+  ) {
+    throw new Error(
+      '[redux-rocketjump] @mutations must be defined along with effect, ' +
+        'please check your config.'
+    )
+  }
+}
+
 export function enhanceMakeRunConfigWithMutations(runConfig, finalConfig) {
   // Set mutations in run config
   if (finalConfig.mutations) {

@@ -57,13 +57,21 @@ const makeMutationSaga = (mutation, name, sideEffect, runConfig) => {
 
 export const enhanceSaga = (mutations, saga, sideEffect, runConfig) => {
   const mutationsKeys = Object.keys(mutations)
+  const muttionsSagas = mutationsKeys.reduce((sagas, name) => {
+    const mutation = mutations[name]
+    const mutationSaga = makeMutationSaga(mutation, name, sideEffect, runConfig)
+    return {
+      ...sagas,
+      [name]: mutationSaga,
+    }
+  }, {})
 
   return function* withMutationsSaga() {
     yield fork(saga)
     for (let i = 0; i < mutationsKeys.length; i++) {
       const name = mutationsKeys[i]
-      const mutation = mutations[name]
-      yield fork(makeMutationSaga(mutation, name, sideEffect, runConfig))
+      const mutationSaga = muttionsSagas[name]
+      yield fork(mutationSaga)
     }
   }
 }

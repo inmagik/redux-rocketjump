@@ -62,7 +62,7 @@ describe('RJ mutations updater', () => {
     const MaRjState = rj({
       mutations: {
         muta: {
-          effect: Promise.resolve(true),
+          effect: () => Promise.resolve(true),
           updater: (state, data) => ({
             ...state,
             data: 'My name WAS ~ ' + data,

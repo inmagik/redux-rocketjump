@@ -120,6 +120,76 @@ describe('RJ mutations action creators', () => {
     ])
   })
 
+  it('can be overwritten using a type in mutation config', async () => {
+    const maRjState = rj({
+      mutations: {
+        killHumans: {
+          type: 'KILLA_KILL',
+          effect: () => Promise.resolve(23),
+          updater: s => s,
+        },
+        cookSpaghetti: {
+          effect: () => Promise.resolve('Ok B00M3R'),
+          updater: s => s,
+        },
+      },
+      type: 'BABU',
+      state: 'babu',
+      effect: () => Promise.resolve(1312),
+    })()
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        babu: maRjState.reducer,
+      })
+    )
+
+    const { result } = renderHook(() => useRj(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    await act(async () => {
+      result.current[1].killHumans('Giova', 23)
+    })
+
+    const mainType1 = 'KILLA_KILL'
+    expect(actionsLog).toEqual([
+      {
+        type: `${mainType1}`,
+        payload: {
+          params: ['Giova', 23],
+        },
+        meta: {
+          params: ['Giova', 23],
+          rjCallId: expect.any(Number),
+        },
+      },
+      {
+        type: `${mainType1}/LOADING`,
+        meta: {
+          params: ['Giova', 23],
+          rjCallId: expect.any(Number),
+        },
+      },
+      {
+        type: `${mainType1}/SUCCESS`,
+        payload: {
+          params: ['Giova', 23],
+          data: 23,
+        },
+        meta: {
+          params: ['Giova', 23],
+          rjCallId: expect.any(Number),
+        },
+      },
+    ])
+  })
+
   it('should be warn when a mutation override existing action creator', async () => {
     const spy = jest.fn()
 
