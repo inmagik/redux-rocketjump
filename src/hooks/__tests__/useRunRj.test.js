@@ -1,26 +1,10 @@
 import React from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
-import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 import { rj } from '../../rocketjump'
 import useRunRj from '../useRunRj'
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const actions = []
-  const actionLogMiddleware = store => next => action => {
-    actions.push(action)
-    return next(action)
-  }
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware, actionLogMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return [store, actions]
-}
+import { createRealStoreWithSagaAndReducer } from '../../testUtils'
 
 describe('useRunRj', () => {
   it('should run rj on mount', async () => {

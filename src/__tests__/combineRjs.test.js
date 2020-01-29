@@ -1,24 +1,11 @@
-// import configureStore from 'redux-mock-store'
-// import createSagaMiddleware from 'redux-saga'
 import { createSelector } from 'reselect'
 import { rj } from '../rocketjump'
-// import { takeEveryAndCancel } from '../effects'
 import combineRjs from '../combineRjs'
 import combineRjsFromPlugins from '../plugins/combine'
 import rjList, { nextPreviousPaginationAdapter } from '../plugins/list'
-// import rjMap from '../plugins/map'
 import rjUpdate from '../plugins/update'
 import rjDelete from '../plugins/delete'
 import { makeUpdateReducer, makeRemoveListReducer } from '../plugins/hor'
-
-// const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
-//   const sagaMiddleware = createSagaMiddleware()
-//   const middlewares = [sagaMiddleware]
-//   const mockStore = configureStore(middlewares)
-//   const store = mockStore(...mockStoreArgs)
-//   sagaMiddleware.run(saga)
-//   return store
-// }
 
 const spyWarn = jest.spyOn(global.console, 'warn')
 

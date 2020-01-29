@@ -1,30 +1,13 @@
 import React from 'react'
 import { rj } from '../../rocketjump'
-import rjMiddleware from '../../rjMiddleware'
 import useRj from '../../hooks/useRj'
 import { renderHook, act } from '@testing-library/react-hooks'
-import createSagaMiddleware from 'redux-saga'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+import { createRealStoreWithSagaAndReducer } from '../../testUtils'
 
 const MUTATION_PREFIX = '@MUTATION'
 const RJ_PREFIX = '@RJ'
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const actions = []
-  const actionLogMiddleware = store => next => action => {
-    actions.push(action)
-    return next(action)
-  }
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware, rjMiddleware, actionLogMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return [store, actions]
-}
 
 describe('RJ mutations action creators', () => {
   it('should be generated from mutations and generate good actions', async () => {

@@ -1,16 +1,6 @@
-import configureStore from 'redux-mock-store'
-import createSagaMiddleware from 'redux-saga'
 import { rj } from '../../../rocketjump'
+import { createMockStoreWithSaga } from '../../../testUtils'
 import rjPosArgs from '../index'
-
-const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const middlewares = [sagaMiddleware]
-  const mockStore = configureStore(middlewares)
-  const store = mockStore(...mockStoreArgs)
-  sagaMiddleware.run(saga)
-  return store
-}
 
 describe('Positional args plugin', () => {
   it('should able to run action creator using positional arguments instead of objects', () => {
@@ -27,7 +17,7 @@ describe('Positional args plugin', () => {
         return [...params, 'King Redeem / Queen serene']
       },
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(23, 777))
     expect(api.mock.calls[0][0]).toBe(23)
     expect(api.mock.calls[0][1]).toBe(777)

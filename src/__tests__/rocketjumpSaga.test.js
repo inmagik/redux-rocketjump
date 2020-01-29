@@ -10,32 +10,16 @@ import {
   takeExhaustAndCancel,
   takeExhaustAndCancelGroupBy,
 } from '../effects'
+import {
+  createMockStoreWithSaga,
+  createRealStoreWithSagaAndReducer,
+} from '../testUtils'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
 
 beforeEach(() => {
   spyWarn.mockReset()
 })
-
-const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const middlewares = [sagaMiddleware]
-  const mockStore = configureStore(middlewares)
-  const store = mockStore(...mockStoreArgs)
-  sagaMiddleware.run(saga)
-  return store
-}
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return store
-}
 
 describe('Rocketjump saga', () => {
   const type = 'GET_SOCI'
@@ -61,7 +45,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -98,7 +82,7 @@ describe('Rocketjump saga', () => {
       api: mockApi,
     })()
     expect(spyWarn).toHaveBeenCalled()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -139,7 +123,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
@@ -173,7 +157,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 666, rinne: 22 })
   })
@@ -192,7 +176,7 @@ describe('Rocketjump saga', () => {
       },
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
   })
@@ -211,7 +195,7 @@ describe('Rocketjump saga', () => {
       },
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
     expect(spyWarn).toHaveBeenCalled()
@@ -238,7 +222,7 @@ describe('Rocketjump saga', () => {
       }),
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 11.5 }))
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -278,7 +262,7 @@ describe('Rocketjump saga', () => {
       failureEffect,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(successEffect).toBeCalled()
@@ -308,7 +292,7 @@ describe('Rocketjump saga', () => {
       combineReducers({
         soci: reducer,
       })
-    )
+    )[0]
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -338,7 +322,7 @@ describe('Rocketjump saga', () => {
       failureEffect,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockBadApi.mock.results[0].value.catch(() => {
       expect(successEffect).not.toBeCalled()
@@ -369,7 +353,7 @@ describe('Rocketjump saga', () => {
       effectCaller,
       effect: myApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(apiResult => {
       expect(apiResult).toBe('Maik~1312')
@@ -399,7 +383,7 @@ describe('Rocketjump saga', () => {
       callApi,
       effect: myApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(apiResult => {
       expect(apiResult).toBe('Maik~1312')
@@ -418,7 +402,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 23 }))
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -459,7 +443,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 23 }))
     mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
@@ -493,7 +477,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(unload())
     mockApi.mock.results[0].value.then(() => {
@@ -527,7 +511,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       unloadBy: 'LOGOUT',
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch({
       type: 'LOGOUT',
@@ -564,7 +548,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(load())
     mockApi.mock.results[1].value.then(() => {
@@ -614,7 +598,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       takeEffect: takeEveryAndCancel,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(load())
     mockApi.mock.results[1].value.then(r => {
@@ -676,7 +660,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       takeEffect: takeExhaustAndCancel,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ name: 'Giova' }))
     store.dispatch(load({ name: 'Rinne' }))
     store.dispatch(load({ name: 'Babu' }))
@@ -805,7 +789,7 @@ describe('Rocketjump saga', () => {
       takeEffect: takeExhaustAndCancelGroupBy,
       takeEffectArgs: [action => action.meta.code || null],
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ name: 'Giova' }, { code: 23 }))
     store.dispatch(load({ name: 'Rinne' }, { code: 51 }))
     store.dispatch(load({ name: 'Babu' }, { code: 23 }))
@@ -924,7 +908,7 @@ describe('Rocketjump saga', () => {
       takeEffect: takeLatestAndCancelGroupBy,
       takeEffectArgs: [action => action.meta.code || null],
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ name: 'Giova' }, { code: 23 }))
     store.dispatch(load({ name: 'Rinne' }, { code: 51 }))
     store.dispatch(load({ name: 'Babu' }, { code: 23 }))
@@ -1045,7 +1029,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       takeEffect: 'every',
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(load())
     await mockApi.mock.results[1].value

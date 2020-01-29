@@ -4,7 +4,7 @@ import { rj } from '../../../rocketjump'
 import rjWithPromise from '../index'
 import { middleware as thunkMiddleware } from 'redux-saga-thunk'
 
-const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
+const mockStoreWithSagaAndSagaThunk = (saga, ...mockStoreArgs) => {
   const sagaMiddleware = createSagaMiddleware()
   const middlewares = [thunkMiddleware, sagaMiddleware]
   const mockStore = configureStore(middlewares)
@@ -33,7 +33,7 @@ describe('Promise plugin', () => {
         }),
     })()
 
-    const store = mockStoreWithSaga(saga, {})
+    const store = mockStoreWithSagaAndSagaThunk(saga, {})
     store.dispatch(load({ maik: 777 })).catch(error => {
       expect(error).toBe('Invalid Maik try again')
       store.dispatch(load({ maik: 23 })).then(data => {

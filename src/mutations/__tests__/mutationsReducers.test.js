@@ -1,6 +1,5 @@
 import { rj } from '../../rocketjump'
 
-// const MUTATION_PREFIX = '@MUTATION'
 const MUTATION_PREFIX = '@MUTATION'
 const RJ_PREFIX = '@RJ'
 

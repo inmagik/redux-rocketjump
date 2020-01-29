@@ -1,27 +1,10 @@
 import React from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import createSagaMiddleware from 'redux-saga'
-import rjMiddleware from '../../rjMiddleware'
 import { rj } from '../../rocketjump'
 import useRj from '../useRj'
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const actions = []
-  const actionLogMiddleware = store => next => action => {
-    actions.push(action)
-    return next(action)
-  }
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware, rjMiddleware, actionLogMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return [store, actions]
-}
+import { createRealStoreWithSagaAndReducer } from '../../testUtils'
 
 describe('useRj', () => {
   it('should select the rj state defined by reducer from redux', () => {
