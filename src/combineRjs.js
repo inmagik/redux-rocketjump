@@ -33,12 +33,14 @@ export default function combineRjs(combine, config) {
           ? key
           : givenRj.__rjconfig.state
 
-      const { reducer, saga, actions, selectors } = givenRj({
+      const RjObject = givenRj({
         __rjtype: $TYPE_RJ_COMBINE_CONFIG,
         state: stateSelector,
         callApi: givenRj.__rjconfig.callApi || config.callApi,
         effectCaller: givenRj.__rjconfig.effectCaller || config.effectCaller,
       })
+
+      const { reducer, saga, actions, selectors } = RjObject
 
       let reducers = result.reducers
       if (typeof reducer !== 'undefined') {
@@ -51,6 +53,10 @@ export default function combineRjs(combine, config) {
       return {
         reducers,
         sagas: result.sagas.concat(saga),
+        rjs: {
+          ...result.rjs,
+          [key]: RjObject,
+        },
         connect: {
           ...result.connect,
           [key]: {
@@ -61,14 +67,16 @@ export default function combineRjs(combine, config) {
       }
     },
     {
+      rjs: {},
       reducers: {},
       sagas: [],
       connect: {},
     }
   )
 
-  const { reducers, sagas, connect } = combined
+  const { reducers, sagas, connect, rjs } = combined
   return {
+    rjs,
     connect,
     reducer: combineReducers(reducers),
     saga: function*() {

@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect'
+import { isObjectRj } from 'rocketjump-core'
+import { combineReducers } from 'redux'
 import { rj } from '../rocketjump'
 import combineRjs from '../combineRjs'
 import combineRjsFromPlugins from '../plugins/combine'
@@ -6,6 +8,7 @@ import rjList, { nextPreviousPaginationAdapter } from '../plugins/list'
 import rjUpdate from '../plugins/update'
 import rjDelete from '../plugins/delete'
 import { makeUpdateReducer, makeRemoveListReducer } from '../plugins/hor'
+import { createRealStoreWithSagaAndReducer } from '../testUtils'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
 
@@ -253,7 +256,6 @@ describe('Combine plugin', () => {
       deleting: {},
       updating: {},
     })
-    // console.log(JSON.stringify(state, null, 2))
   })
 
   it('should combine state and selectors', () => {
@@ -351,5 +353,52 @@ describe('Combine plugin', () => {
       }
     )
     expect(spyWarn).toHaveBeenCalled()
+  })
+
+  it('shoudl generate also rj objects', () => {
+    const config = {}
+
+    config.users = rj({
+      type: 'GET_USERS',
+      effect: () => Promise.resolve(['GioVa', 'Skaffo']),
+    })
+
+    config.dragons = rj({
+      type: 'GET_DRAGONS',
+      effect: () => Promise.resolve(['Skinny']),
+    })
+
+    const {
+      rjs: { users: ReduxUsers, dragons: ReduxDragons },
+      reducer,
+      saga,
+    } = combineRjs(config, {
+      state: 'giovaland',
+    })
+
+    const [store, actions] = createRealStoreWithSagaAndReducer(
+      saga,
+      combineReducers({
+        giovaland: reducer,
+      })
+    )
+
+    expect(store.getState()).toEqual({
+      giovaland: {
+        users: {
+          loading: false,
+          error: null,
+          data: null,
+        },
+        dragons: {
+          loading: false,
+          error: null,
+          data: null,
+        },
+      },
+    })
+
+    expect(isObjectRj(ReduxUsers)).toBe(true)
+    expect(isObjectRj(ReduxDragons)).toBe(true)
   })
 })

@@ -4,11 +4,11 @@ import NewTodo from './NewTodo'
 import { ReduxTodos } from '../state/todos'
 import { useRunRj } from 'redux-rocketjump'
 
-export default function Todos() {
+export default function Todos({ rjObject }) {
   const [
     { todos, loading, adding, updating, deleting },
     { addTodo, updateTodo, deleteTodo },
-  ] = useRunRj(ReduxTodos)
+  ] = useRunRj(rjObject)
 
   const toggleTodo = useCallback(
     todo => {
