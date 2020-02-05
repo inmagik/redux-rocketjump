@@ -1,4 +1,4 @@
-import { call } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
 import { rj } from '../../rocketjump'
 import { createMockStoreWithSaga } from '../../testUtils'
 
@@ -307,5 +307,33 @@ describe('RJ mutations saga', () => {
         meta: { params: [] },
       },
     ])
+  })
+
+  it('should use effect extra params to provide extra params to mutation effect', async () => {
+    const mockEffectA = jest.fn().mockResolvedValue(23)
+
+    const RjObject = rj({
+      mutations: {
+        mutationA: {
+          effect: mockEffectA,
+          effectExtraParams: function* extraShit() {
+            const g = yield select(state => state.giova)
+            return [g]
+          },
+          updater: () => {},
+        },
+      },
+      state: 'babu',
+      type: 'BABU',
+      effect: () => {},
+    })()
+    const { actions } = RjObject
+
+    const store = createMockStoreWithSaga(RjObject.saga, {
+      giova: 2323,
+    })
+    store.dispatch(actions.mutationA())
+    expect(mockEffectA).toHaveBeenCalledTimes(1)
+    expect(mockEffectA).nthCalledWith(1, 2323)
   })
 })

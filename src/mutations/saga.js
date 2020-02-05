@@ -1,4 +1,5 @@
 import { fork } from 'redux-saga/effects'
+import { arrayze } from 'rocketjump-core/utils'
 import makeApiSaga from '../apiSaga'
 import { takeEveryAndCancel } from '../effects'
 import { makeMutationActionTypes } from './actions'
@@ -32,6 +33,10 @@ const makeMutationSaga = (mutation, name, sideEffect, runConfig) => {
     mutationSideEffect.takeEffect = takeEveryAndCancel
   }
 
+  if (mutation.effectExtraParams) {
+    mutationSideEffect.effectExtraParams = arrayze(mutation.effectExtraParams)
+  }
+
   const mutationActionTypes = makeMutationActionTypes(
     runConfig.type,
     name,
@@ -41,7 +46,7 @@ const makeMutationSaga = (mutation, name, sideEffect, runConfig) => {
   return makeApiSaga(
     mutationActionTypes,
     effect,
-    undefined, // Effect extra params not needed
+    mutationSideEffect.effectExtraParams,
     mutationSideEffect.takeEffect,
     mutationSideEffect.effectCaller,
     undefined, // Need effect not needed
