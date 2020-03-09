@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { isObjectRj } from 'rocketjump-core'
 import { useSelector } from 'react-redux'
+import { shallowEqualObjects } from '../helpers'
 
 export default function useRjState(rjObject, mapState) {
   if (!isObjectRj(rjObject)) {
@@ -11,16 +12,34 @@ export default function useRjState(rjObject, mapState) {
 
   const { selectors, computeState } = rjObject
 
+  const memoComputeState = useMemo(() => {
+    if (typeof computeState !== 'function') {
+      return null
+    }
+    let lastComputedState = null
+    return state => {
+      const computedState = computeState(state, selectors)
+      if (
+        lastComputedState &&
+        shallowEqualObjects(lastComputedState, computedState)
+      ) {
+        return lastComputedState
+      }
+      lastComputedState = computedState
+      return computedState
+    }
+  }, [selectors, computeState])
+
   // Make the stale selector function
   const stateSelector = useCallback(
     state => {
       if (
-        typeof computeState === 'function' ||
+        typeof memoComputeState === 'function' ||
         typeof mapState === 'function'
       ) {
         let derivedState = state
-        if (typeof computeState === 'function') {
-          derivedState = computeState(state, selectors)
+        if (typeof memoComputeState === 'function') {
+          derivedState = memoComputeState(state)
         }
         if (typeof mapState === 'function') {
           derivedState = mapState(state, selectors, derivedState)
@@ -30,7 +49,7 @@ export default function useRjState(rjObject, mapState) {
       // Return base state directly
       return selectors.getBaseState(state)
     },
-    [mapState, computeState, selectors]
+    [mapState, memoComputeState, selectors]
   )
 
   const selectedState = useSelector(stateSelector)
