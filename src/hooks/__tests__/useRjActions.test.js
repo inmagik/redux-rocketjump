@@ -1,4 +1,5 @@
 import React from 'react'
+import { deps } from 'rocketjump-core'
 import { renderHook, act } from '@testing-library/react-hooks'
 import { combineReducers } from 'redux'
 import { Provider } from 'react-redux'
@@ -286,5 +287,132 @@ describe('useRjActions', () => {
     expect(mockEffect).nthCalledWith(1, 'Un', 'Dos', 'Tres')
     expect(mockOnSuccess).toHaveBeenCalledTimes(0)
     expect(mockOnFailure).toHaveBeenCalledTimes(0)
+  })
+
+  it('should squash deps values', async () => {
+    const mockEffect = jest.fn().mockResolvedValue(23)
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(() => useRjActions(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    await act(async () => {
+      result.current.run(
+        1,
+        2,
+        deps.maybe(3),
+        deps.maybeGet({ name: 'Giova' }, 'name')
+      )
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: [1, 2, 3, 'Giova'],
+      },
+      meta: {
+        rjCallId: expect.any(Number),
+      },
+    })
+  })
+
+  it('should squash deps meta', async () => {
+    const mockEffect = jest.fn().mockResolvedValue(23)
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(() => useRjActions(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    await act(async () => {
+      result.current.run
+        .withMeta({ x: 3 })
+        .run(
+          1,
+          deps.withMeta(2, { rinne: 2 }),
+          deps.maybe(3).withMeta({ x: 2 }),
+          deps.withAlwaysMeta({ giova: 33 }),
+          deps.maybeGet({ name: 'Giova' }, 'name')
+        )
+    })
+    expect(actionsLog[0]).toEqual({
+      type: 'GET_FRIENDS',
+      payload: {
+        params: [1, 2, 3, 'Giova'],
+      },
+      meta: {
+        rinne: 2,
+        x: 3,
+        giova: 33,
+        rjCallId: expect.any(Number),
+      },
+    })
+  })
+
+  it('should skip run according to deps', async () => {
+    const mockEffect = jest.fn().mockResolvedValue(23)
+    const maRjState = rj({
+      type: 'GET_FRIENDS',
+      state: 'friends',
+      effect: mockEffect,
+    })()
+
+    const [store, actionsLog] = createRealStoreWithSagaAndReducer(
+      maRjState.saga,
+      combineReducers({
+        friends: maRjState.reducer,
+      })
+    )
+
+    const ReduxWrapper = ({ children }) => (
+      <Provider store={store}>{children}</Provider>
+    )
+
+    const { result } = renderHook(() => useRjActions(maRjState), {
+      wrapper: ReduxWrapper,
+    })
+
+    await act(async () => {
+      result.current.run
+        .withMeta({ x: 3 })
+        .run(
+          1,
+          deps.withMeta(2, { rinne: 2 }),
+          deps.maybe(0).withMeta({ x: 2 }),
+          deps.withAlwaysMeta({ giova: 33 }),
+          deps.maybeGet({ name: 'Giova' }, 'name')
+        )
+    })
+    expect(actionsLog).toEqual([])
   })
 })
