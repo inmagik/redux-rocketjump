@@ -9,7 +9,7 @@ export default function useRj(rjObject, mapState) {
       '[redux-rocketjump] You should provide a rj object to useRj.'
     )
   }
-  useDebugValue(`Reduxj rj(${rjObject.__rjconfig.type}) Still Rocks`)
+  useDebugValue(`Redux rj(${rjObject.__rjconfig.type}) Still Rocks`)
 
   const selectedState = useRjState(rjObject, mapState)
   const boundActions = useRjActions(rjObject)
