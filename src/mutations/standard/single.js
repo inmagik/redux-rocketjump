@@ -29,6 +29,7 @@ function singleMutationReducer(
 export default function singleMutation(mutationConfig) {
   return {
     reducer: singleMutationReducer,
+    takeEffect: 'exhaust',
     ...mutationConfig,
   }
 }

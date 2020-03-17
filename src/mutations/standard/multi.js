@@ -40,6 +40,8 @@ function makeMultiMutationReducer(makeKey) {
 export default function multi(makeKey, mutationConfig) {
   return {
     reducer: makeMultiMutationReducer(makeKey),
+    takeEffect: 'groupByExhaust',
+    takeEffectArgs: [action => makeKey(...action.meta.params)],
     ...mutationConfig,
   }
 }
