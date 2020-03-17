@@ -1,4 +1,6 @@
 import { rj } from '../rocketjump'
+import { isObjectRj as strictIsObjectRj } from '../types'
+import { forgeRocketJump, isObjectRj } from 'rocketjump-core'
 
 describe('Rocketjump', () => {
   it('should throw exception when no type is provided', () => {
@@ -58,5 +60,41 @@ describe('Rocketjump', () => {
         { type: 'HELLO@REDUX' }
       )
     ).not.toBe('KILL ALL HUMANS')
+  })
+
+  it('should expose isObjectRj for strict check rj object', () => {
+    const dubRj = forgeRocketJump({
+      shouldRocketJump: () => false, // double invocation
+      makeRunConfig: () => null, // no run config
+      makeRecursionRjs: rjs => rjs, // don't touch configs
+      makeExport: (_, config, rjExport = {}) => {
+        return {
+          giova: 23,
+        }
+      },
+      finalizeExport: rjExport => ({ ...rjExport }), // don't hack config
+    })
+
+    expect(isObjectRj(dubRj()())).toBe(true)
+    expect(strictIsObjectRj(dubRj()())).toBe(false)
+
+    expect(
+      isObjectRj(
+        rj({
+          type: 'X',
+          state: 'X',
+          effect: a => a,
+        })()
+      )
+    ).toBe(true)
+    expect(
+      strictIsObjectRj(
+        rj({
+          type: 'X',
+          state: 'X',
+          effect: a => a,
+        })()
+      )
+    ).toBe(true)
   })
 })
