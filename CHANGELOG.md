@@ -4,8 +4,17 @@
 
 #### :rotating_light: Changes
 
-- The signature of `run` and `clean` action creators exported from `RjObject`
-  now are:
+- `Actions`
+
+This new major version has improved the stablity of `rocketjump` ecosystem,
+this version brings all the loved :heart: features from
+[react-rocketjump](https://inmagik.github.io/react-rocketjump) to
+`redux-rocketjump`.
+
+So, for a relaxed migration the old `load` and `unload` action creations
+still in place with the same signature when using `actions` from `RjObject`.
+
+We only adjust the signature of base `run` and `clean` action creators:
 
 ```js
 run(params = [], meta = {}) => ({
@@ -27,50 +36,94 @@ clean(params = [], meta = {}) => ({
 })
 ```
 
+When we used `hooks` (you can read more below),
+the signature of `run` and `clean` is different.
+Under the hood `RjObject` return also `buildableActions`
+with this different signature:
+
+```js
+run(...params) => ({
+  type,
+  meta,
+  payload: {
+    params,
+  }
+})
+```
+
+```js
+clean(...params) => ({
+  type,
+  meta,
+  payload: {
+    params,
+  }
+})
+```
+
+The params passed to `run` action creator are directly spread to
+`effect` function.
+
+Thanks to _Builder_ you can set the `meta` with the special `withMeta` method.
+You can learn more about _Builder_
+[here](https://inmagik.github.io/react-rocketjump/docs/usage_actions#rich-way-using-the-builder).
+
+Plus, a new smart action action creator `updateData` has been added
+to base action creators.
+With `updateData` action creator you can directly change the `data`
+of your state.
+
+```js
+updateData(newData) => ({
+  type,
+  payload: newData,
+})
+```
+
 - `combineRjs` now returns also `RjObjects`:
 
-```js
-const {
-  rjs: { users: ReduxUsers, todos: ReduxTodos },
-  reducer,
-  saga,
-} = combineRjs(
+  ```js
+  const {
+    rjs: { users: ReduxUsers, todos: ReduxTodos },
+    reducer,
+    saga,
+  } = combineRjs(
+    {
+      users: rj({
+        type,
+        effect,
+      }),
+      todos: rj({
+        type,
+        effect,
+      }),
+    },
+    {
+      state: 'mystatepath',
+    }
+  )
+  ```
+
+- `takeEffect` now **CAN** be a string here's the mapping between strings and generators (you can still use generators directly):
+
+  ```js
   {
-    users: rj({
-      type,
-      effect,
-    }),
-    todos: rj({
-      type,
-      effect,
-    }),
-  },
-  {
-    state: 'mystatepath',
+    'latest': takeLatestAndCancel,
+    'every': takeEveryAndCancel,
+    'exhaust': takeExhaustAndCancel,
+    'groupBy': takeLatestAndCancelGroupBy,
+    'groupByExhaust': takeExhaustAndCancelGroupBy,
   }
-)
-```
+  ```
 
-- `takeEffect` now **CAN** be string here's the mapping between strings and generators (you can still use generators directly):
-
-```js
-{
-  'latest': takeLatestAndCancel,
-  'every': takeEveryAndCancel,
-  'exhaust': takeExhaustAndCancel,
-  'groupBy': takeLatestAndCancelGroupBy,
-  'groupByExhaust': takeExhaustAndCancelGroupBy,
-}
-```
-
-```js
-const RjObject = rj({
-  type: 'MY_TYPE',
-  state: 'mypath',
-  takeEffect: 'every',
-  effect: () => myApi(),
-})()
-```
+  ```js
+  const RjObject = rj({
+    type: 'MY_TYPE',
+    state: 'mypath',
+    takeEffect: 'every',
+    effect: () => myApi(),
+  })()
+  ```
 
 - `composeReducer` now can be directly a function but can still be an array of composing reducers.
 
@@ -80,33 +133,85 @@ const RjObject = rj({
 
 The main features of `rj` v3 are hooks.
 
-- `useRjActions`
+- `useRjActions(RjObject)`
 
-  ...
+  This hook return an object with bound action creators of given `RjObject`.
 
-- `useRjState`
+  ```js
+  const { run, clean, updateData } = useRjActions(RjObject)
+  ```
 
-  ...
+  _NOTE_
 
-- `useRj`
+  To enable _Builder_ `onSuccess`, `onFailure` and `asPromise` features
+  you have to install the rj `middleware`:
 
-  ...
+  ```js
+  import { createStore, compose, applyMiddleware, combineReducers } from 'redux'
+  import createSagaMiddleware from 'redux-saga'
+  import {
+    makeAppsReducers,
+    rjMiddleware,
+    makeAppsSaga,
+  } from 'redux-rocketjump'
+  import * as todos from './todos'
+
+  const APPS = {
+    todos,
+  }
+
+  const rootReducer = combineReducers({
+    // HOOK for other reducers
+    // specialPath: specialReducer,
+    ...makeAppsReducers(APPS),
+  })
+
+  const mainSaga = makeAppsSaga(APPS)
+
+  const preloadedState = undefined
+  const sagaMiddleware = createSagaMiddleware()
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+  const store = createStore(
+    rootReducer,
+    preloadedState,
+    composeEnhancers(applyMiddleware(sagaMiddleware, rjMiddleware))
+  )
+
+  sagaMiddleware.run(mainSaga)
+  ```
+
+- `useRjState(RjObject, mapState)`
+
+  This hook return the state of given `RjObject` you can give a function
+  to transform the selected state.
+
+  ```js
+  const { data: todos } = useRjState(RjObject)
+  // or
+  const todos = useRjState(RjObject, (state, selectors) =>
+    selectors.getData(state)
+  )
+  ```
+
+- `useRj(RjObject, mapState)`
+
+  This hooks combine `useRjState` and `useRjActions` and return an
+  array with state and actions.
+
+  ```js
+  const [{ data: todos }, { run: fetchTodos }] = useRj(RjObject)
+  ```
 
 - `useRunRj`
 
-  ...
-
-#### Builder + actions (updateData) + middleware
-
-...
+  This hook auto run your `RjObject` according to `deps`.
+  You can learn more [here](https://inmagik.github.io/react-rocketjump/docs/connect_userunrj)
 
 #### Computed
 
-...
-
 #### Mutations
-
-...
 
 #### `isObjectRj`
 
