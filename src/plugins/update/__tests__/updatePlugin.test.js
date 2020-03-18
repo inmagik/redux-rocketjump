@@ -1,5 +1,5 @@
-import { rj } from '../rocketjump'
-import rjUpdate from '../plugins/update'
+import { rj } from '../../../rocketjump'
+import rjUpdate from '../index'
 
 describe('Update plugin', () => {
   it('should make update actions creators', () => {

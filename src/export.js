@@ -2,11 +2,17 @@ import {
   makeSideEffectDescriptor,
   addConfigToSideEffectDescritor,
 } from './sideEffectDescriptor'
-import { makeActions } from './actions'
-import { proxyObject, proxyReducer } from 'rocketjump-core/utils'
+import { makeActions, makeBuildableActions } from './actions'
+import {
+  proxyObject,
+  proxyReducer,
+  arrayze,
+  invertKeys,
+} from 'rocketjump-core/utils'
 import { makeReducer } from './reducer'
 import { makeSelectors } from './selectors'
 import { composeReducers } from './helpers'
+import { makeSelectorsWithMutations } from './mutations/index'
 
 // Make the exports
 // take a config and a extended export (the return of this function)
@@ -40,8 +46,12 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
           'proxyReducer options is deprecated use reducer instead.'
       )
     }
-    if (Array.isArray(jumpConfig.composeReducer)) {
-      reducer = composeReducers(...[reducer].concat(jumpConfig.composeReducer))
+    if (
+      typeof jumpConfig.composeReducer === 'function' ||
+      Array.isArray(jumpConfig.composeReducer)
+    ) {
+      const composeReducer = arrayze(jumpConfig.composeReducer)
+      reducer = composeReducers(...[reducer].concat(composeReducer))
     }
   }
 
@@ -54,22 +64,40 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     // Use actions to extended export
     actions = extendExport.actions
   }
+  // Make buildable actions
+  let buildableActions
+  if (!extendExport.buildableActions) {
+    // Make fresh buildableActions from config type
+    buildableActions = makeBuildableActions(runConfig.type)
+  } else {
+    // Use buildableActions to extended export
+    buildableActions = extendExport.buildableActions
+  }
   // Proxy actions
   if (jumpConfig.actions) {
     actions = proxyObject(actions, jumpConfig.actions)
+    buildableActions = proxyObject(buildableActions, jumpConfig.actions)
   } else if (jumpConfig.proxyActions) {
     console.warn(
       '[redux-rocketjump] DeprecationWarning: ' +
         'proxyActions options is deprecated use actions instead.'
     )
     actions = proxyObject(actions, jumpConfig.proxyActions)
+    buildableActions = proxyObject(buildableActions, jumpConfig.proxyActions)
   }
 
   // Make selectors
   let selectors
   if (!extendExport.selectors && runConfig.state !== false) {
     // Make fresh selectors by type
-    selectors = makeSelectors(runConfig.state)
+    if (runConfig.mutations) {
+      selectors = makeSelectorsWithMutations(
+        runConfig.state,
+        runConfig.mutations
+      )
+    } else {
+      selectors = makeSelectors(runConfig.state)
+    }
   } else {
     // Use selectors from exports
     selectors = extendExport.selectors
@@ -86,12 +114,25 @@ export default (runConfig, jumpConfig, extendExport = {}) => {
     }
   }
 
+  // Default no computed
+  let computed = null
+  if (extendExport.computed) {
+    // Continue the export
+    computed = extendExport.computed
+  }
+  if (jumpConfig.computed) {
+    // Merge given computed \w prev computed
+    computed = { ...computed, ...invertKeys(jumpConfig.computed) }
+  }
+
   const newExport = {
     ...extendExport,
     sideEffect,
     reducer,
     actions,
+    buildableActions,
     selectors,
+    computed,
   }
 
   return newExport

@@ -1,5 +1,5 @@
-import { rj } from '../rocketjump'
-import rjDelete from '../plugins/delete'
+import { rj } from '../../../rocketjump'
+import rjDelete from '../index'
 
 describe('Delete plugin', () => {
   it('should make delete actions creators', () => {

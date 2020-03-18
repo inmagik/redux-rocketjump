@@ -1,10 +1,39 @@
 import invariant from 'invariant'
-import { forgeRocketJump } from 'rocketjump-core'
+import { forgeRocketJump, createComputeState } from 'rocketjump-core'
 import pick from 'lodash.pick'
 import { resetReducerOn } from './helpers'
 import makeExport from './export'
 import { $TYPE_RJ_RUN_CONFIG, $TYPE_RJ_COMBINE_CONFIG } from './internals'
 import makeApiSaga from './apiSaga'
+import {
+  enhanceMakeRunConfigWithMutations,
+  enhanceFinalExportWithMutations,
+  checkMutationsConfig,
+} from './mutations/index'
+
+// NOTE: Why Here?
+// To avoid re-looping the rj config over and over
+// when re-implement makePartialConfig
+// the standard implement simply shallow merge non function parameters (config)
+// ... we simply add a check in this poin
+function makePartialConfig(partialRjsOrConfigs) {
+  return partialRjsOrConfigs.reduce((finalConfig, partialRjOrConfig) => {
+    if (typeof partialRjOrConfig === 'function') {
+      // ... Is a partial Rj
+      return finalConfig
+    }
+    // ... Is a config
+
+    // Check mutation config!
+    checkMutationsConfig(partialRjOrConfig)
+
+    // Merge the as a standard implementation
+    return {
+      ...finalConfig,
+      ...partialRjOrConfig,
+    }
+  }, {})
+}
 
 function checkWarns(rjsOrConfigs, extraConfig) {
   if (
@@ -43,11 +72,7 @@ function checkWarns(rjsOrConfigs, extraConfig) {
 function makeRunConfig(finalConfig) {
   // Detected the run config from partial rjs + configs
   // pick only: state, type and api
-  const runConfig = pick(finalConfig, ['state', 'api', 'type', 'effect'])
-  // Mark as a run config
-  Object.defineProperty(runConfig, '__rjtype', {
-    value: $TYPE_RJ_RUN_CONFIG,
-  })
+  let runConfig = pick(finalConfig, ['state', 'api', 'type', 'effect'])
 
   // Check for type and state to be required in run config
   invariant(
@@ -60,6 +85,13 @@ function makeRunConfig(finalConfig) {
       ', if you want to omit the state creation set state explice to false.'
   )
 
+  // ++ Mutations
+  runConfig = enhanceMakeRunConfigWithMutations(runConfig, finalConfig)
+
+  // Mark as a run config
+  Object.defineProperty(runConfig, '__rjtype', {
+    value: $TYPE_RJ_RUN_CONFIG,
+  })
   return runConfig
 }
 
@@ -77,9 +109,9 @@ function makeRecursionRjs(
   return partialRjsOrConfigs
 }
 
-function finalizeExport(finalExport, runConfig, finalConfig) {
+function finalizeExport(mergedAlongExport, runConfig, finalConfig) {
   // ~~ END OF CHAIN RECURSION ~~
-  let { sideEffect, __rjtype, reducer, ...rjExport } = finalExport
+  let { sideEffect, computed, reducer, ...rjExport } = mergedAlongExport
 
   // Use the curried-combined-merged side effect descriptor
   // to create the really side effect the "saga" generator
@@ -141,16 +173,40 @@ function finalizeExport(finalExport, runConfig, finalConfig) {
     reducer = resetReducerOn(sideEffect.unloadBy, reducer)
   }
 
+  // Create the compute state function by computed config,
+  // when no computed config is given return null is responsibility
+  // of useRj .. to check for null
+  const computeState = createComputeState(computed)
+
   // Finally the rocketjump is created!
-  // { actions: {}, selectors: {}, saga, reducer }
-  return {
+  /*
+    {
+      actions: {},
+      buildableActions: {}, // Action with official 4LB1312 Builder
+      computeState: fn, // Compute Y shit \w endless love
+      selectors: {},
+      saga,
+      reducer
+  }
+  */
+  // Export for RjObject
+  const finalExport = {
     ...rjExport,
+    computeState,
     reducer,
     saga,
   }
+
+  // Mutations ++
+  return enhanceFinalExportWithMutations(
+    finalExport,
+    mergedAlongExport,
+    runConfig
+  )
 }
 
 export const rj = forgeRocketJump({
+  makePartialConfig,
   makeRunConfig,
   makeRecursionRjs,
   makeExport,

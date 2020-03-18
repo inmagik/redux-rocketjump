@@ -32,6 +32,11 @@ export const makeReducer = (type, dataReducer = defaultDataReducer) => {
           loading: false,
           data: dataReducer(prevState.data, action),
         }
+      case actionTypes.updateData:
+        return {
+          ...prevState,
+          data: action.payload,
+        }
       case actionTypes.unload:
         // So easy if someone add some shit to state
         // simply preserve that keys!

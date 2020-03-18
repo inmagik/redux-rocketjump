@@ -6,7 +6,7 @@ describe('Rocketjump action creators', () => {
   const type = 'GET_SOCI'
   const state = 'soci'
 
-  it('should be load and unload', () => {
+  it('should be load, unload and updateData', () => {
     const { actions } = rj({
       type,
       state,
@@ -28,6 +28,12 @@ describe('Rocketjump action creators', () => {
         tek: 23,
       },
     })
+    expect(actions.updateData({ tek: 23 })).toEqual({
+      type: `${type}_UPDATE_DATA`,
+      payload: {
+        tek: 23,
+      },
+    })
   })
 
   it('should be has run and clean alias', () => {
@@ -35,19 +41,24 @@ describe('Rocketjump action creators', () => {
       type,
       state,
     })()
-    expect(actions.run({ name: 'Giova' }, { killEnemies: true })).toEqual({
+    expect(actions.run([{ name: 'Giova' }], { killEnemies: true })).toEqual({
       type,
       payload: {
-        params: {
-          name: 'Giova',
-        },
+        params: [
+          {
+            name: 'Giova',
+          },
+        ],
       },
       meta: {
         killEnemies: true,
       },
     })
-    expect(actions.clean({ tek: 23 })).toEqual({
+    expect(actions.clean([], { tek: 23 })).toEqual({
       type: `${type}_UNLOAD`,
+      payload: {
+        params: [],
+      },
       meta: {
         tek: 23,
       },
