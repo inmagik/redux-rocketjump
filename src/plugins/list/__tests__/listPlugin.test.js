@@ -1,9 +1,9 @@
-import { rj } from '../rocketjump'
+import { rj } from '../../../rocketjump'
 import rjList, {
   makeListDataReducer,
   makeListSelectors,
   nextPreviousPaginationAdapter,
-} from '../plugins/list'
+} from '../index'
 
 describe('makeListDataReducer', () => {
   it('should make a list paginated reducer', () => {

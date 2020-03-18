@@ -7,11 +7,12 @@ module.exports = {
         modules: false,
         ...(process.env.NODE_ENV === 'test' && {
           targets: {
-            node: 'current'
-          }
-        })
+            node: 'current',
+          },
+        }),
       },
     ],
+    '@babel/preset-react',
   ],
   plugins: [
     process.env.NODE_ENV === 'test' &&

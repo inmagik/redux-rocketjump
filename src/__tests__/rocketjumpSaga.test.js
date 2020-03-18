@@ -4,33 +4,22 @@ import createSagaMiddleware from 'redux-saga'
 import { select, call } from 'redux-saga/effects'
 import omit from 'lodash/omit'
 import { rj } from '../rocketjump'
-import { takeEveryAndCancel, takeLatestAndCancelGroupBy } from '../effects'
+import {
+  takeEveryAndCancel,
+  takeLatestAndCancelGroupBy,
+  takeExhaustAndCancel,
+  takeExhaustAndCancelGroupBy,
+} from '../effects'
+import {
+  createMockStoreWithSaga,
+  createRealStoreWithSagaAndReducer,
+} from '../testUtils'
 
 const spyWarn = jest.spyOn(global.console, 'warn')
 
 beforeEach(() => {
   spyWarn.mockReset()
 })
-
-const mockStoreWithSaga = (saga, ...mockStoreArgs) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const middlewares = [sagaMiddleware]
-  const mockStore = configureStore(middlewares)
-  const store = mockStore(...mockStoreArgs)
-  sagaMiddleware.run(saga)
-  return store
-}
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return store
-}
 
 describe('Rocketjump saga', () => {
   const type = 'GET_SOCI'
@@ -56,7 +45,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -93,7 +82,7 @@ describe('Rocketjump saga', () => {
       api: mockApi,
     })()
     expect(spyWarn).toHaveBeenCalled()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -134,7 +123,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
@@ -168,7 +157,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 666, rinne: 22 })
   })
@@ -187,7 +176,7 @@ describe('Rocketjump saga', () => {
       },
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
   })
@@ -206,7 +195,7 @@ describe('Rocketjump saga', () => {
       },
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load({ giova: 666, rinne: 22 }))
     expect(mockApi.mock.calls[0][0]).toEqual({ giova: 99, rinne: 22, maik: 23 })
     expect(spyWarn).toHaveBeenCalled()
@@ -233,7 +222,7 @@ describe('Rocketjump saga', () => {
       }),
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 11.5 }))
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -273,7 +262,7 @@ describe('Rocketjump saga', () => {
       failureEffect,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(() => {
       expect(successEffect).toBeCalled()
@@ -303,7 +292,7 @@ describe('Rocketjump saga', () => {
       combineReducers({
         soci: reducer,
       })
-    )
+    )[0]
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -333,7 +322,7 @@ describe('Rocketjump saga', () => {
       failureEffect,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockBadApi.mock.results[0].value.catch(() => {
       expect(successEffect).not.toBeCalled()
@@ -364,7 +353,7 @@ describe('Rocketjump saga', () => {
       effectCaller,
       effect: myApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(apiResult => {
       expect(apiResult).toBe('Maik~1312')
@@ -394,7 +383,7 @@ describe('Rocketjump saga', () => {
       callApi,
       effect: myApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     mockApi.mock.results[0].value.then(apiResult => {
       expect(apiResult).toBe('Maik~1312')
@@ -413,7 +402,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 23 }))
     mockApi.mock.results[0].value.then(() => {
       expect(store.getActions()).toEqual([
@@ -454,7 +443,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockBadApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load(undefined, { maik: 23 }))
     mockBadApi.mock.results[0].value.catch(() => {
       expect(store.getActions()).toEqual([
@@ -488,7 +477,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(unload())
     mockApi.mock.results[0].value.then(() => {
@@ -522,7 +511,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       unloadBy: 'LOGOUT',
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch({
       type: 'LOGOUT',
@@ -559,7 +548,7 @@ describe('Rocketjump saga', () => {
       state,
       effect: mockApi,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(load())
     mockApi.mock.results[1].value.then(() => {
@@ -609,7 +598,7 @@ describe('Rocketjump saga', () => {
       effect: mockApi,
       takeEffect: takeEveryAndCancel,
     })()
-    const store = mockStoreWithSaga(saga, {})
+    const store = createMockStoreWithSaga(saga)
     store.dispatch(load())
     store.dispatch(load())
     mockApi.mock.results[1].value.then(r => {
@@ -653,15 +642,384 @@ describe('Rocketjump saga', () => {
     })
   })
 
-  it('take latest side effect group by when specified', done => {
-    const counterByName = {}
+  it('take exhaust side effect when specified', async () => {
+    let resolves = []
     const mockApi = jest.fn(
-      ({ name }) =>
-        new Promise(resolve => {
-          counterByName[name] = (counterByName[name] || 0) + 1
-          resolve(`${name} is cool ${counterByName[name]}`)
+      () =>
+        new Promise(_resolve => {
+          resolves.push(_resolve)
         })
     )
+
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: takeExhaustAndCancel,
+    })()
+    const store = createMockStoreWithSaga(saga)
+    store.dispatch(load({ name: 'Giova' }))
+    store.dispatch(load({ name: 'Rinne' }))
+    store.dispatch(load({ name: 'Babu' }))
+    expect(mockApi).toHaveBeenCalledTimes(1)
+    resolves[0]('YEAH')
+    await mockApi.mock.results[0].value
+    store.dispatch(load({ name: 'Drago' }))
+    store.dispatch(load({ name: 'Albi' }))
+    expect(mockApi).toHaveBeenCalledTimes(2)
+    resolves[1]('GANG')
+    await mockApi.mock.results[1].value
+    store.dispatch(load({ name: 'Maik' }))
+    store.dispatch(load({ name: 'Debs' }))
+    store.dispatch(unload())
+    expect(mockApi).toHaveBeenCalledTimes(3)
+    resolves[2]('Bubba')
+    await mockApi.mock.results[2].value
+    store.dispatch(load({ name: 'Budda' }))
+    expect(mockApi).toHaveBeenCalledTimes(4)
+    resolves[3]('TEK')
+    await mockApi.mock.results[3].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        meta: {},
+        payload: { params: { name: 'Giova' } },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Rinne' } },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Babu' } },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'YEAH',
+          params: { name: 'Giova' },
+        },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Drago' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Albi' } },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'GANG',
+          params: { name: 'Drago' },
+        },
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Maik' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Debs' } },
+        meta: {},
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: { name: 'Budda' } },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'TEK',
+          params: { name: 'Budda' },
+        },
+        meta: {},
+      },
+    ])
+  })
+
+  it('take exhaust group by side effect when specified', async () => {
+    let resolves = []
+    const mockApi = jest.fn(
+      () =>
+        new Promise(_resolve => {
+          resolves.push(_resolve)
+        })
+    )
+
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: takeExhaustAndCancelGroupBy,
+      takeEffectArgs: [action => action.meta.code || null],
+    })()
+    const store = createMockStoreWithSaga(saga)
+    store.dispatch(load({ name: 'Giova' }, { code: 23 }))
+    store.dispatch(load({ name: 'Rinne' }, { code: 51 }))
+    store.dispatch(load({ name: 'Babu' }, { code: 23 }))
+    expect(mockApi).toHaveBeenCalledTimes(2)
+    resolves[0]('YEAH')
+    await mockApi.mock.results[0].value
+    store.dispatch(load({ name: 'Pippo' }, { code: 777 }))
+    store.dispatch(load({ name: 'Pluto' }, { code: 51 }))
+    store.dispatch(load({ name: 'Jack' }, { code: 51 }))
+    store.dispatch(unload({ code: 51 }))
+    store.dispatch(unload())
+    expect(mockApi).toHaveBeenCalledTimes(3)
+    resolves[1]('X')
+    resolves[2]('ICE')
+    await mockApi.mock.results[2].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        payload: { params: { name: 'Giova' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Rinne' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Babu' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'YEAH',
+          params: { name: 'Giova' },
+        },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Pippo' } },
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Pluto' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Jack' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {},
+      },
+    ])
+  })
+
+  it('take latest side effect group by when specified', async () => {
+    let resolves = []
+    const mockApi = jest.fn(
+      () =>
+        new Promise(_resolve => {
+          resolves.push(_resolve)
+        })
+    )
+
+    const {
+      actions: { load, unload },
+      saga,
+    } = rj({
+      type,
+      state,
+      effect: mockApi,
+      takeEffect: takeLatestAndCancelGroupBy,
+      takeEffectArgs: [action => action.meta.code || null],
+    })()
+    const store = createMockStoreWithSaga(saga)
+    store.dispatch(load({ name: 'Giova' }, { code: 23 }))
+    store.dispatch(load({ name: 'Rinne' }, { code: 51 }))
+    store.dispatch(load({ name: 'Babu' }, { code: 23 }))
+    expect(mockApi).toHaveBeenCalledTimes(3)
+    resolves[0]('YEAH')
+    resolves[1]('RINNEGAN')
+    await mockApi.mock.results[0].value
+    store.dispatch(load({ name: 'Pippo' }, { code: 777 }))
+    store.dispatch(load({ name: 'Pluto' }, { code: 51 }))
+    expect(mockApi).toHaveBeenCalledTimes(5)
+    store.dispatch(unload({ code: 51 }))
+    store.dispatch(unload())
+    resolves[2]('~IGNORE~')
+    resolves[3]('~IGNORE~')
+    resolves[4]('~IGNORE~')
+    await mockApi.mock.results[4].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        payload: { params: { name: 'Giova' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Rinne' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Babu' } },
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 23,
+        },
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          data: 'RINNEGAN',
+          params: { name: 'Rinne' },
+        },
+        meta: {
+          code: 51,
+        },
+      },
+
+      {
+        type,
+        payload: { params: { name: 'Pippo' } },
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 777,
+        },
+      },
+      {
+        type,
+        payload: { params: { name: 'Pluto' } },
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {
+          code: 51,
+        },
+      },
+      {
+        type: `${type}_UNLOAD`,
+        meta: {},
+      },
+    ])
+  })
+
+  it('take effect can be express a literal with pre-defined take effects', async () => {
+    const mockApi = jest
+      .fn()
+      .mockResolvedValueOnce('bananasplit')
+      .mockResolvedValueOnce('splitbanana')
     const {
       actions: { load },
       saga,
@@ -669,83 +1027,59 @@ describe('Rocketjump saga', () => {
       type,
       state,
       effect: mockApi,
-      takeEffect: takeLatestAndCancelGroupBy,
-      takeEffectArgs: [({ meta }) => meta.name],
-      proxyActions: {
-        load: ({ load }) => name => load({ name }, { name }),
-      },
+      takeEffect: 'every',
     })()
-    const store = mockStoreWithSaga(saga, {})
-    store.dispatch(load('maik'))
-    store.dispatch(load('giova'))
-    store.dispatch(load('maik'))
-    store.dispatch(load('lore'))
+    const store = createMockStoreWithSaga(saga)
+    store.dispatch(load())
+    store.dispatch(load())
+    await mockApi.mock.results[1].value
+    expect(store.getActions()).toEqual([
+      {
+        type,
+        payload: { params: {} },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type,
+        payload: { params: {} },
+        meta: {},
+      },
+      {
+        type: `${type}_LOADING`,
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        payload: {
+          params: {},
+          data: 'bananasplit',
+        },
+        meta: {},
+      },
+      {
+        type: `${type}_SUCCESS`,
+        meta: {},
+        payload: {
+          params: {},
+          data: 'splitbanana',
+        },
+      },
+    ])
+  })
 
-    mockApi.mock.results[3].value.then(r => {
-      expect(store.getActions()).toEqual([
-        {
-          type,
-          payload: { params: { name: 'maik' } },
-          meta: { name: 'maik' },
-        },
-        {
-          type: `${type}_LOADING`,
-          meta: { name: 'maik' },
-        },
-        {
-          type,
-          payload: { params: { name: 'giova' } },
-          meta: { name: 'giova' },
-        },
-        {
-          type: `${type}_LOADING`,
-          meta: { name: 'giova' },
-        },
-        {
-          type,
-          payload: { params: { name: 'maik' } },
-          meta: { name: 'maik' },
-        },
-        {
-          type: `${type}_LOADING`,
-          meta: { name: 'maik' },
-        },
-        {
-          type,
-          payload: { params: { name: 'lore' } },
-          meta: { name: 'lore' },
-        },
-        {
-          type: `${type}_LOADING`,
-          meta: { name: 'lore' },
-        },
-        {
-          type: `${type}_SUCCESS`,
-          payload: {
-            params: { name: 'giova' },
-            data: 'giova is cool 1',
-          },
-          meta: { name: 'giova' },
-        },
-        {
-          type: `${type}_SUCCESS`,
-          payload: {
-            params: { name: 'maik' },
-            data: 'maik is cool 2',
-          },
-          meta: { name: 'maik' },
-        },
-        {
-          type: `${type}_SUCCESS`,
-          payload: {
-            params: { name: 'lore' },
-            data: 'lore is cool 1',
-          },
-          meta: { name: 'lore' },
-        },
-      ])
-      done()
-    })
+  it('should get andgry on bad takeEffect literal', async () => {
+    expect(() => {
+      rj({
+        type,
+        state,
+        effect: () => Promise.resolve(23),
+        takeEffect: 'every23',
+      })()
+    }).toThrowError(/\[redux-rocketjump\] bad takeEffect name/)
   })
 
   it('can be custom!', () => {

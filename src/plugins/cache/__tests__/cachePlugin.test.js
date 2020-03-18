@@ -1,18 +1,7 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import { rj } from '../rocketjump'
-import rjCache from '../plugins/cache'
-
-const createRealStoreWithSagaAndReducer = (saga, reducer, preloadedState) => {
-  const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(
-    reducer,
-    preloadedState,
-    applyMiddleware(sagaMiddleware)
-  )
-  sagaMiddleware.run(saga)
-  return store
-}
+import { combineReducers } from 'redux'
+import { rj } from '../../../rocketjump'
+import { createRealStoreWithSagaAndReducer } from '../../../testUtils'
+import rjCache from '../index'
 
 describe('Cache plugin', () => {
   it('run api only when is empty', done => {
@@ -32,7 +21,7 @@ describe('Cache plugin', () => {
       combineReducers({
         soci: reducer,
       })
-    )
+    )[0]
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -60,7 +49,7 @@ describe('Cache plugin', () => {
       combineReducers({
         soci: reducer,
       })
-    )
+    )[0]
     store.dispatch(load())
     expect(mockApi).toBeCalled()
     mockApi.mock.results[0].value.then(() => {
@@ -91,7 +80,7 @@ describe('Cache plugin', () => {
       combineReducers({
         soci: reducer,
       })
-    )
+    )[0]
     expect(store.getState()).toEqual({
       soci: {
         loading: false,

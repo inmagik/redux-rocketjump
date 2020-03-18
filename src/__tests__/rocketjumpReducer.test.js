@@ -71,6 +71,21 @@ describe('Rocketjump reducer', () => {
     })
   })
 
+  it('should handle $type_UPDATE_DATA actions', () => {
+    const prevState = {
+      loading: true,
+      data: 'BabuMon',
+      error: null,
+    }
+    expect(
+      reducer(prevState, { type: `${type}_UPDATE_DATA`, payload: 'Yeah' })
+    ).toEqual({
+      loading: true,
+      data: 'Yeah',
+      error: null,
+    })
+  })
+
   it('should handle $type_UNLOAD actions', () => {
     const prevState = {
       loading: true,
