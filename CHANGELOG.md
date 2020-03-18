@@ -1,6 +1,6 @@
 ## 3.0.0
 
-###### _March X, 2020_
+###### _March 18, 2020_
 
 #### :rotating_light: Changes
 
