@@ -6,79 +6,79 @@
 
 - `Actions`
 
-This new major version has improved the stablity of `rocketjump` ecosystem,
-this version brings all the loved :heart: features from
-[react-rocketjump](https://inmagik.github.io/react-rocketjump) to
-`redux-rocketjump`.
+  This new major version has improved the stablity of `rocketjump` ecosystem,
+  this version brings all the loved :heart: features from
+  [react-rocketjump](https://inmagik.github.io/react-rocketjump) to
+  `redux-rocketjump`.
 
-So, for a relaxed migration the old `load` and `unload` action creations
-still in place with the same signature when using `actions` from `RjObject`.
+  So, for a relaxed migration the old `load` and `unload` action creations
+  still in place with the same signature when using `actions` from `RjObject`.
 
-We only adjust the signature of base `run` and `clean` action creators:
+  We only adjust the signature of base `run` and `clean` action creators:
 
-```js
-run(params = [], meta = {}) => ({
-  type,
-  meta,
-  payload: {
-    params
-  }
-})
-```
+  ```js
+  run(params = [], meta = {}) => ({
+    type,
+    meta,
+    payload: {
+      params
+    }
+  })
+  ```
 
-```js
-clean(params = [], meta = {}) => ({
-  type,
-  meta,
-  payload: {
-    params
-  }
-})
-```
+  ```js
+  clean(params = [], meta = {}) => ({
+    type,
+    meta,
+    payload: {
+      params
+    }
+  })
+  ```
 
-When we used `hooks` (you can read more below),
-the signature of `run` and `clean` is different.
-Under the hood `RjObject` return also `buildableActions`
-with this different signature:
+  When we used `hooks` (you can read more below),
+  the signature of `run` and `clean` is different.
+  Under the hood `RjObject` return also `buildableActions`
+  with this different signature:
 
-```js
-run(...params) => ({
-  type,
-  meta,
-  payload: {
-    params,
-  }
-})
-```
+  ```js
+  run(...params) => ({
+    type,
+    meta,
+    payload: {
+      params,
+    }
+  })
+  ```
 
-```js
-clean(...params) => ({
-  type,
-  meta,
-  payload: {
-    params,
-  }
-})
-```
+  ```js
+  clean(...params) => ({
+    type,
+    meta,
+    payload: {
+      params,
+    }
+  })
+  ```
 
-The params passed to `run` action creator are directly spread to
-`effect` function.
+  The params passed to `run` action creator are directly spread to
+  `effect` function.
 
-Thanks to _Builder_ you can set the `meta` with the special `withMeta` method.
-You can learn more about _Builder_
-[here](https://inmagik.github.io/react-rocketjump/docs/usage_actions#rich-way-using-the-builder).
+  Thanks to _Builder_ you can set the `meta` with the special `withMeta` method.
+  You can learn more about _Builder_
+  [here](https://inmagik.github.io/react-rocketjump/docs/usage_actions#rich-way-using-the-builder).
 
-Plus, a new smart action action creator `updateData` has been added
-to base action creators.
-With `updateData` action creator you can directly change the `data`
-of your state.
+  Plus, a new smart action action creator `updateData` has been added
+  to base action creators.
+  With `updateData` action creator you can directly change the `data`
+  of your state.
 
-```js
-updateData(newData) => ({
-  type,
-  payload: newData,
-})
-```
+  ```js
+  updateData(newData) => ({
+    type,
+    payload: newData,
+  })
+  ```
 
 - `combineRjs` now returns also `RjObjects`:
 
