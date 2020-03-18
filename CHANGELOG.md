@@ -211,9 +211,21 @@ The main features of `rj` v3 are hooks.
 
 #### Computed
 
+Computed describes how to map your state you can learn more
+[here](https://inmagik.github.io/react-rocketjump/docs/api_rj#computed).
+
 #### Mutations
 
+Mutations enhance your rj with async mutations you can learn more
+[here](https://inmagik.github.io/react-rocketjump/docs/api_mutations).
+
 #### `isObjectRj`
+
+This is a tiny helper to check if a plain object is a **REDUX** `RjObject`
+
+```js
+isObjectRj(RjObject) => Boolean
+```
 
 ## 2.0.0
 
